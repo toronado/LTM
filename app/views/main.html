@@ -1,6 +1,11 @@
 <div class="jumbotron">
     <h1>{{station.name}}</h1>
-    <ui-gmap-google-map center="map.center" zoom="map.zoom">
+    <!--<ui-gmap-google-map center="map.center" zoom="map.zoom">
         <ui-gmap-marker coords="marker.coords" idKey="123"></ui-gmap-marker>
-    </ui-gmap-google-map>
+    </ui-gmap-google-map>-->
+    
+    <google-map station='station' ng-if="station">
+    	<h3>Google map goes here!</h3>
+    </google-map>
+    
 </div>

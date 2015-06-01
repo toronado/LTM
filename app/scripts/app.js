@@ -8,7 +8,11 @@
  *
  * Main module of the application.
  */
-var tubeApp = angular.module('tubeApp', ['ngRoute', 'uiGmapgoogle-maps']);
+var tubeApp = angular.module('tubeApp', [
+		'ngRoute',
+		'uiGmapgoogle-maps',
+		'app.directives.googleMap'
+	]);
 
 tubeApp.config(function ($routeProvider) {
     $routeProvider
