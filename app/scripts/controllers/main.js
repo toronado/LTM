@@ -28,27 +28,14 @@ tubeApp.factory('getData', function ($http) {
 
 tubeApp.controller('MainCtrl', function ($scope, $routeParams, getData) {
     $scope.markers = [
-        [51.5,-0.5],
-        [49.27,-0.20],
-        [30.1,-0.1]
+        [51.506951,-0.142783],
+        [51.50398,-0.104935],
+        [51.497957,-0.063762]
     ];
-    getData.fetch('stations', null, true, function (data) {
-        $scope.stationList = data;
-        $scope.station = data[$routeParams.stationId];
-        var lat = $scope.station.lat;
-        var lon = $scope.station.lon;
-        $scope.map = { 
-        	center: { 
-        		latitude: lat, 
-        		longitude: lon
-        	},
-        	zoom: 15
-        };
-        $scope.marker = {
-        	coords: {
-        		latitude: lat,
-        		longitude: lon
-        	}
-        }
+    $scope.stationList = stationsObj;
+    $scope.station = stationsObj[$routeParams.stationId];
+
+    getData.fetch('arrivals', {ids: '940GZZLU' + $routeParams.stationId}, false, function (data) {
+        $scope.arrivals = data;
     });
 });
