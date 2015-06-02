@@ -3,8 +3,7 @@ angular.module('app.directives.googleMap', [])
 		return {
 			restrict: 'E', //Element E, Attribute A
 			scope: {
-				obj: '=', //look for attribute value(=)
-				lat: '=',
+				lat: '=', //look for attribute value(=)
 				lon: '='
 			},
 			replace: true, //replace custom html with compliant html
@@ -16,7 +15,6 @@ angular.module('app.directives.googleMap', [])
 				});*/
 			},
 			controller: function($scope) {
-				console.log($scope.obj);
 				var center = new google.maps.LatLng($scope.lat, $scope.lon);
 				var mapOptions = {
 	                zoom: 12,
