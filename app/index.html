@@ -21,12 +21,7 @@
         <![endif]-->
 
         <!-- Add your site or application content here -->
-
-        <div class="container">
-            <div ng-view=""></div>
-        </div>
-
-
+        <div ng-view=""></div>
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID
          <script>
            !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
@@ -43,12 +38,11 @@
         <script src="bower_components/jquery/dist/jquery.min.js"></script>
         <script src="bower_components/angular/angular.min.js"></script>
         <script src="bower_components/angular-route/angular-route.min.js"></script>
-        <script src="bower_components/lodash/dist/lodash.min.js"></script>
-        <script src="bower_components/angular-google-maps/dist/angular-google-maps.min.js"></script>
         <!-- endbower -->
         <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src="data/stations.min.js"></script>
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/about.js"></script>
