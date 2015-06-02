@@ -3,26 +3,46 @@ angular.module('app.directives.googleMap', [])
 		return {
 			restrict: 'E', //Element E, Attribute A
 			scope: {
-				station: '=' //look for attribute value(=)
+				obj: '=', //look for attribute value(=)
+				lat: '=',
+				lon: '='
 			},
 			replace: true, //replace custom html with compliant html
 			transclude: true, //allow other html without overwriting
 			templateUrl:'views/directives/googleMap.html',
 			link: function(scope, element, attrs) { //no dependancy injection
-				/*var center = new google.maps.LatLng(0, 0);
-	            var mapOptions = {
+				/*element.click(function() {
+					alert('hello');
+				});*/
+			},
+			controller: function($scope) {
+				console.log($scope.obj);
+				var center = new google.maps.LatLng($scope.lat, $scope.lon);
+				var mapOptions = {
 	                zoom: 12,
 	                backgroundColor: '#000000',
 	                center: center,
 	                disableDefaultUI: true
 	            };
-            	var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);*/
-				element.click(function() {
-					alert('hello');
-				});
+	            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+			}
+		}
+	});
+angular.module('app.directives.googleMarker', [])
+	.directive('googleMarker', function() {
+		return {
+			restrict: 'E',
+			scope: {
+				lat: '=',
+				lon: '='
 			},
+			require: "googleMap",
 			controller: function($scope) {
-				console.log($scope.station);
+				var location = new google.maps.LatLng($scope.lat, $scope.lon);
+	            var marker = new google.maps.Marker({
+	                position: location,
+	                map: map
+	            });
 			}
 		}
 	});

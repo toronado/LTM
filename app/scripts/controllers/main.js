@@ -27,6 +27,11 @@ tubeApp.factory('getData', function ($http) {
 });
 
 tubeApp.controller('MainCtrl', function ($scope, $routeParams, getData) {
+    $scope.markers = [
+        [51.5,-0.5],
+        [49.27,-0.20],
+        [30.1,-0.1]
+    ];
     getData.fetch('stations', null, true, function (data) {
         $scope.stationList = data;
         $scope.station = data[$routeParams.stationId];

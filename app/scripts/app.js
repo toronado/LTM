@@ -10,8 +10,8 @@
  */
 var tubeApp = angular.module('tubeApp', [
 		'ngRoute',
-		'uiGmapgoogle-maps',
-		'app.directives.googleMap'
+		'app.directives.googleMap',
+        'app.directives.googleMarker'
 	]);
 
 tubeApp.config(function ($routeProvider) {
