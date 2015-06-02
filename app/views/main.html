@@ -1,8 +1,27 @@
-<div>
-    <h1>{{station.name}}</h1>
-    <google-map obj="station" lat="station.lat" lon="station.lon" ng-if="station">
-    	<div ng-repeat="marker in markers">
-    		<google-marker lat="marker[0]" lon="marker[1]"></google-marker>
-    	</div>
-    </google-map>
+<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<div class="navbar-header">
+		  	<a class="navbar-brand" href="#">{{station.name}}</a>
+		</div>
+	</div>
+</nav>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-3">
+		    <ol class="list-group">
+		    	<li class="list-group-item" data-ng-repeat="train in arrivals">
+		    		<span class="badge">{{train.timeToStation}}</span>
+		    		{{$index+1}} {{train.currentLocation}}
+		    	</li>
+		    </ol>
+		</div>
+		<div class="col-md-9">
+		    <google-map lat="station.lat" lon="station.lon" ng-if="station">
+		    	<google-marker lat="station.lat" lon="station.lon"></google-marker>
+		    	<div ng-repeat="marker in markers">
+		    		<google-marker lat="marker[0]" lon="marker[1]"></google-marker>
+		    	</div>
+		    </google-map>
+		</div>
+	</div>
 </div>
