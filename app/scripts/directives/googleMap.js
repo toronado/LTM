@@ -18,13 +18,12 @@ angular.module('app.directives.googleMap', [])
 				var center = new google.maps.LatLng($scope.lat, $scope.lon);
 				var mapOptions = {
 	                zoom: 12,
-	                backgroundColor: '#000000',
 	                center: center,
 	                disableDefaultUI: true
 	            };
 	            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 			}
-		}
+		};
 	});
 angular.module('app.directives.googleMarker', [])
 	.directive('googleMarker', function() {
@@ -32,15 +31,21 @@ angular.module('app.directives.googleMarker', [])
 			restrict: 'E',
 			scope: {
 				lat: '=',
-				lon: '='
+				lon: '=',
+				tts: '=',
+				cls: '='
 			},
 			require: "googleMap",
 			controller: function($scope) {
-				var location = new google.maps.LatLng($scope.lat, $scope.lon);
-	            var marker = new google.maps.Marker({
-	                position: location,
-	                map: map
-	            });
+				if ($scope.tts) {
+					//console.log($scope.cls);
+		        } else {
+		        	var location = new google.maps.LatLng($scope.lat, $scope.lon);
+		            var marker = new google.maps.Marker({
+		                position: location,
+		                map: map
+		            });
+		        }
 			}
-		}
+		};
 	});

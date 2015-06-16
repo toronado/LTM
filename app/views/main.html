@@ -9,20 +9,22 @@
 	<div class="row">
 		<div class="col-md-3">
 		    <ol class="list-group">
-		    	<li class="list-group-item" data-ng-repeat="train in arrivals">
+		    	<li class="list-group-item" data-ng-repeat="train in arrivals | orderBy:'-timeToStation':true">
 		    		<span class="badge">{{train.timeToStation}}</span>
-		    		{{$index+1}} {{train.towards}}
+		    		{{train.naptanId.substring(8)}}
+		    		{{train.stationName.split(' Underground Station')[0]}}
 		    		<br />
-		    		<small>{{train.currentLocation}}</small>
+		    		<small>
+		    			{{train.platformName.split(' ')[0]}}
+		    			- {{train.currentLocation}}
+		    		</small>
+		    		<google-marker tts="train.timeToStation" cls="train.currentLocation"></google-marker>
 		    	</li>
 		    </ol>
 		</div>
 		<div class="col-md-9">
-		    <google-map lat="station.lat" lon="station.lon" ng-if="station">
+		    <google-map lat="station.lat" lon="station.lon">
 		    	<google-marker lat="station.lat" lon="station.lon"></google-marker>
-		    	<div ng-repeat="marker in markers">
-		    		<google-marker lat="marker[0]" lon="marker[1]"></google-marker>
-		    	</div>
 		    </google-map>
 		</div>
 	</div>
