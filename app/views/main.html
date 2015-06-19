@@ -11,8 +11,8 @@
 		    <ol class="list-group">
 		    	<li class="list-group-item" data-ng-repeat="train in arrivals | orderBy:'-timeToStation':true">
 		    		<span class="badge">{{train.timeToStation}}</span>
-		    		{{train.naptanId.substring(8)}}
-		    		{{train.stationName.split(' Underground Station')[0]}}
+		    		{{train.naptanId.substring(8)}}<sup>{{train.vehicleId}}</sup>
+		    		{{train.stationName.split(' Underground')[0]}}
 		    		<br />
 		    		<small>
 		    			{{train.platformName.split(' ')[0]}}
