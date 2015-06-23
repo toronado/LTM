@@ -1,4 +1,3 @@
-var stationsObj = 
 {  
     "ACT":{  
         "name":"Acton Town",
@@ -61,7 +60,8 @@ var stationsObj =
         "route":{  
             "LSQ":61,
             "HBN":107
-        }
+        },
+        "id":"CGN"
     },
     "ERC":{  
         "name":"Edgware Road (Circle Line)",
@@ -435,7 +435,8 @@ var stationsObj =
         "route":{  
             "OSY":195,
             "NFD":155
-        }
+        },
+        "id":"BOS"
     },
     "BBN":{  
         "name":"Barbican",
@@ -926,7 +927,8 @@ var stationsObj =
         "route":{  
             "CAR":94,
             "ASL":86
-        }
+        },
+        "id":"HWY"
     },
     "MBA":{  
         "name":"Marble Arch",
@@ -1010,7 +1012,8 @@ var stationsObj =
         "route":{  
             "KNB":91,
             "GPK":133
-        }
+        },
+        "id":"HPC"
     },
     "NHG":{  
         "name":"Notting Hill Gate",
@@ -1145,7 +1148,8 @@ var stationsObj =
         "route":{  
             "NFD":90,
             "ACT":218
-        }
+        },
+        "id":"SEA"
     },
     "LNB":{  
         "name":"London Bridge",
@@ -1389,7 +1393,8 @@ var stationsObj =
         "route":{  
             "SUT":167,
             "PKR":133
-        }
+        },
+        "id":"ALP"
     },
     "ERB":{  
         "name":"Edgware Road (Bakerloo)",
@@ -1633,7 +1638,8 @@ var stationsObj =
         "route":{  
             "KSX":200,
             "HWY":94
-        }
+        },
+        "id":"CAR"
     },
     "FYR":{  
         "name":"Finchley Road",
@@ -2127,7 +2133,8 @@ var stationsObj =
             "HRC":207,
             "HWT":236,
             "HR4":174
-        }
+        },
+        "id":"HNX"
     },
     "STM":{  
         "name":"Stanmore",
@@ -2226,7 +2233,8 @@ var stationsObj =
         "route":{  
             "HNX":207,
             "HR5":180
-        }
+        },
+        "id":"HRC"
     },
     "WYC":{  
         "name":"Wembley Central",
@@ -2372,7 +2380,8 @@ var stationsObj =
         "route":{  
             "HWT":156,
             "HWE":84
-        }
+        },
+        "id":"HWC"
     },
     "MED":{  
         "name":"Mile End",
@@ -2429,7 +2438,8 @@ var stationsObj =
         "route":{  
             "HWC":84,
             "OSY":120
-        }
+        },
+        "id":"HWE"
     },
     "WYP":{  
         "name":"Wembley Park",
@@ -2483,7 +2493,8 @@ var stationsObj =
         "route":{  
             "HNX":236,
             "HWC":156
-        }
+        },
+        "id":"HWT"
     },
     "RKW":{  
         "name":"Rickmansworth",
@@ -2625,7 +2636,8 @@ var stationsObj =
         "route":{  
             "FPK":139,
             "TPN":187
-        }
+        },
+        "id":"MRH"
     },
     "RBG":{  
         "name":"Redbridge",
@@ -2656,7 +2668,8 @@ var stationsObj =
         "route":{  
             "BOS":155,
             "SEA":90
-        }
+        },
+        "id":"NFD"
     },
     "SSQ":{  
         "name":"Sloane Square",
@@ -2867,7 +2880,8 @@ var stationsObj =
         "route":{  
             "ASG":275,
             "OAK":149
-        }
+        },
+        "id":"SGT"
     },
     "VIC":{  
         "name":"Victoria",
@@ -2998,7 +3012,8 @@ var stationsObj =
         "route":{  
             "MRH":187,
             "WOG":120
-        }
+        },
+        "id":"TPN"
     },
     "WIM":{  
         "name":"Wimbledon",
@@ -3178,7 +3193,8 @@ var stationsObj =
         "route":{  
             "SGT":149,
             "CKS":206
-        }
+        },
+        "id":"OAK"
     },
     "CGT":{  
         "name":"Canning Town",
@@ -3254,7 +3270,8 @@ var stationsObj =
         "lon":-0.445762,
         "route":{  
             "HNX":174
-        }
+        },
+        "id":"HR4"
     },
     "RMD":{  
         "name":"Richmond",
@@ -3283,7 +3300,8 @@ var stationsObj =
         "route":{  
             "SKS":150,
             "HPC":91
-        }
+        },
+        "id":"KNB"
     },
     "QWY":{  
         "name":"Queensway",
@@ -3360,7 +3378,8 @@ var stationsObj =
         "lon":-0.149167,
         "route":{  
             "OAK":206
-        }
+        },
+        "id":"CKS"
     },
     "GPS":{  
         "name":"Great Portland Street",
@@ -3397,7 +3416,8 @@ var stationsObj =
         "lon":-0.490552,
         "route":{  
             "HRC":180
-        }
+        },
+        "id":"HR5"
     },
     "ASG":{  
         "name":"Arnos Grove",
@@ -3412,7 +3432,8 @@ var stationsObj =
         "route":{  
             "BDS":159,
             "SGT":275
-        }
+        },
+        "id":"ASG"
     },
     "SKT":{  
         "name":"South Kenton",
@@ -3511,7 +3532,8 @@ var stationsObj =
         "route":{  
             "TPN":120,
             "BDS":155
-        }
+        },
+        "id":"WOG"
     },
     "SJP":{  
         "name":"St. James's Park",
@@ -3546,7 +3568,8 @@ var stationsObj =
         "route":{  
             "HWY":86,
             "FPK":96
-        }
+        },
+        "id":"ASL"
     },
     "AGL":{  
         "name":"Angel",
@@ -3660,7 +3683,8 @@ var stationsObj =
         "route":{  
             "WOG":155,
             "ASG":159
-        }
+        },
+        "id":"BDS"
     },
     "KEN":{  
         "name":"Kenton",
@@ -4127,7 +4151,8 @@ var stationsObj =
         "route":{  
             "PKR":120,
             "ECM":121
-        }
+        },
+        "id":"NEN"
     },
     "RVY":{  
         "name":"Roding Valley",
@@ -4174,7 +4199,8 @@ var stationsObj =
         "route":{  
             "HWE":120,
             "BOS":195
-        }
+        },
+        "id":"OSY"
     },
     "SNB":{  
         "name":"Snaresbrook",
@@ -4205,7 +4231,8 @@ var stationsObj =
         "route":{  
             "ALP":133,
             "NEN":120
-        }
+        },
+        "id":"PKR"
     },
     "SRP":{  
         "name":"South Ruislip",
@@ -4273,7 +4300,8 @@ var stationsObj =
         "route":{  
             "HBN":98,
             "KSX":126
-        }
+        },
+        "id":"RSQ"
     },
     "SHH":{  
         "name":"South Harrow",
@@ -4288,7 +4316,8 @@ var stationsObj =
         "route":{  
             "RYL":214,
             "SUH":174
-        }
+        },
+        "id":"SHH"
     },
     "UPB":{  
         "name":"Upminster Bridge",
@@ -4376,7 +4405,8 @@ var stationsObj =
         "route":{  
             "SHH":174,
             "SUT":133
-        }
+        },
+        "id":"SUH"
     },
     "SUT":{  
         "name":"Sudbury Town",
@@ -4391,7 +4421,8 @@ var stationsObj =
         "route":{  
             "SUH":133,
             "ALP":167
-        }
+        },
+        "id":"SUT"
     },
     "MTC":{  
         "name":"Mornington Crescent",
