@@ -28,7 +28,7 @@ tubeApp.factory('getData', function ($http) {
     return {
         dataSrc : {
             stnArrivals: 'https://api.tfl.gov.uk/StopPoint/%7Bids%7D/Arrivals',
-            allArrivals: 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals?ids='+tubeLines[1],
+            allArrivals: 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals?ids='+tubeLines[5],
             stations: 'data/stations.min.json'
         },
         fetch : function (dataSrc, params, cache, callback) {
@@ -50,19 +50,11 @@ tubeApp.factory('genericServices', function ($http) {
             }
             return null;
         },
-        newLatLon: function(a, b, tts, info) {
-            
-            var ratio = Math.round((tts/sObj['sid'][a]['route'][b])*1000)/1000;
-            if (ratio > 1) ratio = 0.5;
-            var aO = sObj['sid'][a];
-            var bO = sObj['sid'][b];
-
+        newLatLon: function(a, b, ratio) {
             return {
-                'lat': aO['lat'] + ((bO['lat'] - aO['lat']) * ratio),
-                'lon': aO['lon'] + ((bO['lon'] - aO['lon']) * ratio),
-                'info': info
+                'lat': a['lat'] + ((b['lat'] - a['lat']) * ratio),
+                'lon': a['lon'] + ((b['lon'] - a['lon']) * ratio)
             }
-    
         },
         unifyData: function(data) {
             //TFL data contains multiple instances of the same train.
@@ -107,7 +99,7 @@ tubeApp.factory('genericServices', function ($http) {
 
                 switch (tts) {
                     case 0: //Train is at the station - no need to look at string
-                        txy = [sObj['sid'][sid]['lat'], sObj['sid'][sid]['lon']];
+                        data[i]['coords'] = [sObj['sid'][sid]['lat'], sObj['sid'][sid]['lon']];
                         break;
                     default:
                         switch (cls.substring(0,2)) {
@@ -117,20 +109,18 @@ tubeApp.factory('genericServices', function ($http) {
                                     'lat': sObj['sid'][sid]['lat'],
                                     'lon': sObj['sid'][sid]['lon']
                                 };
-                                trains.push(data[i]);
                                 break;
                             case 'Be': //Between 2 stations, A and B
                                 cls = cls.split(' and ');
                                 var a = this.stationNameLookup(cls[0].substring(8)); //From
                                 var b = this.stationNameLookup(cls[1]); //To
-                                var coords = this.newLatLon(a,b,tts,data[i]);
-                                data[i]['coords'] = coords;
-                                trains.push(data[i]);
+                                var ratio = Math.round((tts/sObj['sid'][a]['route'][b])*1000)/1000;
+                                data[i]['coords'] = this.newLatLon(sObj['sid'][a], sObj['sid'][b], ratio);
                                 break;
                         }
                 }
-                if (txy) {
-                    data[i]['coords'] = txy;
+                if (data[i]['coords']) {
+                    trains.push(data[i]);
                 }
             }
             console.log(trains.length);
