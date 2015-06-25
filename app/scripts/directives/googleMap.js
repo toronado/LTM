@@ -32,20 +32,25 @@ angular.module('app.directives.googleMarker', [])
 			scope: {
 				lat: '=',
 				lon: '=',
-				tts: '=',
-				cls: '='
+				info: '='
 			},
 			require: "googleMap",
 			controller: function($scope) {
-				if ($scope.tts) {
-					//console.log($scope.cls);
-		        } else {
-		        	var location = new google.maps.LatLng($scope.lat, $scope.lon);
-		            var marker = new google.maps.Marker({
-		                position: location,
-		                map: map
-		            });
-		        }
+				var location = new google.maps.LatLng($scope.lat, $scope.lon);
+	            var marker = new google.maps.Marker({
+	                position: location,
+	                map: map
+	            });
+	            var infowindow = new google.maps.InfoWindow({
+	                content: $scope.info,
+	                maxWidth: 200
+	            });
+	            google.maps.event.addListener(marker, 'mouseover', function () {
+                	infowindow.open(map,marker);
+	            });
+	            google.maps.event.addListener(marker, 'mouseout', function () {
+	                infowindow.close(map,marker);
+	            });
 			}
 		};
 	});

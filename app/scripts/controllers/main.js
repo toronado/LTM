@@ -28,7 +28,7 @@ tubeApp.factory('getData', function ($http) {
     return {
         dataSrc : {
             stnArrivals: 'https://api.tfl.gov.uk/StopPoint/%7Bids%7D/Arrivals',
-            allArrivals: 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals?ids='+tubeLines.join(),
+            allArrivals: 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals?ids='+tubeLines[1],
             stations: 'data/stations.min.json'
         },
         fetch : function (dataSrc, params, cache, callback) {
@@ -44,18 +44,23 @@ tubeApp.factory('getData', function ($http) {
 
 tubeApp.factory('genericServices', function ($http) {
     return {
-        stationLookup: function(string) {
-            if (stationLookup[string]) {
-                return stationLookup[string];
+        stationNameLookup: function(name) {
+            if (sObj['sidLookup'][name]) {
+                return sObj['sidLookup'][name];
             }
-            return string + ' not found.';
+            return null;
         },
-        newLatLon: function(a, b, ratio) {
-            var lat = a['lat'] + ((b['lat'] - a['lat']) * ratio);
-            var lon = a['lon'] + ((b['lon'] - a['lon']) * ratio);
+        newLatLon: function(a, b, tts, info) {
+            
+            var ratio = Math.round((tts/sObj['sid'][a]['route'][b])*1000)/1000;
+            if (ratio > 1) ratio = 0.5;
+            var aO = sObj['sid'][a];
+            var bO = sObj['sid'][b];
+
             return {
-                'lat': lat,
-                'lon': lon
+                'lat': aO['lat'] + ((bO['lat'] - aO['lat']) * ratio),
+                'lon': aO['lon'] + ((bO['lon'] - aO['lon']) * ratio),
+                'info': info
             }
     
         },
@@ -90,11 +95,12 @@ tubeApp.factory('genericServices', function ($http) {
         },
         locateTrain: function(data) {
             //Convert Location String to a Coordinate!
+            var trains = [];
             var i;
             var dataLength = data.length;
             for (i=0; i<dataLength; i++) {
 
-                var cls = data[i]['currentLocation'].replace(/,| depot| sidings| platform.*$|/gi,''); //Remove unwanted things
+                var cls = data[i]['currentLocation'].replace(/,| depot| sidings| platform.*$|/gi,''); //Remove unwanted string things
                 var tts = data[i]['timeToStation']; //Time to Station
                 var sid = data[i]['naptanId'].substring(8); //Station ID
                 var txy = null; //Train coordinates
@@ -104,15 +110,22 @@ tubeApp.factory('genericServices', function ($http) {
                         txy = [sObj['sid'][sid]['lat'], sObj['sid'][sid]['lon']];
                         break;
                     default:
-                        console.log(cls);
                         switch (cls.substring(0,2)) {
                             case 'At': //Sometimes a train can be at a station with tts > 0
-                                txy = [sObj['sid'][sid]['lat'], sObj['sid'][sid]['lon']];
+                                //Get the station coordinates from the sObj file and add to train object
+                                data[i]['coords'] = {
+                                    'lat': sObj['sid'][sid]['lat'],
+                                    'lon': sObj['sid'][sid]['lon']
+                                };
+                                trains.push(data[i]);
                                 break;
                             case 'Be': //Between 2 stations, A and B
                                 cls = cls.split(' and ');
-                                var a = cls[0].substring(8); //strip 'Between'
-                                var b = cls[1];
+                                var a = this.stationNameLookup(cls[0].substring(8)); //From
+                                var b = this.stationNameLookup(cls[1]); //To
+                                var coords = this.newLatLon(a,b,tts,data[i]);
+                                data[i]['coords'] = coords;
+                                trains.push(data[i]);
                                 break;
                         }
                 }
@@ -120,7 +133,8 @@ tubeApp.factory('genericServices', function ($http) {
                     data[i]['coords'] = txy;
                 }
             }
-            return data;
+            console.log(trains.length);
+            return trains;
         }
     };
 });
@@ -133,8 +147,9 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, getData, genericS
         //$scope.arrivals = data;
         
         //consolidate the data first
-        data = genericServices.unifyData(data);
-        console.log(genericServices.locateTrain(data));
+        $scope.arrivals = genericServices.unifyData(data);
+        $scope.markers = genericServices.locateTrain($scope.arrivals);
+
 
         /*var errors = [];
         for (var j=0; j<arr.length; j++) {
@@ -181,6 +196,6 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, getData, genericS
             }
         }
         console.log(errors);*/
-        $scope.arrivals = data;
+        //$scope.arrivals = data;
     });
 });
