@@ -28,7 +28,7 @@ tubeApp.factory('getData', function ($http) {
     return {
         dataSrc : {
             stnArrivals: 'https://api.tfl.gov.uk/StopPoint/%7Bids%7D/Arrivals',
-            allArrivals: 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals?ids='+tubeLines[5],
+            allArrivals: 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals?ids='+tubeLines[1],
             stations: 'data/stations.min.json'
         },
         fetch : function (dataSrc, params, cache, callback) {
@@ -51,6 +51,7 @@ tubeApp.factory('genericServices', function ($http) {
             return null;
         },
         newLatLon: function(a, b, ratio) {
+            if (ratio > 1) ratio = 0.5; //When a train's between a and b but the tts is relative to c, make it half way between a and b.
             return {
                 'lat': a['lat'] + ((b['lat'] - a['lat']) * ratio),
                 'lon': a['lon'] + ((b['lon'] - a['lon']) * ratio)
@@ -58,7 +59,7 @@ tubeApp.factory('genericServices', function ($http) {
         },
         unifyData: function(data) {
             //TFL data contains multiple instances of the same train.
-            //Need to consolidate by least 'timeToStation'.
+            //Need to consolidate to the nearest station using 'timeToStation'.
 
             var trainsArr, trainsObj, uid, i, dataLength, train;
             trainsArr = [];
@@ -87,44 +88,50 @@ tubeApp.factory('genericServices', function ($http) {
         },
         locateTrain: function(data) {
             //Convert Location String to a Coordinate!
-            var trains = [];
+            var trainMarkers = [];
             var i;
             var dataLength = data.length;
             for (i=0; i<dataLength; i++) {
 
-                var cls = data[i]['currentLocation'].replace(/,| depot| sidings| platform.*$|/gi,''); //Remove unwanted string things
-                var tts = data[i]['timeToStation']; //Time to Station
-                var sid = data[i]['naptanId'].substring(8); //Station ID
-                var txy = null; //Train coordinates
+                var train = data[i];
+                var cls = train['currentLocation'].replace(/,| depot| sidings| platform.*$|/gi,''); // Current Location String - Remove unwanted string things
+                var tts = train['timeToStation']; //Time to Station
+                var sid = train['naptanId'].substring(8); //Station ID
+                var stn = sObj['sid'][sid] || null; //Station Object
+
+                if (!stn) continue;
 
                 switch (tts) {
                     case 0: //Train is at the station - no need to look at string
-                        data[i]['coords'] = [sObj['sid'][sid]['lat'], sObj['sid'][sid]['lon']];
+                        train['coords'] = {
+                            'lat': stn['lat'],
+                            'lon': stn['lon']
+                        };
                         break;
                     default:
                         switch (cls.substring(0,2)) {
-                            case 'At': //Sometimes a train can be at a station with tts > 0
-                                //Get the station coordinates from the sObj file and add to train object
-                                data[i]['coords'] = {
-                                    'lat': sObj['sid'][sid]['lat'],
-                                    'lon': sObj['sid'][sid]['lon']
+                            case 'At': //At a station
+                                train['coords'] = {
+                                    'lat': stn['lat'],
+                                    'lon': stn['lon']
                                 };
                                 break;
                             case 'Be': //Between 2 stations, A and B
                                 cls = cls.split(' and ');
                                 var a = this.stationNameLookup(cls[0].substring(8)); //From
                                 var b = this.stationNameLookup(cls[1]); //To
+                                if (!a || !b) break;
                                 var ratio = Math.round((tts/sObj['sid'][a]['route'][b])*1000)/1000;
-                                data[i]['coords'] = this.newLatLon(sObj['sid'][a], sObj['sid'][b], ratio);
+                                train['coords'] = this.newLatLon(sObj['sid'][a], sObj['sid'][b], ratio);
                                 break;
                         }
                 }
-                if (data[i]['coords']) {
-                    trains.push(data[i]);
+                if (train['coords']) {
+                    trainMarkers.push(train);
                 }
             }
-            console.log(trains.length);
-            return trains;
+            console.log(trainMarkers.length);
+            return trainMarkers;
         }
     };
 });
