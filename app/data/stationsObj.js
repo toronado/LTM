@@ -2336,7 +2336,8 @@
         "name":"Northwick Park",
         "lines":{  
             "Metropolitan":[  
-                "Northbound"
+                "Northbound",
+                "Southbound"
             ]
         },
         "id":"NKP",
@@ -4323,7 +4324,8 @@
         "name":"Upminster Bridge",
         "lines":{  
             "District":[  
-                "Eastbound"
+                "Eastbound",
+                "Westbound"
             ]
         },
         "id":"UPB",
