@@ -28,7 +28,7 @@ tubeApp.factory('getData', function ($http) {
     return {
         dataSrc : {
             stnArrivals: 'https://api.tfl.gov.uk/StopPoint/%7Bids%7D/Arrivals',
-            allArrivals: 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals?ids='+tubeLines[1],
+            allArrivals: 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals?ids='+tubeLines[8],
             stations: 'data/stations.min.json'
         },
         fetch : function (dataSrc, params, cache, callback) {
@@ -86,7 +86,10 @@ tubeApp.factory('genericServices', function ($http) {
             }
             return trainsArr;
         },
-        locateTrain: function(data) {
+        locateTrain: function (train) {
+            console.log(train['stationName']+' - '+train['currentLocation']);
+        },
+        getArrivals: function(data) {
             //Convert Location String to a Coordinate!
             var trainMarkers = [];
             var i;
@@ -97,6 +100,8 @@ tubeApp.factory('genericServices', function ($http) {
                 var cls = train['currentLocation'].replace(/,| depot| sidings| platform.*$|/gi,''); // Current Location String - Remove unwanted string things
                 var tts = train['timeToStation']; //Time to Station
                 var sid = train['naptanId'].substring(8); //Station ID
+                var lid = train['lineId']; //Line
+                var pna = train['platformName'].split(' ')[0].toLowerCase();
                 var stn = sObj['sid'][sid] || null; //Station Object
 
                 if (!stn) continue;
@@ -109,21 +114,52 @@ tubeApp.factory('genericServices', function ($http) {
                         };
                         break;
                     default:
-                        switch (cls.substring(0,2)) {
-                            case 'At': //At a station
+                        //train['coords'] = this.getLocation(sObj['sid'][sid], lid, pna, tts);
+                        //break;
+                        switch (cls) {
+                            case 'At Platform': //At a station
                                 train['coords'] = {
                                     'lat': stn['lat'],
                                     'lon': stn['lon']
                                 };
                                 break;
-                            case 'Be': //Between 2 stations, A and B
+                            case 'xx': //Between 2 stations, A and B
                                 cls = cls.split(' and ');
                                 var a = this.stationNameLookup(cls[0].substring(8)); //From
                                 var b = this.stationNameLookup(cls[1]); //To
+
                                 if (!a || !b) break;
-                                var ratio = Math.round((tts/sObj['sid'][a]['route'][b])*1000)/1000;
+                                var ratio = Math.round((tts/sObj['sid'][a]['line'][lid][pna][b])*1000)/1000;
                                 train['coords'] = this.newLatLon(sObj['sid'][a], sObj['sid'][b], ratio);
                                 break;
+                            default:
+                                var lineObj = stn['line'][lid];
+                                //Check that the train only has 2 possible routes (i.e. it's not at a fork).
+                                if (Object.keys(lineObj).length < 3) {
+                                    for (var platform in lineObj) {
+                                        //Train coming towards a station will be coming from the opp direction to which it's going
+                                        if (platform !== pna) {
+                                            var direction = lineObj[platform];
+                                            for (var station in direction) {
+                                                //Time between stations
+                                                var tst = direction[station]; //Time it should take from a to b
+                                                if (tts <= tst) {
+                                                    var ratio = Math.round((tts/tst)*1000)/1000;
+                                                    train['coords'] = this.newLatLon(stn, sObj['sid'][station], ratio);
+                                                } else {
+                                                    if (tts <= tst+30) {
+                                                        var ratio = Math.round((tts/tst+30)*1000)/1000;
+                                                        train['coords'] = this.newLatLon(stn, sObj['sid'][station], ratio);
+                                                    } else {
+                                                        this.locateTrain(train);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    console.log(train);
+                                }
                         }
                 }
                 if (train['coords']) {
@@ -145,7 +181,7 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, getData, genericS
         
         //consolidate the data first
         $scope.arrivals = genericServices.unifyData(data);
-        $scope.markers = genericServices.locateTrain($scope.arrivals);
+        $scope.markers = genericServices.getArrivals($scope.arrivals);
 
 
         /*var errors = [];
