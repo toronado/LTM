@@ -28,7 +28,7 @@ tubeApp.factory('getData', function ($http) {
     return {
         dataSrc : {
             stnArrivals: 'https://api.tfl.gov.uk/StopPoint/%7Bids%7D/Arrivals',
-            allArrivals: 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals?ids='+tubeLines[8],
+            allArrivals: 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals?ids='+tubeLines.join(),
             stations: 'data/stations.min.json'
         },
         fetch : function (dataSrc, params, cache, callback) {
@@ -58,9 +58,8 @@ tubeApp.factory('genericServices', function ($http) {
             }
         },
         unifyData: function(data) {
-            //TFL data contains multiple instances of the same train.
-            //Need to consolidate to the nearest station using 'timeToStation'.
-
+            //TFL data contains multiple instances of the same train
+            //Need to consolidate to the nearest station using 'timeToStation'
             var trainsArr, trainsObj, uid, i, dataLength, train;
             trainsArr = [];
             trainsObj = {};
@@ -86,8 +85,26 @@ tubeApp.factory('genericServices', function ($http) {
             }
             return trainsArr;
         },
-        locateTrain: function (train) {
-            console.log(train['stationName']+' - '+train['currentLocation']);
+        locateTrain: function (cls) {
+            switch (cls.charAt(0)) {
+                case 'B': //Between
+                    cls = cls.substring(8).split(' and ');
+                    var a = this.stationNameLookup(cls[0]); //From
+                    var b = this.stationNameLookup(cls[1]); //To
+                    return this.newLatLon(sObj['sid'][a], sObj['sid'][b], 0.5);
+                default: //At, Approaching, Departed, Left
+                    cls = cls.substr(cls.indexOf(' ')+1);
+                    var a = this.stationNameLookup(cls);
+                    if (!a) {
+                        console.log(cls);
+                        return false;
+                    }
+                    var stn = sObj['sid'][a];
+                    return {
+                        'lat': stn['lat'],
+                        'lon': stn['lon'],
+                    }
+            }
         },
         getArrivals: function(data) {
             //Convert Location String to a Coordinate!
@@ -97,14 +114,10 @@ tubeApp.factory('genericServices', function ($http) {
             for (i=0; i<dataLength; i++) {
 
                 var train = data[i];
-                var cls = train['currentLocation'].replace(/,| depot| sidings| platform.*$|/gi,''); // Current Location String - Remove unwanted string things
-                var tts = train['timeToStation']; //Time to Station
                 var sid = train['naptanId'].substring(8); //Station ID
-                var lid = train['lineId']; //Line
-                var pna = train['platformName'].split(' ')[0].toLowerCase();
                 var stn = sObj['sid'][sid] || null; //Station Object
-
                 if (!stn) continue;
+                var tts = train['timeToStation']; //Time to Station
 
                 switch (tts) {
                     case 0: //Train is at the station - no need to look at string
@@ -114,8 +127,7 @@ tubeApp.factory('genericServices', function ($http) {
                         };
                         break;
                     default:
-                        //train['coords'] = this.getLocation(sObj['sid'][sid], lid, pna, tts);
-                        //break;
+                        var cls = train['currentLocation'].replace(/,| depot| sidings| platform.*$|/gi,''); // Current Location String - Remove unwanted string things
                         switch (cls) {
                             case 'At Platform': //At a station
                                 train['coords'] = {
@@ -123,21 +135,18 @@ tubeApp.factory('genericServices', function ($http) {
                                     'lon': stn['lon']
                                 };
                                 break;
-                            case 'xx': //Between 2 stations, A and B
-                                cls = cls.split(' and ');
-                                var a = this.stationNameLookup(cls[0].substring(8)); //From
-                                var b = this.stationNameLookup(cls[1]); //To
-
-                                if (!a || !b) break;
-                                var ratio = Math.round((tts/sObj['sid'][a]['line'][lid][pna][b])*1000)/1000;
-                                train['coords'] = this.newLatLon(sObj['sid'][a], sObj['sid'][b], ratio);
-                                break;
                             default:
+                                var lid = train['lineId']; //Line
                                 var lineObj = stn['line'][lid];
+                                if (!lineObj) {
+                                    console.log(train);
+                                    continue;
+                                }
                                 //Check that the train only has 2 possible routes (i.e. it's not at a fork).
                                 if (Object.keys(lineObj).length < 3) {
                                     for (var platform in lineObj) {
                                         //Train coming towards a station will be coming from the opp direction to which it's going
+                                        var pna = train['platformName'].split(' ')[0].toLowerCase();
                                         if (platform !== pna) {
                                             var direction = lineObj[platform];
                                             for (var station in direction) {
@@ -151,19 +160,21 @@ tubeApp.factory('genericServices', function ($http) {
                                                         var ratio = Math.round((tts/tst+30)*1000)/1000;
                                                         train['coords'] = this.newLatLon(stn, sObj['sid'][station], ratio);
                                                     } else {
-                                                        this.locateTrain(train);
+                                                        train['coords'] = this.locateTrain(cls);
                                                     }
                                                 }
                                             }
                                         }
                                     }
                                 } else {
-                                    console.log(train);
+                                    console.log('Fork?!');
                                 }
                         }
                 }
                 if (train['coords']) {
                     trainMarkers.push(train);
+                } else {
+                    console.log(train);
                 }
             }
             console.log(trainMarkers.length);
@@ -172,63 +183,14 @@ tubeApp.factory('genericServices', function ($http) {
     };
 });
 tubeApp.controller('MainCtrl', function ($scope, $routeParams, getData, genericServices) {
+
     $scope.stationList = sObj['sid'];
     $scope.station = sObj['sid'][$routeParams.stationId];
 
-    //console.log(genericServices.stationLookup('Barkingsides'));
     getData.fetch('allArrivals', null, false, function (data) {
-        //$scope.arrivals = data;
-        
         //consolidate the data first
         $scope.arrivals = genericServices.unifyData(data);
         $scope.markers = genericServices.getArrivals($scope.arrivals);
 
-
-        /*var errors = [];
-        for (var j=0; j<arr.length; j++) {
-            var cl = data[j]['currentLocation'].split(' Platform')[0];
-            var tts = data[j]['timeToStation'];
-            var cls = null;
-            switch (tts) {
-                case 0:
-                    console.log(data[j]['naptanId'].substring(8));
-                default:
-                    switch (cl.substring(0,2)) {
-                        case 'At':
-                            console.log(data[j]['naptanId'].substring(8));
-                            break;
-                        case 'De':
-                            cls = cl.split('Departed ')[1];
-                            break;
-                        case 'Ap':
-                            cls = cl.split('Approaching ')[1];
-                            break;
-                        case 'Be':
-                            cls = cl.split(' and ')[0].substring(8);
-                            break;
-                        case 'Le': 
-                            cls = cl.split('Left ')[1]
-                            break;
-                        case 'No':
-                        case 'So':
-                        case 'Ea':
-                        case 'We':
-                            cls = cl.split(' of ')[1]
-                            break;
-                        default:
-                            errors.push(data[j]['vehicleId']);
-                    }
-            }
-            if (cls) {
-                switch (true) {
-                    case (cls.indexOf(",") > -1):
-                        cls = cls.split(',')[0];
-                        break;
-                }
-                console.log(genericServices.stationLookup(cls.trim()));
-            }
-        }
-        console.log(errors);*/
-        //$scope.arrivals = data;
     });
 });
