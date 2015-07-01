@@ -45,6 +45,7 @@ tubeApp.factory('getData', function ($http) {
 tubeApp.factory('genericServices', function ($http) {
     return {
         stationNameLookup: function(name) {
+            name = name.trim();
             if (sObj['sidLookup'][name]) {
                 return sObj['sidLookup'][name];
             }
@@ -85,12 +86,14 @@ tubeApp.factory('genericServices', function ($http) {
             }
             return trainsArr;
         },
-        locateTrain: function (cls) {
+        clsTrainLocate: function (cls) {
             switch (cls.charAt(0)) {
                 case 'B': //Between
                     cls = cls.substring(8).split(' and ');
                     var a = this.stationNameLookup(cls[0]); //From
                     var b = this.stationNameLookup(cls[1]); //To
+                    //console.log(cls[1] + '-' + b);
+                    if (!a || !b) return false;
                     return this.newLatLon(sObj['sid'][a], sObj['sid'][b], 0.5);
                 default: //At, Approaching, Departed, Left
                     cls = cls.substr(cls.indexOf(' ')+1);
@@ -106,6 +109,48 @@ tubeApp.factory('genericServices', function ($http) {
                     }
             }
         },
+        ttsTrainLocate: function(train) {
+            //Station ID - time to station is relative to this station
+            var sid = train['naptanId'].substring(8);
+            //Station Object
+            var stn = sObj['sid'][sid]; 
+            //Line ID
+            var lid = train['lineId'];
+            //Direction Of Travel
+            var dot = train['platformName'].split(' ')[0].toLowerCase(); //(N)orth/(E)ast/(S)outh/(W)est/(I)nner/(O)uter
+            //Time To Station
+            var tts = train['timeToStation'];
+            //From station ID - Opposite direction to it's heading. However, junctions.
+            var fid = null;
+            //known Time Between Stations
+            var tbs = null;
+            //Possible Origins Object
+            var posObj = stn['line'][lid];
+            if (!posObj) return null;
+            for (var platform in posObj) {
+                if (platform !== dot) {
+                    var fidObj = posObj[platform];
+                    for (var key in fidObj) {
+                        fid = key;
+                        tbs = fidObj[key];
+                    }
+                }
+            }
+            if (!tbs) return null;
+            //Check time to station is less than time between stations. 30s leeway.
+            var ratio = null;
+            if (tts <= tbs+30) {
+                if (tts <= tbs) {
+                    ratio = Math.round((tts/tbs)*1000)/1000;
+                } else {
+                    ratio = Math.round((tts/tbs+30)*1000)/1000;
+                }
+            }
+            if (ratio) {
+                return this.newLatLon(stn, sObj['sid'][fid], ratio);
+            }
+            return null;
+        },
         getArrivals: function(data) {
             //Convert Location String to a Coordinate!
             var trainMarkers = [];
@@ -120,14 +165,14 @@ tubeApp.factory('genericServices', function ($http) {
                 var tts = train['timeToStation']; //Time to Station
 
                 switch (tts) {
-                    case 0: //Train is at the station - no need to look at string
+                    case 0: //Train is at the station - no need to locate
                         train['coords'] = {
                             'lat': stn['lat'],
                             'lon': stn['lon']
                         };
                         break;
                     default:
-                        var cls = train['currentLocation'].replace(/,| depot| sidings| platform.*$|/gi,''); // Current Location String - Remove unwanted string things
+                        var cls = train['currentLocation'].replace(/,| depot| sidings| platform.*$|/gi,''); // Current Location String - Remove unwanted things
                         switch (cls) {
                             case 'At Platform': //At a station
                                 train['coords'] = {
@@ -136,38 +181,11 @@ tubeApp.factory('genericServices', function ($http) {
                                 };
                                 break;
                             default:
-                                var lid = train['lineId']; //Line
-                                var lineObj = stn['line'][lid];
-                                if (!lineObj) {
-                                    console.log(train);
-                                    continue;
-                                }
-                                //Check that the train only has 2 possible routes (i.e. it's not at a fork).
-                                if (Object.keys(lineObj).length < 3) {
-                                    for (var platform in lineObj) {
-                                        //Train coming towards a station will be coming from the opp direction to which it's going
-                                        var pna = train['platformName'].split(' ')[0].toLowerCase();
-                                        if (platform !== pna) {
-                                            var direction = lineObj[platform];
-                                            for (var station in direction) {
-                                                //Time between stations
-                                                var tst = direction[station]; //Time it should take from a to b
-                                                if (tts <= tst) {
-                                                    var ratio = Math.round((tts/tst)*1000)/1000;
-                                                    train['coords'] = this.newLatLon(stn, sObj['sid'][station], ratio);
-                                                } else {
-                                                    if (tts <= tst+30) {
-                                                        var ratio = Math.round((tts/tst+30)*1000)/1000;
-                                                        train['coords'] = this.newLatLon(stn, sObj['sid'][station], ratio);
-                                                    } else {
-                                                        train['coords'] = this.locateTrain(cls);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
+                                var coords = this.ttsTrainLocate(train);
+                                if (coords) {
+                                    train['coords'] = coords;
                                 } else {
-                                    console.log('Fork?!');
+                                    train['coords'] = this.clsTrainLocate(cls);
                                 }
                         }
                 }
@@ -177,20 +195,42 @@ tubeApp.factory('genericServices', function ($http) {
                     console.log(train);
                 }
             }
-            console.log(trainMarkers.length);
+            console.log(trainMarkers.length + '/' + data.length);
             return trainMarkers;
         }
     };
 });
 tubeApp.controller('MainCtrl', function ($scope, $routeParams, getData, genericServices) {
-
+    
+    var data = [  
+        {  
+            "$type":"Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
+            "id":"-131699164",
+            "operationType":1,
+            "vehicleId":"002",
+            "naptanId":"940GZZLULYS",
+            "stationName":"Leytonstone Underground Station",
+            "lineId":"central",
+            "lineName":"Central",
+            "platformName":"Westbound - Platform 2",
+            "direction":"inbound",
+            "destinationNaptanId":"940GZZLUWRP",
+            "destinationName":"West Ruislip Underground Station",
+            "timestamp":"2015-07-01T15:11:07.968Z",
+            "timeToStation":147,
+            "currentLocation":"Left Snaresbrook",
+            "towards":"West Ruislip",
+            "expectedArrival":"2015-07-01T15:13:34.968Z",
+            "timeToLive":"2015-07-01T15:13:34.968Z",
+            "modeName":"tube"
+        }
+    ];
     $scope.stationList = sObj['sid'];
     $scope.station = sObj['sid'][$routeParams.stationId];
-
-    getData.fetch('allArrivals', null, false, function (data) {
+    //getData.fetch('allArrivals', null, false, function (data) {
         //consolidate the data first
         $scope.arrivals = genericServices.unifyData(data);
         $scope.markers = genericServices.getArrivals($scope.arrivals);
 
-    });
+    //});
 });
