@@ -45,6 +45,7 @@ tubeApp.factory('getData', function ($http) {
 tubeApp.factory('genericServices', function ($http) {
     return {
         stationNameLookup: function(name) {
+            if (!name) return null;
             name = name.trim();
             if (sObj['sidLookup'][name]) {
                 return sObj['sidLookup'][name];
@@ -86,20 +87,46 @@ tubeApp.factory('genericServices', function ($http) {
             }
             return trainsArr;
         },
-        clsTrainLocate: function (cls) {
-            switch (cls.charAt(0)) {
-                case 'B': //Between
+        clsTrainLocate: function (train) {
+            var cls = train['currentLocation'].replace(/,| depot| sidings| platform.*$|/gi,''); // Current Location String - Remove unwanted things
+            var sid = train['naptanId'].substring(8);
+            var tts = train['timeToStation'];
+            var dot = train['platformName'].split(' ')[0].toLowerCase();
+            var lid = train['lineId'];
+            switch (cls.substring(0,2)) {
+                case 'Be': //Between
                     cls = cls.substring(8).split(' and ');
                     var a = this.stationNameLookup(cls[0]); //From
                     var b = this.stationNameLookup(cls[1]); //To
-                    //console.log(cls[1] + '-' + b);
                     if (!a || !b) return false;
                     return this.newLatLon(sObj['sid'][a], sObj['sid'][b], 0.5);
+                case 'Le': //Left,Leaving
+                case 'De': //Departed
+                    var a = this.stationNameLookup(cls.substring(cls.indexOf(' ')+1));
+                    var b = sObj['sid'][sid];
+                    if (!a || !b) return false;
+                    return this.newLatLon(sObj['sid'][a], b, 0.1);
+                case 'Ap': //Approaching
+                    var a = sObj['sid'][sid];
+                    var lines = a['line'][lid];
+                    if (!lines && lid === 'hammersmith-city') {
+                        lines = a['line']['district'];
+                    }
+                    for (var platform in lines) {
+                        if (platform !== dot) {
+                            var origins = lines[platform];
+                            for (var origin in origins) {
+                                b = origin;
+                                break;
+                            }
+                        }
+                    }
+                    if (!a || !b) return false;
+                    return this.newLatLon(sObj['sid'][b], a, 0.9);
                 default: //At, Approaching, Departed, Left
                     cls = cls.substr(cls.indexOf(' ')+1);
                     var a = this.stationNameLookup(cls);
                     if (!a) {
-                        console.log(cls);
                         return false;
                     }
                     var stn = sObj['sid'][a];
@@ -110,6 +137,8 @@ tubeApp.factory('genericServices', function ($http) {
             }
         },
         ttsTrainLocate: function(train) {
+            //stations-lines-platforms at a fork
+            var fork = {"ACTpiccadillywestbound":2,"ERCcirclewestbound":2,"EUSnorthernnorthbound":2,"EUSnorthernsouthbound":2,"WOFcentraleastbound":2,"ECTdistricteastbound":2,"ECTdistrictwestbound":3,"CTNnorthernnorthbound":2,"CTNnorthernsouthbound":2,"HOHmetropolitannorthbound":2,"NANcentralwestbound":2,"TNGdistrictwestbound":2,"HNXpiccadillywestbound":2,"LYScentraleastbound":2,"RKWmetropolitansouthbound":2,"KNGnorthernnorthbound":2,"CALmetropolitannorthbound":2,"CXYmetropolitansouthbound":3,"MPKmetropolitannorthbound":2,"FYCnorthernnorthbound":2};
             //Station ID - time to station is relative to this station
             var sid = train['naptanId'].substring(8);
             //Station Object
@@ -120,7 +149,7 @@ tubeApp.factory('genericServices', function ($http) {
             var dot = train['platformName'].split(' ')[0].toLowerCase(); //(N)orth/(E)ast/(S)outh/(W)est/(I)nner/(O)uter
             //Time To Station
             var tts = train['timeToStation'];
-            //From station ID - Opposite direction to it's heading. However, junctions.
+            //From station ID - Opposite direction to it's heading
             var fid = null;
             //known Time Between Stations
             var tbs = null;
@@ -128,6 +157,8 @@ tubeApp.factory('genericServices', function ($http) {
             var posObj = stn['line'][lid];
             if (!posObj) return null;
             for (var platform in posObj) {
+                //Check if it's a junction
+                if (fork[sid+lid+platform]) return false;
                 if (platform !== dot) {
                     var fidObj = posObj[platform];
                     for (var key in fidObj) {
@@ -172,8 +203,7 @@ tubeApp.factory('genericServices', function ($http) {
                         };
                         break;
                     default:
-                        var cls = train['currentLocation'].replace(/,| depot| sidings| platform.*$|/gi,''); // Current Location String - Remove unwanted things
-                        switch (cls) {
+                        switch (train['currentLocation']) {
                             case 'At Platform': //At a station
                                 train['coords'] = {
                                     'lat': stn['lat'],
@@ -185,7 +215,7 @@ tubeApp.factory('genericServices', function ($http) {
                                 if (coords) {
                                     train['coords'] = coords;
                                 } else {
-                                    train['coords'] = this.clsTrainLocate(cls);
+                                    train['coords'] = this.clsTrainLocate(train);
                                 }
                         }
                 }
@@ -202,35 +232,36 @@ tubeApp.factory('genericServices', function ($http) {
 });
 tubeApp.controller('MainCtrl', function ($scope, $routeParams, getData, genericServices) {
     
-    var data = [  
+    /*var data = [
         {  
             "$type":"Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
-            "id":"-131699164",
+            "id":"350528073",
             "operationType":1,
-            "vehicleId":"002",
-            "naptanId":"940GZZLULYS",
-            "stationName":"Leytonstone Underground Station",
-            "lineId":"central",
-            "lineName":"Central",
-            "platformName":"Westbound - Platform 2",
-            "direction":"inbound",
-            "destinationNaptanId":"940GZZLUWRP",
-            "destinationName":"West Ruislip Underground Station",
-            "timestamp":"2015-07-01T15:11:07.968Z",
-            "timeToStation":147,
-            "currentLocation":"Left Snaresbrook",
-            "towards":"West Ruislip",
-            "expectedArrival":"2015-07-01T15:13:34.968Z",
-            "timeToLive":"2015-07-01T15:13:34.968Z",
-            "modeName":"tube"
+            "vehicleId":"213",
+            "naptanId":"940GZZLUEAC",
+            "stationName":"Elephant & Castle Underground Station",
+            "lineId":"bakerloo",
+            "lineName":"Bakerloo",
+            "platformName":"Northbound - Platform 3",
+            "destinationNaptanId":"940GZZLUEAC",
+            "destinationName":"Elephant & Castle Underground Station",
+            "timestamp":"2015-07-02T15:23:48.382Z",
+            "timeToStation":120,
+            "currentLocation":"South of Lambeth North",
+            "towards":"Elephant and Castle",
+            "expectedArrival":"2015-07-02T15:25:48.382Z",
+            "timeToLive":"2015-07-02T15:25:48.382Z",
+            "modeName":"tube",
+            "coords":false,
+            "$$hashKey":"object:410"
         }
-    ];
+    ];*/
     $scope.stationList = sObj['sid'];
     $scope.station = sObj['sid'][$routeParams.stationId];
-    //getData.fetch('allArrivals', null, false, function (data) {
+    getData.fetch('allArrivals', null, false, function (data) {
         //consolidate the data first
         $scope.arrivals = genericServices.unifyData(data);
         $scope.markers = genericServices.getArrivals($scope.arrivals);
 
-    //});
+    });
 });
