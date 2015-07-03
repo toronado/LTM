@@ -137,8 +137,11 @@ tubeApp.factory('genericServices', function ($http) {
             }
         },
         ttsTrainLocate: function(train) {
-            //stations-lines-platforms at a fork
+
+            //Forks (naptan-line-platform:forks)
             var fork = {"ACTpiccadillywestbound":2,"ERCcirclewestbound":2,"EUSnorthernnorthbound":2,"EUSnorthernsouthbound":2,"WOFcentraleastbound":2,"ECTdistricteastbound":2,"ECTdistrictwestbound":3,"CTNnorthernnorthbound":2,"CTNnorthernsouthbound":2,"HOHmetropolitannorthbound":2,"NANcentralwestbound":2,"TNGdistrictwestbound":2,"HNXpiccadillywestbound":2,"LYScentraleastbound":2,"RKWmetropolitansouthbound":2,"KNGnorthernnorthbound":2,"CALmetropolitannorthbound":2,"CXYmetropolitansouthbound":3,"MPKmetropolitannorthbound":2,"FYCnorthernnorthbound":2};
+            //End Points (naptan-line:platform)
+            var terminus = {"ERCdistrict":"westbound","EGWnorthern":"southbound","UXBmetropolitan":"eastbound","UXBpiccadilly":"eastbound","BXNvictoria":"northbound","EACbakerloo":"northbound","HBTnorthern":"southbound","BNKwaterloo-city":"eastbound","WLOwaterloo-city":"westbound","ALDmetropolitan":"northbound","AMSmetropolitan":"southbound","EBYcentral":"eastbound","EBYdistrict":"eastbound","HSChammersmith-city":"northbound","HSCcircle":"northbound","STMjubilee":"southbound","STDjubilee":"westbound","WAFmetropolitan":"southbound","UPMdistrict":"westbound","WIMdistrict":"eastbound","BKGhammersmith-city":"westbound","EPGcentral":"westbound","HR4piccadilly":"westbound","RMDdistrict":"eastbound","CKSpiccadilly":"westbound","HR5piccadilly":"eastbound","HAWbakerloo":"southbound","CSMmetropolitan":"eastbound","WWLvictoria":"southbound","MHLnorthern":"southbound","MDNnorthern":"northbound","WRPcentral":"eastbound","KOYdistrict":"eastbound"};
             //Station ID - time to station is relative to this station
             var sid = train['naptanId'].substring(8);
             //Station Object
@@ -149,17 +152,17 @@ tubeApp.factory('genericServices', function ($http) {
             var dot = train['platformName'].split(' ')[0].toLowerCase(); //(N)orth/(E)ast/(S)outh/(W)est/(I)nner/(O)uter
             //Time To Station
             var tts = train['timeToStation'];
-            //From station ID - Opposite direction to it's heading
+            //From station ID
             var fid = null;
-            //known Time Between Stations
+            //Known Time Between Stations
             var tbs = null;
             //Possible Origins Object
             var posObj = stn['line'][lid];
-            if (!posObj) return null;
+
             for (var platform in posObj) {
                 //Check if it's a junction
                 if (fork[sid+lid+platform]) return false;
-                if (platform !== dot) {
+                if (platform !== dot || terminus[sid+lid]) {
                     var fidObj = posObj[platform];
                     for (var key in fidObj) {
                         fid = key;
@@ -233,117 +236,6 @@ tubeApp.factory('genericServices', function ($http) {
 tubeApp.controller('MainCtrl', function ($scope, $routeParams, getData, genericServices) {
     
     var data = [
-        {  
-            "$type":"Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
-            "id":"350528073",
-            "operationType":1,
-            "vehicleId":"213",
-            "naptanId":"940GZZLUEAC",
-            "stationName":"Elephant & Castle Underground Station",
-            "lineId":"bakerloo",
-            "lineName":"Bakerloo",
-            "platformName":"Northbound - Platform 3",
-            "destinationNaptanId":"940GZZLUEAC",
-            "destinationName":"Elephant & Castle Underground Station",
-            "timestamp":"2015-07-02T15:23:48.382Z",
-            "timeToStation":120,
-            "currentLocation":"South of Lambeth North",
-            "towards":"Elephant and Castle",
-            "expectedArrival":"2015-07-02T15:25:48.382Z",
-            "timeToLive":"2015-07-02T15:25:48.382Z",
-            "modeName":"tube",
-            "coords":false,
-            "$$hashKey":"object:410"
-        },
-        {
-            "$type":"Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
-            "id":"-454320232",
-            "operationType":1,
-            "vehicleId":"226",
-            "naptanId":"940GZZLUHNX",
-            "stationName":"Hatton Cross Underground Station",
-            "lineId":"piccadilly",
-            "lineName":"Piccadilly",
-            "platformName":"Eastbound - Platform 2",
-            "direction":"outbound",
-            "destinationNaptanId":"940GZZLUCKS",
-            "destinationName":"Cockfosters Underground Station",
-            "timestamp":"2015-07-02T22:41:12.768Z",
-            "timeToStation":118,
-            "currentLocation":"Between Heathrow and Hatton Cross",
-            "towards":"Cockfosters",
-            "expectedArrival":"2015-07-02T22:43:10.768Z",
-            "timeToLive":"2015-07-02T22:43:10.768Z",
-            "modeName":"tube",
-            "coords":false,
-            "$$hashKey":"object:288"
-        },
-        {
-            "$type":"Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
-            "id":"2001557230",
-            "operationType":1,
-            "vehicleId":"212",
-            "naptanId":"940GZZLUEAC",
-            "stationName":"Elephant & Castle Underground Station",
-            "lineId":"bakerloo",
-            "lineName":"Bakerloo",
-            "platformName":"Northbound - Platform 4",
-            "destinationNaptanId":"940GZZLUEAC",
-            "destinationName":"Elephant & Castle Underground Station",
-            "timestamp":"2015-07-02T22:41:11.565Z",
-            "timeToStation":59,
-            "currentLocation":"Approaching Elephant & Castle",
-            "towards":"Elephant and Castle",
-            "expectedArrival":"2015-07-02T22:42:10.565Z",
-            "timeToLive":"2015-07-02T22:42:10.565Z",
-            "modeName":"tube",
-            "coords":false,
-            "$$hashKey":"object:229"
-        },
-        {
-            "$type":"Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
-            "id":"-674253855",
-            "operationType":1,
-            "vehicleId":"201",
-            "naptanId":"940GZZLUWLO",
-            "stationName":"Waterloo Underground Station",
-            "lineId":"waterloo-city",
-            "lineName":"Waterloo & City",
-            "platformName":"Westbound Platform 26",
-            "destinationNaptanId":"940GZZLUWLO",
-            "destinationName":"Waterloo Underground Station",
-            "timestamp":"2015-07-02T22:41:11.049Z",
-            "timeToStation":30,
-            "currentLocation":"Approaching Waterloo",
-            "towards":"Waterloo",
-            "expectedArrival":"2015-07-02T22:41:41.049Z",
-            "timeToLive":"2015-07-02T22:41:41.049Z",
-            "modeName":"tube",
-            "coords":false,
-            "$$hashKey":"object:185"
-        },
-        {
-            "$type":"Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
-            "id":"-366199147",
-            "operationType":1,
-            "vehicleId":"123",
-            "naptanId":"940GZZLUMDN",
-            "stationName":"Morden Underground Station",
-            "lineId":"northern",
-            "lineName":"Northern",
-            "platformName":"Northbound - Platform 5",
-            "destinationNaptanId":"940GZZLUMDN",
-            "destinationName":"Morden Underground Station",
-            "timestamp":"2015-07-02T22:40:39.549Z",
-            "timeToStation":26,
-            "currentLocation":"Approaching Morden",
-            "towards":"Morden via Bank",
-            "expectedArrival":"2015-07-02T22:41:05.549Z",
-            "timeToLive":"2015-07-02T22:41:05.549Z",
-            "modeName":"tube",
-            "coords":false,
-            "$$hashKey":"object:146"
-        },
         {
             "$type":"Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
             "id":"82191388",
@@ -366,6 +258,29 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, getData, genericS
             "modeName":"tube",
             "coords":false,
             "$$hashKey":"object:151"
+        },
+        {  
+            "$type":"Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
+            "id":"590569225",
+            "operationType":1,
+            "vehicleId":"131",
+            "naptanId":"940GZZLUFYC",
+            "stationName":"Finchley Central Underground Station",
+            "lineId":"northern",
+            "lineName":"Northern",
+            "platformName":"Southbound - Platform 3",
+            "direction":"inbound",
+            "destinationNaptanId":"940GZZLUMDN",
+            "destinationName":"Morden Underground Station",
+            "timestamp":"2015-07-03T15:10:08.123Z",
+            "timeToStation":57,
+            "currentLocation":"",
+            "towards":"Morden via Bank",
+            "expectedArrival":"2015-07-03T15:11:05.123Z",
+            "timeToLive":"2015-07-03T15:11:05.123Z",
+            "modeName":"tube",
+            "coords":false,
+            "$$hashKey":"object:278"
         }
     ];
     $scope.stationList = sObj['sid'];
