@@ -132,11 +132,11 @@ tubeApp.factory('genericServices', function ($http) {
                     var stn = sObj['sid'][a];
                     return {
                         'lat': stn['lat'],
-                        'lon': stn['lon'],
+                        'lon': stn['lon']
                     }
             }
         },
-        ttsTrainLocate: function(train) {
+        locateTrain: function(train) {
 
             //Forks (naptan-line-platform:forks)
             var fork = {"ACTpiccadillywestbound":2,"ERCcirclewestbound":2,"EUSnorthernnorthbound":2,"EUSnorthernsouthbound":2,"WOFcentraleastbound":2,"ECTdistricteastbound":2,"ECTdistrictwestbound":3,"CTNnorthernnorthbound":2,"CTNnorthernsouthbound":2,"HOHmetropolitannorthbound":2,"NANcentralwestbound":2,"TNGdistrictwestbound":2,"HNXpiccadillywestbound":2,"LYScentraleastbound":2,"RKWmetropolitansouthbound":2,"KNGnorthernnorthbound":2,"CALmetropolitannorthbound":2,"CXYmetropolitansouthbound":3,"MPKmetropolitannorthbound":2,"FYCnorthernnorthbound":2};
@@ -159,43 +159,111 @@ tubeApp.factory('genericServices', function ($http) {
             //Possible Origins Object
             var posObj = stn['line'][lid];
 
+            //Due to occasional incorrect data
+            if (!posObj) {
+                if (lid === 'hammersmith-city') {
+                    posObj = stn['line']['district'];
+                } else {
+                    return null;
+                }
+            }
+
+            //Locate the train using it's time to station
             for (var platform in posObj) {
-                //Check if it's a junction
-                if (fork[sid+lid+platform]) return false;
                 if (platform !== dot || terminus[sid+lid]) {
+                    //Check if it's a junction
+                    if (fork[sid+lid+platform]) {
+                        break;
+                    }
                     var fidObj = posObj[platform];
                     for (var key in fidObj) {
                         fid = key;
                         tbs = fidObj[key];
+                        //Check time to station is less than time between stations. 30s leeway.
+                        var ratio = null;
+                        if (tts <= tbs+30) {
+                            if (tts <= tbs) {
+                                ratio = Math.round((tts/tbs)*1000)/1000;
+                            } else {
+                                ratio = Math.round((tts/tbs+30)*1000)/1000;
+                            }
+                        }
+                        if (ratio) {
+                            return this.newLatLon(stn, sObj['sid'][fid], ratio);
+                        }
+                        break;
                     }
                 }
             }
-            if (!tbs) return null;
-            //Check time to station is less than time between stations. 30s leeway.
-            var ratio = null;
-            if (tts <= tbs+30) {
-                if (tts <= tbs) {
-                    ratio = Math.round((tts/tbs)*1000)/1000;
-                } else {
-                    ratio = Math.round((tts/tbs+30)*1000)/1000;
-                }
+
+            //Locate the train using Current Location String    
+            var cls = train['currentLocation'].replace(/,| depot| sidings| platform.*$|/gi,''); //Remove unwanted words
+            //Train is between station id, a and b
+            var a = null;
+            var b = null;
+            switch (cls.substring(0,3)) {
+                case 'At ':
+                    a = this.stationNameLookup(cls.split('At ')[1]);
+                    return {
+                        'lat': a['lat'],
+                        'lon': a['lon']
+                    }
+                case 'Bet': //Between
+                    cls = cls.substring(8).split(' and ');
+                    if (cls.length > 2) cls.splice(1,1); //Elephant and Castle. Remove the middle value - either castle or elephant. Catch in lookup. 
+                    a = this.stationNameLookup(cls[0]);
+                    b = this.stationNameLookup(cls[1]);
+                    ratio = 0.5; //Exact position unknown
+                    break;
+                case 'Lef': //Left
+                case 'Lea': //Left
+                case 'Dep': //Departed
+                    a = this.stationNameLookup(cls.substring(cls.indexOf(' ')+1));
+                    b = sid;
+                    ratio = 0.1 //Just Left
+                    break;
+                case 'App': //Approaching
+                case 'Arr': //Arriving
+                    b = sid;
+                    ratio = 0.9;
+                    //Need to find out from where it's coming.
+                    var lines = stn['line'][lid];
+                    //Some district line trains are mislabelled as hammersmith and city.
+                    if (!lines && lid === 'hammersmith-city') {
+                        lines = stn['line']['district'];
+                    }
+                    var platform;
+                    for (platform in lines) {
+                        if (platform !== dot) {
+                            //Train arriving from opposite direction to which it's heading
+                            var origins = lines[platform];
+                            var origin;
+                            for (origin in origins) {
+                                a = origin;
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    console.log(cls);
             }
-            if (ratio) {
-                return this.newLatLon(stn, sObj['sid'][fid], ratio);
+            if (a && b && ratio) {
+                return this.newLatLon(sObj['sid'][a], sObj['sid'][b], ratio);
             }
             return null;
         },
         getArrivals: function(data) {
             //Convert Location String to a Coordinate!
             var trainMarkers = [];
+            var unknown = [];
             var i;
             var dataLength = data.length;
             for (i=0; i<dataLength; i++) {
 
                 var train = data[i];
                 var sid = train['naptanId'].substring(8); //Station ID
-                var stn = sObj['sid'][sid] || null; //Station Object
-                if (!stn) continue;
+                var stn = sObj['sid'][sid]; //Station Object
                 var tts = train['timeToStation']; //Time to Station
 
                 switch (tts) {
@@ -214,51 +282,29 @@ tubeApp.factory('genericServices', function ($http) {
                                 };
                                 break;
                             default:
-                                var coords = this.ttsTrainLocate(train);
+                                var coords = this.locateTrain(train);
                                 if (coords) {
                                     train['coords'] = coords;
                                 } else {
-                                    train['coords'] = this.clsTrainLocate(train);
+                                    //train['coords'] = this.clsTrainLocate(train);
                                 }
                         }
                 }
                 if (train['coords']) {
                     trainMarkers.push(train);
                 } else {
-                    console.log(train);
+                    unknown.push(train);
                 }
             }
             console.log(trainMarkers.length + '/' + data.length);
+            console.log(unknown);
             return trainMarkers;
         }
     };
 });
 tubeApp.controller('MainCtrl', function ($scope, $routeParams, getData, genericServices) {
     
-    var data = [
-        {
-            "$type":"Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
-            "id":"82191388",
-            "operationType":1,
-            "vehicleId":"115",
-            "naptanId":"940GZZLUKNG",
-            "stationName":"Kennington Underground Station",
-            "lineId":"northern",
-            "lineName":"Northern",
-            "platformName":"Southbound - Platform 4",
-            "direction":"inbound",
-            "destinationNaptanId":"940GZZLUMDN",
-            "destinationName":"Morden Underground Station",
-            "timestamp":"2015-07-02T22:41:14.096Z",
-            "timeToStation":27,
-            "currentLocation":"Between Elephant and Castle and Kennington",
-            "towards":"Morden via Bank",
-            "expectedArrival":"2015-07-02T22:41:41.096Z",
-            "timeToLive":"2015-07-02T22:41:41.096Z",
-            "modeName":"tube",
-            "coords":false,
-            "$$hashKey":"object:151"
-        },
+    var data2 = [
         {  
             "$type":"Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
             "id":"590569225",
@@ -281,14 +327,37 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, getData, genericS
             "modeName":"tube",
             "coords":false,
             "$$hashKey":"object:278"
+        },
+        {  
+            "$type":"Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
+            "id":"1960589679",
+            "operationType":1,
+            "vehicleId":"206",
+            "naptanId":"940GZZLUMMT",
+            "stationName":"Monument Underground Station",
+            "lineId":"district",
+            "lineName":"District",
+            "platformName":"Westbound - Platform 1",
+            "direction":"inbound",
+            "destinationNaptanId":"940GZZLUERC",
+            "destinationName":"Edgware Road (Circle Line) Underground Station",
+            "timestamp":"2015-07-04T15:53:45.043Z",
+            "timeToStation":297,
+            "currentLocation":"East of Liverpool Street",
+            "towards":"Edgware Road (Circle)",
+            "expectedArrival":"2015-07-04T15:58:42.043Z",
+            "timeToLive":"2015-07-04T15:58:42.043Z",
+            "modeName":"tube",
+            "coords":false,
+            "$$hashKey":"object:402"
         }
     ];
     $scope.stationList = sObj['sid'];
     $scope.station = sObj['sid'][$routeParams.stationId];
-    //getData.fetch('allArrivals', null, false, function (data) {
+    getData.fetch('allArrivals', null, false, function (data) {
         //consolidate the data first
         $scope.arrivals = genericServices.unifyData(data);
         $scope.markers = genericServices.getArrivals($scope.arrivals);
 
-    //});
+    });
 });
