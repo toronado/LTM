@@ -81,8 +81,9 @@ tubeApp.factory('genericServices', function ($http) {
                     trainsObj[uid] = data[i];
                 }
             }
-            //Put data back into array of objects **** MIGHT NOT NEED ***
+            //Put data back into array of objects
             for (train in trainsObj) {
+                trainsObj[train]['uid'] = train;
                 trainsArr.push(trainsObj[train]);
             }
             return trainsArr;

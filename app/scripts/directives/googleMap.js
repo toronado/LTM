@@ -32,15 +32,18 @@ angular.module('app.directives.googleMarker', [])
 			scope: {
 				lat: '=',
 				lon: '=',
-				info: '='
+				info: '=',
+				uid: '='
 			},
 			require: "googleMap",
 			controller: function($scope) {
 				var location = new google.maps.LatLng($scope.lat, $scope.lon);
 	            var marker = new google.maps.Marker({
 	                position: location,
-	                map: map
+	                map: map,
+	                uid: $scope.uid
 	            });
+	            console.log(marker);
 	            var infowindow = new google.maps.InfoWindow({
 	                content: $scope.info,
 	                maxWidth: 200
