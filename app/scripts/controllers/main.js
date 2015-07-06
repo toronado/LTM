@@ -28,7 +28,7 @@ tubeApp.factory('getData', function ($http) {
     return {
         dataSrc : {
             stnArrivals: 'https://api.tfl.gov.uk/StopPoint/%7Bids%7D/Arrivals',
-            allArrivals: 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals?ids='+tubeLines.join(),
+            allArrivals: 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals?ids='+tubeLines[1],
             stations: 'data/stations.min.json'
         },
         fetch : function (dataSrc, params, cache, callback) {
@@ -86,55 +86,6 @@ tubeApp.factory('genericServices', function ($http) {
                 trainsArr.push(trainsObj[train]);
             }
             return trainsArr;
-        },
-        clsTrainLocate: function (train) {
-            var cls = train['currentLocation'].replace(/,| depot| sidings| platform.*$|/gi,''); // Current Location String - Remove unwanted things
-            var sid = train['naptanId'].substring(8);
-            var tts = train['timeToStation'];
-            var dot = train['platformName'].split(' ')[0].toLowerCase();
-            var lid = train['lineId'];
-            switch (cls.substring(0,2)) {
-                case 'Be': //Between
-                    cls = cls.substring(8).split(' and ');
-                    var a = this.stationNameLookup(cls[0]); //From
-                    var b = this.stationNameLookup(cls[1]); //To
-                    if (!a || !b) return false;
-                    return this.newLatLon(sObj['sid'][a], sObj['sid'][b], 0.5);
-                case 'Le': //Left,Leaving
-                case 'De': //Departed
-                    var a = this.stationNameLookup(cls.substring(cls.indexOf(' ')+1));
-                    var b = sObj['sid'][sid];
-                    if (!a || !b) return false;
-                    return this.newLatLon(sObj['sid'][a], b, 0.1);
-                case 'Ap': //Approaching
-                    var a = sObj['sid'][sid];
-                    var lines = a['line'][lid];
-                    if (!lines && lid === 'hammersmith-city') {
-                        lines = a['line']['district'];
-                    }
-                    for (var platform in lines) {
-                        if (platform !== dot) {
-                            var origins = lines[platform];
-                            for (var origin in origins) {
-                                b = origin;
-                                break;
-                            }
-                        }
-                    }
-                    if (!a || !b) return false;
-                    return this.newLatLon(sObj['sid'][b], a, 0.9);
-                default: //At, Approaching, Departed, Left
-                    cls = cls.substr(cls.indexOf(' ')+1);
-                    var a = this.stationNameLookup(cls);
-                    if (!a) {
-                        return false;
-                    }
-                    var stn = sObj['sid'][a];
-                    return {
-                        'lat': stn['lat'],
-                        'lon': stn['lon']
-                    }
-            }
         },
         locateTrain: function(train) {
 
@@ -234,8 +185,7 @@ tubeApp.factory('genericServices', function ($http) {
                     }
                     var platform;
                     for (platform in lines) {
-                        if (platform !== dot) {
-                            //Train arriving from opposite direction to which it's heading
+                        if (platform !== dot) { //Train arrives from opposite direction to which it's heading
                             var origins = lines[platform];
                             var origin;
                             for (origin in origins) {
@@ -256,48 +206,42 @@ tubeApp.factory('genericServices', function ($http) {
         getArrivals: function(data) {
             //Convert Location String to a Coordinate!
             var trainMarkers = [];
-            var unknown = [];
+            var locationUnknown = [];
             var i;
             var dataLength = data.length;
             for (i=0; i<dataLength; i++) {
 
                 var train = data[i];
-                var sid = train['naptanId'].substring(8); //Station ID
-                var stn = sObj['sid'][sid]; //Station Object
+                var stn = sObj['sid'][train['naptanId'].substring(8)]; //Data relative to this station
+                var stnCoords = {
+                    'lat': stn['lat'],
+                    'lon': stn['lon']
+                };
                 var tts = train['timeToStation']; //Time to Station
+                var location = null;
 
                 switch (tts) {
-                    case 0: //Train is at the station - no need to locate
-                        train['coords'] = {
-                            'lat': stn['lat'],
-                            'lon': stn['lon']
-                        };
+                    case 0:
+                        location = stnCoords;
                         break;
                     default:
                         switch (train['currentLocation']) {
-                            case 'At Platform': //At a station
-                                train['coords'] = {
-                                    'lat': stn['lat'],
-                                    'lon': stn['lon']
-                                };
+                            case 'At Platform':
+                                location = stnCoords;
                                 break;
                             default:
-                                var coords = this.locateTrain(train);
-                                if (coords) {
-                                    train['coords'] = coords;
-                                } else {
-                                    //train['coords'] = this.clsTrainLocate(train);
-                                }
+                                location = this.locateTrain(train);
                         }
                 }
-                if (train['coords']) {
+                if (location) {
+                    train['coords'] = location;
                     trainMarkers.push(train);
                 } else {
-                    unknown.push(train);
+                    locationUnknown.push(train);
                 }
             }
             console.log(trainMarkers.length + '/' + data.length);
-            console.log(unknown);
+            console.log(locationUnknown);
             return trainMarkers;
         }
     };
@@ -354,10 +298,12 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, getData, genericS
     ];
     $scope.stationList = sObj['sid'];
     $scope.station = sObj['sid'][$routeParams.stationId];
-    getData.fetch('allArrivals', null, false, function (data) {
-        //consolidate the data first
-        $scope.arrivals = genericServices.unifyData(data);
-        $scope.markers = genericServices.getArrivals($scope.arrivals);
+    $scope.go = function() {
+        getData.fetch('allArrivals', null, false, function (data) {
+            //consolidate the data first
+            $scope.arrivals = genericServices.unifyData(data);
+            $scope.markers = genericServices.getArrivals($scope.arrivals);
 
-    });
+        });
+    }
 });
