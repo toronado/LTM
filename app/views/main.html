@@ -10,17 +10,10 @@
 	<div class="row">
 		<div class="col-md-3">
 		    <ol class="list-group">
-		    	<li class="list-group-item" data-ng-repeat="train in arrivals | orderBy:'-timeToStation':true">
+		    	<li class="list-group-item" data-ng-repeat="train in trains | orderBy:'-timeToStation':true">
 		    		<span class="badge">{{train.timeToStation}}</span>
-		    		{{$index+1}} - {{train.naptanId.substring(8)}}<sup>{{train.vehicleId}}</sup>
-		    		{{train.stationName.split(' Underground')[0]}}
-		    		<br />
-		    		<small>
-		    			- {{train.currentLocation}}
-		    		</small>
-		    		<br />
+		    		{{$index+1}}. {{train.naptanId.substring(8)}}
 		    		{{train.towards}}
-		    		<br />{{train.platformName.split(' ')[0]}} - {{train.direction}}
 		    	</li>
 		    </ol>
 		</div>

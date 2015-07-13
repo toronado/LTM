@@ -302,8 +302,7 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, getData, genericS
     $scope.go = function() {
         getData.fetch('allArrivals', null, false, function (data) {
             //consolidate the data first
-            $scope.arrivals = genericServices.unifyData(data);
-            $scope.trains = genericServices.getArrivals($scope.arrivals);
+            $scope.trains = genericServices.getArrivals(genericServices.unifyData(data));
 
         });
     }
