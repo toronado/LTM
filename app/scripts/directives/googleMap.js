@@ -30,22 +30,19 @@ angular.module('app.directives.googleMarker', [])
 		return {
 			restrict: 'E',
 			scope: {
-				lat: '=',
-				lon: '=',
-				info: '=',
-				uid: '='
+				marker: '='
 			},
 			require: "googleMap",
 			controller: function($scope) {
-				var location = new google.maps.LatLng($scope.lat, $scope.lon);
+				var location = new google.maps.LatLng($scope.marker.coords.lat, $scope.marker.coords.lon);
 	            var marker = new google.maps.Marker({
 	                position: location,
 	                map: map,
-	                uid: $scope.uid
+	                uid: $scope.marker.uid
 	            });
 	            console.log(marker);
 	            var infowindow = new google.maps.InfoWindow({
-	                content: $scope.info,
+	                content: $scope.marker.currentLocation,
 	                maxWidth: 200
 	            });
 	            google.maps.event.addListener(marker, 'mouseover', function () {

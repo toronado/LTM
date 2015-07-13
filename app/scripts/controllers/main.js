@@ -303,7 +303,7 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, getData, genericS
         getData.fetch('allArrivals', null, false, function (data) {
             //consolidate the data first
             $scope.arrivals = genericServices.unifyData(data);
-            $scope.markers = genericServices.getArrivals($scope.arrivals);
+            $scope.trains = genericServices.getArrivals($scope.arrivals);
 
         });
     }
