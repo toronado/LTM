@@ -27,6 +27,19 @@ angular.module('app.directives.googleMap', [])
 	});
 angular.module('app.directives.googleMarker', [])
 	.directive('googleMarker', function() {
+		var colors = {
+            'bakerloo' : '#AE6118',
+            'central' : '#E41F1F',
+            'circle' : '#F8D42D',
+            'district' : '#007229',
+            'hammersmith-city' : '#E899A8',
+            'jubilee' : '#686E72',
+            'metropolitan' : '#893267',
+            'northern' : '#000000',
+            'piccadilly' : '#0450A1',
+            'victoria' : '#009FE0',
+            'waterloo-city' : '#70C3CE'
+        };
 		return {
 			restrict: 'E',
 			scope: {
@@ -37,14 +50,21 @@ angular.module('app.directives.googleMarker', [])
 				var location = new google.maps.LatLng($scope.marker.coords.lat, $scope.marker.coords.lon);
 	            var marker = new google.maps.Marker({
 	                position: location,
+	                icon: {
+	                    path: google.maps.SymbolPath.CIRCLE,
+	                    scale: 3,
+	                    fillOpacity: 1,
+	                    fillColor: colors[$scope.marker.lineId],
+	                    strokeWeight:0
+	                },
 	                map: map,
 	                uid: $scope.marker.uid
 	            });
-	            console.log(marker);
 	            var infowindow = new google.maps.InfoWindow({
 	                content: $scope.marker.currentLocation,
 	                maxWidth: 200
 	            });
+	            //console.log(marker);
 	            google.maps.event.addListener(marker, 'mouseover', function () {
                 	infowindow.open(map,marker);
 	            });

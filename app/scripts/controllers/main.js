@@ -156,9 +156,11 @@ tubeApp.factory('genericServices', function ($http) {
             switch (cls.substring(0,3)) {
                 case 'At ':
                     a = this.stationNameLookup(cls.split('At ')[1]);
-                    return {
-                        'lat': a['lat'],
-                        'lon': a['lon']
+                    if (a) {
+                        return {
+                            'lat': a['lat'],
+                            'lon': a['lon']
+                        }
                     }
                 case 'Bet': //Between
                     cls = cls.substring(8).split(' and ');
@@ -248,62 +250,11 @@ tubeApp.factory('genericServices', function ($http) {
     };
 });
 tubeApp.controller('MainCtrl', function ($scope, $routeParams, getData, genericServices) {
-    
-    var data2 = [
-        {  
-            "$type":"Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
-            "id":"590569225",
-            "operationType":1,
-            "vehicleId":"131",
-            "naptanId":"940GZZLUFYC",
-            "stationName":"Finchley Central Underground Station",
-            "lineId":"northern",
-            "lineName":"Northern",
-            "platformName":"Southbound - Platform 3",
-            "direction":"inbound",
-            "destinationNaptanId":"940GZZLUMDN",
-            "destinationName":"Morden Underground Station",
-            "timestamp":"2015-07-03T15:10:08.123Z",
-            "timeToStation":57,
-            "currentLocation":"",
-            "towards":"Morden via Bank",
-            "expectedArrival":"2015-07-03T15:11:05.123Z",
-            "timeToLive":"2015-07-03T15:11:05.123Z",
-            "modeName":"tube",
-            "coords":false,
-            "$$hashKey":"object:278"
-        },
-        {  
-            "$type":"Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
-            "id":"1960589679",
-            "operationType":1,
-            "vehicleId":"206",
-            "naptanId":"940GZZLUMMT",
-            "stationName":"Monument Underground Station",
-            "lineId":"district",
-            "lineName":"District",
-            "platformName":"Westbound - Platform 1",
-            "direction":"inbound",
-            "destinationNaptanId":"940GZZLUERC",
-            "destinationName":"Edgware Road (Circle Line) Underground Station",
-            "timestamp":"2015-07-04T15:53:45.043Z",
-            "timeToStation":297,
-            "currentLocation":"East of Liverpool Street",
-            "towards":"Edgware Road (Circle)",
-            "expectedArrival":"2015-07-04T15:58:42.043Z",
-            "timeToLive":"2015-07-04T15:58:42.043Z",
-            "modeName":"tube",
-            "coords":false,
-            "$$hashKey":"object:402"
-        }
-    ];
     $scope.stationList = sObj['sid'];
     $scope.station = sObj['sid'][$routeParams.stationId];
     $scope.go = function() {
         getData.fetch('allArrivals', null, false, function (data) {
-            //consolidate the data first
             $scope.trains = genericServices.getArrivals(genericServices.unifyData(data));
-
         });
     }
 });
