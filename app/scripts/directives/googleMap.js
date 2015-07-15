@@ -64,7 +64,6 @@ angular.module('app.directives.googleMarker', [])
 	                content: $scope.marker.currentLocation,
 	                maxWidth: 200
 	            });
-	            //console.log(marker);
 	            google.maps.event.addListener(marker, 'mouseover', function () {
                 	infowindow.open(map,marker);
 	            });

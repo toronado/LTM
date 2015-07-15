@@ -24,25 +24,22 @@ var tubeLines = [
  */
 
 //Main GET factory
-tubeApp.factory('getData', function ($http) {
+tubeApp.factory('dataFactory', function ($http) {
     return {
-        dataSrc : {
-            stnArrivals: 'https://api.tfl.gov.uk/StopPoint/%7Bids%7D/Arrivals',
-            allArrivals: 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals?ids='+tubeLines[1],
-            stations: 'data/stations.min.json'
-        },
-        fetch : function (dataSrc, params, cache, callback) {
-            $http({
-                method: 'GET',
-                url: this.dataSrc[dataSrc],
-                cache: cache,
-                params: params
-            }).success(callback);
+        getArrivals : function() {
+            return $http({
+                    method: 'GET',
+                    url: 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals?ids='+tubeLines[1],
+                    cache: false
+                })
+                .then(function (response) {
+                    return response.data;
+                });
         }
     };
 });
 
-tubeApp.factory('genericServices', function ($http) {
+tubeApp.factory('dataService', function ($http) {
     return {
         stationNameLookup: function(name) {
             if (!name) return null;
@@ -206,9 +203,10 @@ tubeApp.factory('genericServices', function ($http) {
             }
             return null;
         },
-        getArrivals: function(data) {
+        locateArrivals: function(data) {
             //Convert Location String to a Coordinate!
             var trainMarkers = [];
+            var trainObj = {};
             var locationUnknown = [];
             var i;
             var dataLength = data.length;
@@ -244,17 +242,43 @@ tubeApp.factory('genericServices', function ($http) {
                 }
             }
             console.log(trainMarkers.length + '/' + data.length);
-            console.log(locationUnknown);
             return trainMarkers;
         }
     };
 });
-tubeApp.controller('MainCtrl', function ($scope, $routeParams, getData, genericServices) {
+tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, dataService) {
     $scope.stationList = sObj['sid'];
     $scope.station = sObj['sid'][$routeParams.stationId];
+    var trainsObj = null;
     $scope.go = function() {
-        getData.fetch('allArrivals', null, false, function (data) {
-            $scope.trains = genericServices.getArrivals(genericServices.unifyData(data));
+        dataFactory.getArrivals().then(function (data) {
+            data = dataService.locateArrivals(dataService.unifyData(data));
+            if (!trainsObj) {
+                $scope.trains = data;
+                trainsObj = {};
+            }
+            var i, dataLen, d, timestamp, train;
+            dataLen = data.length;
+            d = new Date();
+            timestamp = Math.round(d.getTime()/1000);
+            for (i=0; i<dataLen; i++) {
+                var uid = data[i]['uid'];
+                if (trainsObj[uid]) {
+                    trainsObj[uid]['todo'] = 'move';
+                } else {
+                    trainsObj[uid] = data[i];
+                    trainsObj[uid]['todo'] = 'new';
+                }
+                trainsObj[uid]['timestamp'] = timestamp;
+            }
+            for (train in trainsObj) {
+                if (trainsObj[train]['timestamp'] !== timestamp) {
+                    trainsObj[uid]['todo'] = 'delete';
+                    console.log(uid + ' deleted');
+                }
+            }
+            //$scope.trains = data;
+            console.log(trainsObj);
         });
     }
 });
