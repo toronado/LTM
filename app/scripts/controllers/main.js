@@ -249,36 +249,32 @@ tubeApp.factory('dataService', function ($http) {
 tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, dataService) {
     $scope.stationList = sObj['sid'];
     $scope.station = sObj['sid'][$routeParams.stationId];
-    var trainsObj = null;
+    var tObj = {};
     $scope.go = function() {
         dataFactory.getArrivals().then(function (data) {
-            data = dataService.locateArrivals(dataService.unifyData(data));
-            if (!trainsObj) {
-                $scope.trains = data;
-                trainsObj = {};
-            }
+            //Get the arrivals data, unify it, add location coordinates
+            $scope.trains = dataService.unifyData(data);
+            //$scope.markers = dataService.locateArrivals($scope.trains);
+
+            //Add markers to the marker object
             var i, dataLen, d, timestamp, train;
+            data = dataService.locateArrivals($scope.trains);
             dataLen = data.length;
             d = new Date();
             timestamp = Math.round(d.getTime()/1000);
+            var trainArr = [];
             for (i=0; i<dataLen; i++) {
                 var uid = data[i]['uid'];
-                if (trainsObj[uid]) {
-                    trainsObj[uid]['todo'] = 'move';
+                if (!tObj[uid]) {
+                    tObj[uid] = data[i];
+                    tObj[uid]['marker'] = 'add';
                 } else {
-                    trainsObj[uid] = data[i];
-                    trainsObj[uid]['todo'] = 'new';
+                    tObj[uid]['marker'] = 'move';
                 }
-                trainsObj[uid]['timestamp'] = timestamp;
+                tObj[uid]['timestamp'] = timestamp;
+                trainArr.push(tObj[uid]);
             }
-            for (train in trainsObj) {
-                if (trainsObj[train]['timestamp'] !== timestamp) {
-                    trainsObj[uid]['todo'] = 'delete';
-                    console.log(uid + ' deleted');
-                }
-            }
-            //$scope.trains = data;
-            console.log(trainsObj);
+            $scope.markers = data;
         });
     }
 });

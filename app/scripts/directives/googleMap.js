@@ -43,25 +43,24 @@ angular.module('app.directives.googleMarker', [])
 		return {
 			restrict: 'E',
 			scope: {
-				marker: '='
+				data: '='
 			},
 			require: "googleMap",
 			controller: function($scope) {
-				var location = new google.maps.LatLng($scope.marker.coords.lat, $scope.marker.coords.lon);
+				var location = new google.maps.LatLng($scope.data.coords.lat, $scope.data.coords.lon);
 	            var marker = new google.maps.Marker({
 	                position: location,
 	                icon: {
 	                    path: google.maps.SymbolPath.CIRCLE,
 	                    scale: 3,
 	                    fillOpacity: 1,
-	                    fillColor: colors[$scope.marker.lineId],
+	                    fillColor: colors[$scope.data.lineId],
 	                    strokeWeight:0
 	                },
-	                map: map,
-	                uid: $scope.marker.uid
+	                map: map
 	            });
 	            var infowindow = new google.maps.InfoWindow({
-	                content: $scope.marker.currentLocation,
+	                content: $scope.data.currentLocation,
 	                maxWidth: 200
 	            });
 	            google.maps.event.addListener(marker, 'mouseover', function () {
@@ -70,6 +69,7 @@ angular.module('app.directives.googleMarker', [])
 	            google.maps.event.addListener(marker, 'mouseout', function () {
 	                infowindow.close(map,marker);
 	            });
+		        
 			}
 		};
 	});

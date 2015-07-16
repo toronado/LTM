@@ -20,7 +20,7 @@
 		<div class="col-md-9">
 		    <google-map lat="station.lat" lon="station.lon">
 		    	<!--<google-marker lat="station.lat" lon="station.lon" info="'Center'"></google-marker>-->
-		    	<google-marker data-ng-repeat="train in trains" marker="train"></google-marker>
+		    	<google-marker data-ng-repeat="marker in markers" data="marker"></google-marker>
 		    </google-map>
 		</div>
 	</div>
