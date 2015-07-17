@@ -249,32 +249,11 @@ tubeApp.factory('dataService', function ($http) {
 tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, dataService) {
     $scope.stationList = sObj['sid'];
     $scope.station = sObj['sid'][$routeParams.stationId];
-    var tObj = {};
     $scope.go = function() {
         dataFactory.getArrivals().then(function (data) {
             //Get the arrivals data, unify it, add location coordinates
             $scope.trains = dataService.unifyData(data);
-            //$scope.markers = dataService.locateArrivals($scope.trains);
-
-            //Add markers to the marker object
-            var i, dataLen, d, timestamp, train;
-            data = dataService.locateArrivals($scope.trains);
-            dataLen = data.length;
-            d = new Date();
-            timestamp = Math.round(d.getTime()/1000);
-            var trainArr = [];
-            for (i=0; i<dataLen; i++) {
-                var uid = data[i]['uid'];
-                if (!tObj[uid]) {
-                    tObj[uid] = data[i];
-                    tObj[uid]['marker'] = 'add';
-                } else {
-                    tObj[uid]['marker'] = 'move';
-                }
-                tObj[uid]['timestamp'] = timestamp;
-                trainArr.push(tObj[uid]);
-            }
-            $scope.markers = data;
+            $scope.markers = dataService.locateArrivals($scope.trains);
         });
     }
 });
