@@ -29,7 +29,7 @@ tubeApp.factory('dataFactory', function ($http) {
         getArrivals : function() {
             return $http({
                     method: 'GET',
-                    url: 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals?ids='+tubeLines[1],
+                    url: 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals?ids='+tubeLines.join(),
                     cache: false
                 })
                 .then(function (response) {
@@ -203,10 +203,9 @@ tubeApp.factory('dataService', function ($http) {
             }
             return null;
         },
-        locateArrivals: function(data) {
+        getMarkers: function(data) {
             //Convert Location String to a Coordinate!
-            var trainMarkers = [];
-            var trainObj = {};
+            var markers = [];
             var locationUnknown = [];
             var i;
             var dataLength = data.length;
@@ -236,24 +235,49 @@ tubeApp.factory('dataService', function ($http) {
                 }
                 if (location) {
                     train['coords'] = location;
-                    trainMarkers.push(train);
+                    markers.push(train);
                 } else {
                     locationUnknown.push(train);
                 }
             }
-            console.log(trainMarkers.length + '/' + data.length);
-            return trainMarkers;
+            //console.log(this.trainMarkers.length + '/' + data.length);
+            return markers;
         }
     };
 });
 tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, dataService) {
-    $scope.stationList = sObj['sid'];
     $scope.station = sObj['sid'][$routeParams.stationId];
+    $scope.markers = null;
+    var mObj = {};
     $scope.go = function() {
         dataFactory.getArrivals().then(function (data) {
             //Get the arrivals data, unify it, add location coordinates
-            $scope.trains = dataService.unifyData(data);
-            $scope.markers = dataService.locateArrivals($scope.trains);
+            var markers = dataService.getMarkers(dataService.unifyData(data));
+            var timestamp = new Date() / 1000;
+
+            if (!$scope.markers) {
+                $scope.markers = markers;
+            } else {
+                var sms = $scope.markers;
+                var sm;
+                for (sm in sms) {
+                    var s = sms[sm];
+                    mObj[s['uid']] = s['mObj'];
+                }
+                var marker;
+                for (marker in markers) {
+                    var m = markers[marker];
+                    var uid = m['uid'];
+                    if (mObj[uid]) {
+                        m['todo'] = 'move';
+                        m['mObj'] = mObj[uid];
+                    } else {
+                        m['todo'] = 'add';
+                    }
+                }
+                console.log(mObj);
+                $scope.markers = markers;
+            }
         });
     }
 });

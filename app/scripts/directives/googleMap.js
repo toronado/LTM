@@ -47,20 +47,32 @@ angular.module('app.directives.googleMarker', [])
 			},
 			require: "googleMap",
 			controller: function($scope) {
-				console.log($scope.marker.markerz);
 				var location = new google.maps.LatLng($scope.marker.coords.lat, $scope.marker.coords.lon);
-	            var marker = new google.maps.Marker({
-	                position: location,
-	                icon: {
-	                    path: google.maps.SymbolPath.CIRCLE,
-	                    scale: 3,
-	                    fillOpacity: 1,
-	                    fillColor: colors[$scope.marker.lineId],
-	                    strokeWeight:0
-	                },
-	                map: map
-	            });
-	            var infowindow = new google.maps.InfoWindow({
+				var todo = $scope.marker.todo;
+				console.log(todo);
+				switch (todo) {
+					case 'move':
+						$scope.marker['mObj'].setPosition(location);
+						break;
+					case 'remove':
+						$scope.marker['mObj'].setMap(null);
+						console.log('removed');
+						break;
+					default:
+						var marker = new google.maps.Marker({
+			                position: location,
+			                icon: {
+			                    path: google.maps.SymbolPath.CIRCLE,
+			                    scale: 3,
+			                    fillOpacity: 1,
+			                    fillColor: colors[$scope.marker.lineId],
+			                    strokeWeight:0
+			                },
+			                map: map
+			            });
+						$scope.marker['mObj'] = marker;
+				}
+	            /*var infowindow = new google.maps.InfoWindow({
 	                content: $scope.marker.currentLocation,
 	                maxWidth: 200
 	            });
@@ -69,8 +81,7 @@ angular.module('app.directives.googleMarker', [])
 	            });
 	            google.maps.event.addListener(marker, 'mouseout', function () {
 	                infowindow.close(map,marker);
-	            });
-		        
+	            });*/
 			}
 		};
 	});
