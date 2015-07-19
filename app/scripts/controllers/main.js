@@ -271,6 +271,7 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, data
                     if (mObj[uid]) {
                         m['todo'] = 'move';
                         m['mObj'] = mObj[uid];
+                        delete mObj[uid];
                     } else {
                         m['todo'] = 'add';
                     }

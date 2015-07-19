@@ -48,15 +48,14 @@ angular.module('app.directives.googleMarker', [])
 			require: "googleMap",
 			controller: function($scope) {
 				var location = new google.maps.LatLng($scope.marker.coords.lat, $scope.marker.coords.lon);
-				var todo = $scope.marker.todo;
-				console.log(todo);
-				switch (todo) {
+				console.log($scope.marker.todo);
+				switch ($scope.marker.todo) {
 					case 'move':
 						$scope.marker['mObj'].setPosition(location);
 						break;
 					case 'remove':
+						console.log('removed' + $scope.marker);
 						$scope.marker['mObj'].setMap(null);
-						console.log('removed');
 						break;
 					default:
 						var marker = new google.maps.Marker({
