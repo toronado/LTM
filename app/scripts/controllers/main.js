@@ -29,7 +29,7 @@ tubeApp.factory('dataFactory', function ($http) {
         getArrivals : function() {
             return $http({
                     method: 'GET',
-                    url: 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals?ids='+tubeLines.join(),
+                    url: 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals?ids='+tubeLines[1],
                     cache: false
                 })
                 .then(function (response) {

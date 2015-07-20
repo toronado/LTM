@@ -81,7 +81,7 @@ angular.module('app.directives.googleMarker', [])
 					case 'move':
 						var gObj = $scope.marker['gObj'];
 						//gObj['marker'].setPosition(location);
-						gObj['marker'].animateTo(location, {easing: 'linear', duration: 1000});
+						gObj['marker'].animateTo(location, {easing: 'linear', duration: 10000});
 						gObj['info'].setContent(info);
 						break;
 					case 'remove':
