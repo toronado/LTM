@@ -205,7 +205,7 @@ tubeApp.factory('dataService', function ($http) {
         },
         getMarkers: function(data) {
             //Convert Location String to a Coordinate!
-            var markers = [];
+            var markers = {};
             var locationUnknown = [];
             var i;
             var dataLength = data.length;
@@ -235,50 +235,51 @@ tubeApp.factory('dataService', function ($http) {
                 }
                 if (location) {
                     train['coords'] = location;
-                    markers.push(train);
+                    train['todo'] = 'add';
+                    markers[train['uid']] = train;
                 } else {
                     locationUnknown.push(train);
                 }
             }
-            //console.log(this.trainMarkers.length + '/' + data.length);
             return markers;
         }
     };
 });
 tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, dataService) {
     $scope.station = sObj['sid'][$routeParams.stationId];
-    $scope.markers = null;
-    var mObj = {};
+    var init = false;
+    var cm = {}; //Current markers
     $scope.go = function() {
         dataFactory.getArrivals().then(function (data) {
             //Get the arrivals data, unify it, add location coordinates
-            var markers = dataService.getMarkers(dataService.unifyData(data));
-            var timestamp = new Date() / 1000;
-
-            if (!$scope.markers) {
-                $scope.markers = markers;
-            } else {
-                var sms = $scope.markers;
-                var sm;
-                for (sm in sms) {
-                    var s = sms[sm];
-                    mObj[s['uid']] = s['mObj'];
-                }
-                var marker;
-                for (marker in markers) {
-                    var m = markers[marker];
-                    var uid = m['uid'];
-                    if (mObj[uid]) {
-                        m['todo'] = 'move';
-                        m['mObj'] = mObj[uid];
-                        delete mObj[uid];
+            $scope.trains = dataService.unifyData(data);
+            data = dataService.getMarkers($scope.trains);
+            if (init) {
+                var m;
+                for (m in cm) {
+                    var cmo = cm[m];
+                    if (data[m]) {
+                        data[m]['todo'] = 'move';
                     } else {
-                        m['todo'] = 'add';
+                        data[m] = cmo;
+                        data[m]['todo'] = 'remove';
                     }
+                    data[m]['gObj'] = cmo['gObj'];
                 }
-                console.log(mObj);
-                $scope.markers = markers;
             }
+            var mArr = [];
+            var marker;
+            for (marker in data) {
+                var dm = data[marker];
+                if (dm['todo'] !== 'remove') {
+                    cm[dm['uid']] = dm;
+                } else {
+                    delete cm[dm['uid']];
+                }
+                mArr.push(dm);
+            }
+            $scope.markers = mArr;
+            init = true;
         });
     }
 });

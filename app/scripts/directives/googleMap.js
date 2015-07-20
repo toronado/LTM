@@ -50,14 +50,7 @@ angular.module('app.directives.googleMarker', [])
 				var location = new google.maps.LatLng($scope.marker.coords.lat, $scope.marker.coords.lon);
 				console.log($scope.marker.todo);
 				switch ($scope.marker.todo) {
-					case 'move':
-						$scope.marker['mObj'].setPosition(location);
-						break;
-					case 'remove':
-						console.log('removed' + $scope.marker);
-						$scope.marker['mObj'].setMap(null);
-						break;
-					default:
+					case 'add':
 						var marker = new google.maps.Marker({
 			                position: location,
 			                icon: {
@@ -69,18 +62,29 @@ angular.module('app.directives.googleMarker', [])
 			                },
 			                map: map
 			            });
-						$scope.marker['mObj'] = marker;
+			            var infowindow = new google.maps.InfoWindow({
+			                content: $scope.marker.currentLocation,
+			                maxWidth: 200
+			            });
+			            google.maps.event.addListener(marker, 'mouseover', function () {
+		                	infowindow.open(map,marker);
+			            });
+			            google.maps.event.addListener(marker, 'mouseout', function () {
+			                infowindow.close(map,marker);
+			            });
+						$scope.marker['gObj'] = marker;
+						break;
+					case 'move':
+						var gObj = $scope.marker['gObj'];
+						gObj.setPosition(location);
+						gObj.title = $scope.marker.currentLocation;
+						break;
+					case 'remove':
+						$scope.marker['gObj'].setMap(null);
+						break;
+					default:
+						console.log('unknown!!!');
 				}
-	            /*var infowindow = new google.maps.InfoWindow({
-	                content: $scope.marker.currentLocation,
-	                maxWidth: 200
-	            });
-	            google.maps.event.addListener(marker, 'mouseover', function () {
-                	infowindow.open(map,marker);
-	            });
-	            google.maps.event.addListener(marker, 'mouseout', function () {
-	                infowindow.close(map,marker);
-	            });*/
 			}
 		};
 	});
