@@ -277,11 +277,12 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, data
             var marker;
             for (marker in data) {
                 var dm = data[marker];
-                if (data[marker] !== 'remove') {
+                if (dm['todo'] !== 'remove') {
                     cm[dm['uid']] = dm;
                 }
                 mArr.push(dm);
             }
+            //console.log(cm);
             $scope.markers = mArr;
             init = true;
         //});
