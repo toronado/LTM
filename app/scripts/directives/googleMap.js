@@ -48,6 +48,7 @@ angular.module('app.directives.googleMarker', [])
 			require: "googleMap",
 			controller: function($scope) {
 				var location = new google.maps.LatLng($scope.marker.coords.lat, $scope.marker.coords.lon);
+				var info = $scope.marker['uid']+' - '+$scope.marker['currentLocation'];
 				console.log($scope.marker.todo);
 				switch ($scope.marker.todo) {
 					case 'add':
@@ -63,8 +64,8 @@ angular.module('app.directives.googleMarker', [])
 			                map: map
 			            });
 			            var infowindow = new google.maps.InfoWindow({
-			                content: $scope.marker.currentLocation,
-			                maxWidth: 200
+			                maxWidth: 200,
+			                content: info
 			            });
 			            google.maps.event.addListener(marker, 'mouseover', function () {
 		                	infowindow.open(map,marker);
@@ -72,15 +73,18 @@ angular.module('app.directives.googleMarker', [])
 			            google.maps.event.addListener(marker, 'mouseout', function () {
 			                infowindow.close(map,marker);
 			            });
-						$scope.marker['gObj'] = marker;
+			            $scope.marker['gObj'] = {
+			            	'marker': marker,
+			            	'info': infowindow
+			            }
 						break;
 					case 'move':
 						var gObj = $scope.marker['gObj'];
-						gObj.setPosition(location);
-						gObj.title = $scope.marker.currentLocation;
+						gObj['marker'].setPosition(location);
+						gObj['info'].setContent(info);
 						break;
 					case 'remove':
-						$scope.marker['gObj'].setMap(null);
+						$scope.marker['gObj']['marker'].setMap(null);
 						break;
 					default:
 						console.log('unknown!!!');

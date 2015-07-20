@@ -29,7 +29,7 @@ tubeApp.factory('dataFactory', function ($http) {
         getArrivals : function() {
             return $http({
                     method: 'GET',
-                    url: 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals?ids='+tubeLines.join(),
+                    url: 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals?ids='+tubeLines[1],
                     cache: false
                 })
                 .then(function (response) {
@@ -246,12 +246,16 @@ tubeApp.factory('dataService', function ($http) {
     };
 });
 tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, dataService) {
+    var testData1 = [{"$type":"Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities","id":"-1364140861","operationType":1,"vehicleId":"013","naptanId":"940GZZLUSTD","stationName":"Stratford Underground Station","lineId":"central","lineName":"Central","platformName":"Westbound - Platform 3","direction":"inbound","destinationNaptanId":"940GZZLUWRP","destinationName":"West Ruislip Underground Station","timestamp":"2015-07-20T10:04:27.809Z","timeToStation":0,"currentLocation":"At Platform","towards":"West Ruislip","expectedArrival":"2015-07-20T10:04:27.809Z","timeToLive":"2015-07-20T10:04:27.809Z","modeName":"tube"},{"$type":"Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities","id":"-1455366928","operationType":1,"vehicleId":"025","naptanId":"940GZZLUMED","stationName":"Mile End Underground Station","lineId":"central","lineName":"Central","platformName":"Westbound - Platform 1","direction":"inbound","destinationNaptanId":"940GZZLUEBY","destinationName":"Ealing Broadway Underground Station","timestamp":"2015-07-20T10:04:24.793Z","timeToStation":174,"currentLocation":"Between Stratford and Mile End","towards":"Ealing Broadway","expectedArrival":"2015-07-20T10:07:18.793Z","timeToLive":"2015-07-20T10:07:18.793Z","modeName":"tube"}];
+    var testData2 = [{"$type":"Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities","id":"-1455366928","operationType":1,"vehicleId":"025","naptanId":"940GZZLUMED","stationName":"Mile End Underground Station","lineId":"central","lineName":"Central","platformName":"Westbound - Platform 1","direction":"inbound","destinationNaptanId":"940GZZLUEBY","destinationName":"Ealing Broadway Underground Station","timestamp":"2015-07-20T10:04:24.793Z","timeToStation":100,"currentLocation":"Hello!","towards":"Ealing Broadway","expectedArrival":"2015-07-20T10:07:18.793Z","timeToLive":"2015-07-20T10:07:18.793Z","modeName":"tube"}];
     $scope.station = sObj['sid'][$routeParams.stationId];
     var init = false;
     var cm = {}; //Current markers
     $scope.go = function() {
-        dataFactory.getArrivals().then(function (data) {
+        //dataFactory.getArrivals().then(function (data) {
             //Get the arrivals data, unify it, add location coordinates
+            var data = testData1;
+            if (init) data = testData2;
             $scope.trains = dataService.unifyData(data);
             data = dataService.getMarkers($scope.trains);
             if (init) {
@@ -263,6 +267,8 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, data
                     } else {
                         data[m] = cmo;
                         data[m]['todo'] = 'remove';
+                        delete data[m]['$$hashKey'];
+                        delete cm[m];
                     }
                     data[m]['gObj'] = cmo['gObj'];
                 }
@@ -271,15 +277,13 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, data
             var marker;
             for (marker in data) {
                 var dm = data[marker];
-                if (dm['todo'] !== 'remove') {
+                if (data[marker] !== 'remove') {
                     cm[dm['uid']] = dm;
-                } else {
-                    delete cm[dm['uid']];
                 }
                 mArr.push(dm);
             }
             $scope.markers = mArr;
             init = true;
-        });
+        //});
     }
 });

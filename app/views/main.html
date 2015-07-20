@@ -10,10 +10,10 @@
 	<div class="row">
 		<div class="col-md-3">
 		    <ol class="list-group">
-		    	<li class="list-group-item" data-ng-repeat="train in trains | orderBy:'-timeToStation':true">
+		    	<li class="list-group-item" data-ng-repeat="train in trains | orderBy:'-uid':true">
 		    		<span class="badge">{{train.timeToStation}}</span>
-		    		{{$index+1}}. {{train.naptanId.substring(8)}}
-		    		{{train.towards}}
+		    		{{$index+1}}. {{train.uid}} - {{train.currentLocation}} ({{train.naptanId.substring(8)}})
+		    		
 		    	</li>
 		    </ol>
 		</div>
