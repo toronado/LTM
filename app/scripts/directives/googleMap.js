@@ -3,8 +3,7 @@ angular.module('app.directives.googleMap', [])
 		return {
 			restrict: 'E', //Element E, Attribute A
 			scope: {
-				lat: '=', //look for attribute value(=)
-				lon: '='
+				map: '=' //look for attribute value(=)
 			},
 			replace: true, //replace custom html with compliant html
 			transclude: true, //allow other html without overwriting
@@ -15,13 +14,27 @@ angular.module('app.directives.googleMap', [])
 				});*/
 			},
 			controller: function($scope) {
-				var center = new google.maps.LatLng($scope.lat, $scope.lon);
+				var lat = $scope.map.lat;
+				var lon = $scope.map.lon;
+				var center = new google.maps.LatLng(lat, lon);
+
 				var mapOptions = {
-	                zoom: 12,
+	                zoom: 13,
 	                center: center,
-	                disableDefaultUI: true
+	                mapTypeId: google.maps.MapTypeId.SATELLITE//,
+	                //disableDefaultUI: true
 	            };
 	            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+	            var location = new google.maps.LatLng(lat, lon);
+	            var marker = new google.maps.Marker({
+	                position: location,
+	                map: map
+	            });
+	            //$scope.map['mObj'] = map;
+	            /*var infowindow = new google.maps.InfoWindow({
+	                content: $scope.data.name
+	            });
+	            infowindow.open(map,marker);*/
 			}
 		};
 	});
@@ -40,23 +53,23 @@ angular.module('app.directives.googleMarker', [])
             'victoria' : '#009FE0',
             'waterloo-city' : '#70C3CE'
         };
-		return {
+        return {
 			restrict: 'E',
 			scope: {
 				marker: '='
 			},
-			require: "googleMap",
+			//require: "googleMap",
 			controller: function($scope) {
 				var location = new google.maps.LatLng($scope.marker.coords.lat, $scope.marker.coords.lon);
-				var info = $scope.marker['uid']+' - '+$scope.marker['currentLocation'];
-				console.log($scope.marker.todo);
+				var info = $scope.marker['currentLocation'];
+				//console.log($scope.marker.todo);
 				switch ($scope.marker.todo) {
 					case 'add':
 						var marker = new google.maps.Marker({
 			                position: location,
 			                icon: {
 			                    path: google.maps.SymbolPath.CIRCLE,
-			                    scale: 3,
+			                    scale: 5,
 			                    fillOpacity: 1,
 			                    fillColor: colors[$scope.marker.lineId],
 			                    strokeWeight:0
@@ -81,7 +94,7 @@ angular.module('app.directives.googleMarker', [])
 					case 'move':
 						var gObj = $scope.marker['gObj'];
 						//gObj['marker'].setPosition(location);
-						gObj['marker'].animateTo(location, {easing: 'linear', duration: 10000});
+						gObj['marker'].animateTo(location, {easing: 'linear', duration: 2000});
 						gObj['info'].setContent(info);
 						break;
 					case 'remove':

@@ -1,14 +1,13 @@
 <nav class="navbar navbar-default">
 	<div class="container-fluid">
 		<div class="navbar-header">
-		  	<a class="navbar-brand" href="#">{{station.name}}</a>
-		  	<button ng-click="go()" >Go!</button>
+		  	<a class="navbar-brand" href="" ng-click="go()">{{station.name}}</a>
 		</div>
 	</div>
 </nav>
-<div class="container-fluid">
+<div class="container-fluid" id="main-container">
 	<div class="row">
-		<div class="col-md-3">
+		<!--<div class="col-md-3">
 		    <ol class="list-group">
 		    	<li class="list-group-item" data-ng-repeat="train in trains | orderBy:'-uid':true">
 		    		<span class="badge">{{train.timeToStation}}</span>
@@ -16,12 +15,20 @@
 		    		
 		    	</li>
 		    </ol>
-		</div>
-		<div class="col-md-9">
-		    <google-map lat="station.lat" lon="station.lon">
-		    	<!--<google-marker lat="station.lat" lon="station.lon" info="'Center'"></google-marker>-->
+		</div>-->
+		<div class="col-md-12" style="height:calc(100vh - 50px)">
+			<div id="overlay">
+				<ol class="list-group">
+			    	<li class="list-group-item" data-ng-repeat="train in trains | orderBy:'-uid':true">
+			    		<span class="badge">{{train.timeToStation}}</span>
+			    		{{$index+1}}. {{train.uid}} - {{train.currentLocation}} ({{train.naptanId.substring(8)}})
+			    		
+			    	</li>
+			    </ol>
+			</div>
+		    <google-map map="map">
 		    	<google-marker data-ng-repeat="marker in markers" marker="marker"></google-marker>
-		    </google-map>
+			</google-map>
 		</div>
 	</div>
 </div>

@@ -26,10 +26,20 @@ var tubeLines = [
 //Main GET factory
 tubeApp.factory('dataFactory', function ($http) {
     return {
-        getArrivals : function() {
+        getArrivals : function(sid) {
+            var lines = tubeLines;
+            if (sid) {
+                var lineObj = sObj['sid'][sid]['line'];
+                var line;
+                var arr = [];
+                for (line in lineObj) {
+                    arr.push(line);
+                }
+                lines = arr;
+            }
             return $http({
                     method: 'GET',
-                    url: 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals?ids='+tubeLines[1],
+                    url: 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals?ids='+lines.join(),
                     cache: false
                 })
                 .then(function (response) {
@@ -206,11 +216,10 @@ tubeApp.factory('dataService', function ($http) {
         getMarkers: function(data) {
             //Convert Location String to a Coordinate!
             var markers = {};
-            var locationUnknown = [];
             var i;
-            var dataLength = data.length;
-            for (i=0; i<dataLength; i++) {
+            var totalTrains = data.length;
 
+            for (i=0; i<totalTrains; i++) {
                 var train = data[i];
                 var stn = sObj['sid'][train['naptanId'].substring(8)]; //Data relative to this station
                 var stnCoords = {
@@ -220,25 +229,16 @@ tubeApp.factory('dataService', function ($http) {
                 var tts = train['timeToStation']; //Time to Station
                 var location = null;
 
-                switch (tts) {
-                    case 0:
-                        location = stnCoords;
-                        break;
-                    default:
-                        switch (train['currentLocation']) {
-                            case 'At Platform':
-                                location = stnCoords;
-                                break;
-                            default:
-                                location = this.locateTrain(train);
-                        }
+                if (!tts) { //Time to station is 0 therefore train is at stn
+                    train['currentLocation'] = 'At ' + stn['name'];
+                    location = stnCoords;
+                } else {
+                    location = this.locateTrain(train);
                 }
                 if (location) {
                     train['coords'] = location;
                     train['todo'] = 'add';
                     markers[train['uid']] = train;
-                } else {
-                    locationUnknown.push(train);
                 }
             }
             return markers;
@@ -246,11 +246,16 @@ tubeApp.factory('dataService', function ($http) {
     };
 });
 tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, dataService) {
+
     $scope.station = sObj['sid'][$routeParams.stationId];
+    $scope.map = {
+        lat: $scope.station.lat,
+        lon: $scope.station.lon
+    };
     var init = false;
     var cm = {}; //Current markers
     $scope.go = function() {
-        dataFactory.getArrivals().then(function (data) {
+        dataFactory.getArrivals($routeParams.stationId).then(function (data) {
             //Get the arrivals data, unify it, add location coordinates
             $scope.trains = dataService.unifyData(data);
             data = dataService.getMarkers($scope.trains);
@@ -282,4 +287,5 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, data
             init = true;
         });
     }
+    $scope.go();
 });
