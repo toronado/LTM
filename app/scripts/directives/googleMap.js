@@ -3,6 +3,7 @@ angular.module('app.directives.googleMap', [])
 		return {
 			restrict: 'E', //Element E, Attribute A
 			scope: {
+				center: '=',
 				map: '=' //look for attribute value(=)
 			},
 			replace: true, //replace custom html with compliant html
@@ -14,23 +15,23 @@ angular.module('app.directives.googleMap', [])
 				});*/
 			},
 			controller: function($scope) {
-				var lat = $scope.map.lat;
-				var lon = $scope.map.lon;
+				var lat = $scope.center.lat;
+				var lon = $scope.center.lon;
 				var center = new google.maps.LatLng(lat, lon);
 
 				var mapOptions = {
 	                zoom: 13,
-	                center: center,
-	                mapTypeId: google.maps.MapTypeId.SATELLITE//,
-	                //disableDefaultUI: true
+	                center: center//,
+	                /*mapTypeId: google.maps.MapTypeId.SATELLITE,
+	                disableDefaultUI: true*/
 	            };
-	            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+	            var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 	            var location = new google.maps.LatLng(lat, lon);
 	            var marker = new google.maps.Marker({
 	                position: location,
 	                map: map
 	            });
-	            //$scope.map['mObj'] = map;
+	            $scope.map = map;
 	            /*var infowindow = new google.maps.InfoWindow({
 	                content: $scope.data.name
 	            });
@@ -56,12 +57,13 @@ angular.module('app.directives.googleMarker', [])
         return {
 			restrict: 'E',
 			scope: {
-				marker: '='
+				marker: '=',
+				map: '='
 			},
-			//require: "googleMap",
 			controller: function($scope) {
 				var location = new google.maps.LatLng($scope.marker.coords.lat, $scope.marker.coords.lon);
 				var info = $scope.marker['currentLocation'];
+				var map = $scope.map;
 				//console.log($scope.marker.todo);
 				switch ($scope.marker.todo) {
 					case 'add':

@@ -29,13 +29,7 @@ tubeApp.factory('dataFactory', function ($http) {
         getArrivals : function(sid) {
             var lines = tubeLines;
             if (sid) {
-                var lineObj = sObj['sid'][sid]['line'];
-                var line;
-                var arr = [];
-                for (line in lineObj) {
-                    arr.push(line);
-                }
-                lines = arr;
+                lines = Object.keys(sObj['sid'][sid]['line']);
             }
             return $http({
                     method: 'GET',
@@ -248,10 +242,7 @@ tubeApp.factory('dataService', function ($http) {
 tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, dataService) {
 
     $scope.station = sObj['sid'][$routeParams.stationId];
-    $scope.map = {
-        lat: $scope.station.lat,
-        lon: $scope.station.lon
-    };
+
     var init = false;
     var cm = {}; //Current markers
     $scope.go = function() {

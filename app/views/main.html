@@ -22,12 +22,11 @@
 			    	<li class="list-group-item" data-ng-repeat="train in trains | orderBy:'-uid':true">
 			    		<span class="badge">{{train.timeToStation}}</span>
 			    		{{$index+1}}. {{train.uid}} - {{train.currentLocation}} ({{train.naptanId.substring(8)}})
-			    		
 			    	</li>
 			    </ol>
 			</div>
-		    <google-map map="map">
-		    	<google-marker data-ng-repeat="marker in markers" marker="marker"></google-marker>
+		    <google-map map="map" center="station">
+		    	<google-marker data-ng-repeat="marker in markers" marker="marker" map="map"></google-marker>
 			</google-map>
 		</div>
 	</div>
