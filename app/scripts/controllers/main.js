@@ -207,7 +207,7 @@ tubeApp.factory('dataService', function ($http) {
             }
             return null;
         },
-        getMarkers: function(data) {
+        locateTrains: function(data) {
             //Convert Location String to a Coordinate!
             var markers = {};
             var i;
@@ -249,7 +249,7 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, data
         dataFactory.getArrivals($routeParams.stationId).then(function (data) {
             //Get the arrivals data, unify it, add location coordinates
             $scope.trains = dataService.unifyData(data);
-            data = dataService.getMarkers($scope.trains);
+            data = dataService.locateTrains($scope.trains);
             if (init) {
                 var m;
                 for (m in cm) {
