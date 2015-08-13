@@ -45,24 +45,9 @@ tubeApp.factory('dataFactory', function ($http) {
 
 tubeApp.factory('dataService', function ($http) {
     return {
-        stationNameLookup: function(name) {
-            if (!name) return null;
-            name = name.trim();
-            if (sObj['sidLookup'][name]) {
-                return sObj['sidLookup'][name];
-            }
-            return null;
-        },
-        newLatLon: function(a, b, ratio) {
-            if (ratio > 1) ratio = 0.5; //When a train's between a and b but the tts is relative to c, make it half way between a and b.
-            return {
-                'lat': a['lat'] + ((b['lat'] - a['lat']) * ratio),
-                'lon': a['lon'] + ((b['lon'] - a['lon']) * ratio)
-            }
-        },
         unifyData: function(data) {
             //TFL data contains multiple instances of the same train
-            //Need to consolidate to the nearest station using 'timeToStation'
+            //Need to consolidate the data to the nearest station using 'timeToStation'
             var trainsArr, trainsObj, uid, i, dataLength, train;
             trainsArr = [];
             trainsObj = {};
@@ -82,29 +67,53 @@ tubeApp.factory('dataService', function ($http) {
                     trainsObj[uid] = data[i];
                 }
             }
-            //Put data back into array of objects
+            //Put data back into array of objects - $hashkey issue if not?? 
             for (train in trainsObj) {
                 trainsObj[train]['uid'] = train;
                 trainsArr.push(trainsObj[train]);
             }
             return trainsArr;
+        }
+    };
+});
+
+tubeApp.factory('locationService', function ($http) {
+    return {
+        stationNameLookup: function(name) {
+            if (!name) return null;
+            name = name.trim();
+            if (sObj['sidLookup'][name]) {
+                return sObj['sidLookup'][name];
+            }
+            return null;
+        },
+        newLatLon: function(a, b, ratio) {
+            if (ratio > 1) ratio = 0.5; //When a train's between a and b but the tts is relative to c, make it half way between a and b.
+            return {
+                'lat': a['lat'] + ((b['lat'] - a['lat']) * ratio),
+                'lon': a['lon'] + ((b['lon'] - a['lon']) * ratio)
+            }
         },
         locateTrain: function(train) {
 
-            //Forks (naptan-line-platform:forks)
-            var fork = {"ACTpiccadillywestbound":2,"ERCcirclewestbound":2,"EUSnorthernnorthbound":2,"EUSnorthernsouthbound":2,"WOFcentraleastbound":2,"ECTdistricteastbound":2,"ECTdistrictwestbound":3,"CTNnorthernnorthbound":2,"CTNnorthernsouthbound":2,"HOHmetropolitannorthbound":2,"NANcentralwestbound":2,"TNGdistrictwestbound":2,"HNXpiccadillywestbound":2,"LYScentraleastbound":2,"RKWmetropolitansouthbound":2,"KNGnorthernnorthbound":2,"CALmetropolitannorthbound":2,"CXYmetropolitansouthbound":3,"MPKmetropolitannorthbound":2,"FYCnorthernnorthbound":2};
-            //End Points (naptan-line:platform)
-            var terminus = {"ERCdistrict":"westbound","EGWnorthern":"southbound","UXBmetropolitan":"eastbound","UXBpiccadilly":"eastbound","BXNvictoria":"northbound","EACbakerloo":"northbound","HBTnorthern":"southbound","BNKwaterloo-city":"eastbound","WLOwaterloo-city":"westbound","ALDmetropolitan":"northbound","AMSmetropolitan":"southbound","EBYcentral":"eastbound","EBYdistrict":"eastbound","HSChammersmith-city":"northbound","HSCcircle":"northbound","STMjubilee":"southbound","STDjubilee":"westbound","WAFmetropolitan":"southbound","UPMdistrict":"westbound","WIMdistrict":"eastbound","BKGhammersmith-city":"westbound","EPGcentral":"westbound","HR4piccadilly":"westbound","RMDdistrict":"eastbound","CKSpiccadilly":"westbound","HR5piccadilly":"eastbound","HAWbakerloo":"southbound","CSMmetropolitan":"eastbound","WWLvictoria":"southbound","MHLnorthern":"southbound","MDNnorthern":"northbound","WRPcentral":"eastbound","KOYdistrict":"eastbound"};
             //Station ID - time to station is relative to this station
             var sid = train['naptanId'].substring(8);
             //Station Object
-            var stn = sObj['sid'][sid]; 
+            var stn = sObj['sid'][sid];
+            //Time To Station
+            var tts = train['timeToStation'];
+            //Train is at a Platform tts = 0
+            if (!tts) {
+                train['currentLocation'] = 'At ' + stn['name'];
+                return {
+                    'lat': stn['lat'],
+                    'lon': stn['lon']
+                };
+            }
             //Line ID
             var lid = train['lineId'];
             //Direction Of Travel
             var dot = train['platformName'].split(' ')[0].toLowerCase(); //(N)orth/(E)ast/(S)outh/(W)est/(I)nner/(O)uter
-            //Time To Station
-            var tts = train['timeToStation'];
             //From station ID
             var fid = null;
             //Known Time Between Stations
@@ -123,9 +132,9 @@ tubeApp.factory('dataService', function ($http) {
 
             //Locate the train using it's time to station
             for (var platform in posObj) {
-                if (platform !== dot || terminus[sid+lid]) {
+                if (platform !== dot || sObj['terminus'][sid+lid]) {
                     //Check if it's a junction
-                    if (fork[sid+lid+platform]) {
+                    if (sObj['fork'][sid+lid+platform]) {
                         break;
                     }
                     var fidObj = posObj[platform];
@@ -206,50 +215,27 @@ tubeApp.factory('dataService', function ($http) {
                 return this.newLatLon(sObj['sid'][a], sObj['sid'][b], ratio);
             }
             return null;
-        },
-        locateTrains: function(data) {
-            //Convert Location String to a Coordinate!
-            var markers = {};
-            var i;
-            var totalTrains = data.length;
-
-            for (i=0; i<totalTrains; i++) {
-                var train = data[i];
-                var stn = sObj['sid'][train['naptanId'].substring(8)]; //Data relative to this station
-                var stnCoords = {
-                    'lat': stn['lat'],
-                    'lon': stn['lon']
-                };
-                var tts = train['timeToStation']; //Time to Station
-                var location = null;
-
-                if (!tts) { //Time to station is 0 therefore train is at stn
-                    train['currentLocation'] = 'At ' + stn['name'];
-                    location = stnCoords;
-                } else {
-                    location = this.locateTrain(train);
-                }
-                if (location) {
-                    train['coords'] = location;
-                    train['todo'] = 'add';
-                    markers[train['uid']] = train;
-                }
-            }
-            return markers;
         }
     };
 });
 tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, dataService) {
 
     $scope.station = sObj['sid'][$routeParams.stationId];
+    $scope.map;
+    $scope.markers = {};
 
-    var init = false;
-    var cm = {}; //Current markers
+    //var init = false;
+    //var cm = {}; //Current markers
     $scope.go = function() {
         dataFactory.getArrivals($routeParams.stationId).then(function (data) {
             //Get the arrivals data, unify it, add location coordinates
             $scope.trains = dataService.unifyData(data);
-            data = dataService.locateTrains($scope.trains);
+            //$scope.locateTrain = function(train) {
+                //console.log(train['currentLocation']);
+                //var loc = dataService.locateTrain(train);
+                //console.log(loc);
+            //}
+            /*data = dataService.locateTrains($scope.trains);
             if (init) {
                 var m;
                 for (m in cm) {
@@ -275,7 +261,7 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, data
                 mArr.push(dm);
             }
             $scope.markers = mArr;
-            init = true;
+            init = true;*/
         });
     }
     $scope.go();
