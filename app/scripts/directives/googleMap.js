@@ -74,79 +74,72 @@ angular.module('app.directives.googleMarker', [])
 			scope: {
 				train: '=',
 				map: '=',
-				markers: '='
+				markers: '=',
+				timestamp: '='
 			},
 			controller: function($scope) {
 				//Get the location of the train, exit if null
 				var trainLoc = locationService.locateTrain($scope.train);
 				if (!trainLoc) return;
-				
-				//Check if train already has a marker
-				var trainUid = $scope.train.uid;
-				if ($scope.markers[trainUid]) {
-					$scope.train.todo = 'move';
-				} else {
-					$scope.train.todo = 'add';
-					$scope.markers[trainUid] = $scope.train;
-				}
-
 				//Google map marker location
 				var location = new google.maps.LatLng(trainLoc.lat, trainLoc.lon);
 				//Marker popup messsage
 				var info = $scope.train['currentLocation'];
 
-				//What todo?
-				switch ($scope.train.todo) {
-					case 'add':
-						var map = $scope.map;
-						var marker = new google.maps.Marker({
-			                position: location,
-			                icon: {
-			                    path: google.maps.SymbolPath.CIRCLE,
-			                    scale: 5,
-			                    fillOpacity: 1,
-			                    fillColor: colors[$scope.train.lineId],
-			                    strokeWeight:0
-			                },
-			                map: map
-			            });
-			            var infowindow = new google.maps.InfoWindow({
-			                maxWidth: 200,
-			                content: info
-			            });
-			            google.maps.event.addListener(marker, 'mouseover', function () {
-		                	infowindow.open(map,marker);
-			            });
-			            google.maps.event.addListener(marker, 'mouseout', function () {
-			                infowindow.close(map,marker);
-			            });
-			            // Update markers object with Google marker object
-			            $scope.markers[trainUid]['gObj'] = {
-			            	'marker': marker,
-			            	'info': infowindow
-			            }
-						break;
-					case 'move':
-						var gObj = $scope.markers[trainUid]['gObj'];
-						//gObj['marker'].setPosition(location);
-						gObj['marker'].animateTo(location, {easing: 'linear', duration: 2000});
-						gObj['info'].setContent(info);
-						break;
-					case 'remove':
-						console.log($scope.train);
-						$scope.train['gObj']['marker'].setMap(null);
-						break;
-					default:
-						console.log('unknown!!!');
+				//Check if train already has a marker
+				var trainUid = $scope.train.uid;
+				if ($scope.markers[trainUid]) {
+					var mObj = $scope.markers[trainUid];
+					//mObj['marker'].setPosition(location);
+					mObj['marker'].animateTo(location, {easing: 'linear', duration: 25000});
+					mObj['info'].setContent(info);
+					mObj['data'] = $scope.train;
+				} else {
+					var map = $scope.map;
+					var marker = new google.maps.Marker({
+		                position: location,
+		                icon: {
+		                    path: google.maps.SymbolPath.CIRCLE,
+		                    scale: 5,
+		                    fillOpacity: 1,
+		                    fillColor: colors[$scope.train.lineId],
+		                    strokeWeight:0
+		                },
+		                map: map
+		            });
+		            var infowindow = new google.maps.InfoWindow({
+		                maxWidth: 200,
+		                content: info
+		            });
+		            google.maps.event.addListener(marker, 'mouseover', function () {
+	                	infowindow.open(map,marker);
+		            });
+		            google.maps.event.addListener(marker, 'mouseout', function () {
+		                infowindow.close(map,marker);
+		            });
+		            // Update markers object with Google marker object
+		            $scope.markers[trainUid] = {
+		            	'marker': marker,
+		            	'info': infowindow,
+		            	'data': $scope.train
+		            }
 				}
+				$scope.markers[trainUid]['timestamp'] = $scope.timestamp;
 			}
 		};
 	}])
 	.directive('trainRepeatDirective', function() {
   		return function(scope, element, attrs) {
     		if (scope.$last) {
-    			console.log(scope.markers);
-      			//window.alert("im the last!");
+    			var m, marker;
+    			for (m in scope.markers) {
+    				marker = scope.markers[m]
+    				if (marker['timestamp'] !== scope.timestamp) {
+    					marker['marker'].setMap(null);
+    					console.log(marker);
+    					delete scope.markers[m];
+    				}
+    			}
     		}
   		};
 	});

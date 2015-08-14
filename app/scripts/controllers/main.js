@@ -43,7 +43,7 @@ tubeApp.factory('dataFactory', function ($http) {
     };
 });
 
-tubeApp.factory('dataService', function ($http) {
+tubeApp.factory('dataService', function () {
     return {
         unifyData: function(data) {
             //TFL data contains multiple instances of the same train
@@ -77,7 +77,7 @@ tubeApp.factory('dataService', function ($http) {
     };
 });
 
-tubeApp.factory('locationService', function ($http) {
+tubeApp.factory('locationService', function () {
     return {
         stationNameLookup: function(name) {
             if (!name) return null;
@@ -218,51 +218,23 @@ tubeApp.factory('locationService', function ($http) {
         }
     };
 });
+
 tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, dataService) {
 
     $scope.station = sObj['sid'][$routeParams.stationId];
     $scope.map;
     $scope.markers = {};
-
-    //var init = false;
-    //var cm = {}; //Current markers
-    $scope.go = function() {
+    var gogo = function() {
         dataFactory.getArrivals($routeParams.stationId).then(function (data) {
-            //Get the arrivals data, unify it, add location coordinates
+            $scope.timestamp = new Date().getTime() / 1000;
+            //Get the arrivals data and unify it
             $scope.trains = dataService.unifyData(data);
-            //$scope.locateTrain = function(train) {
-                //console.log(train['currentLocation']);
-                //var loc = dataService.locateTrain(train);
-                //console.log(loc);
-            //}
-            /*data = dataService.locateTrains($scope.trains);
-            if (init) {
-                var m;
-                for (m in cm) {
-                    var cmo = cm[m];
-                    if (data[m]) {
-                        data[m]['todo'] = 'move';
-                    } else {
-                        data[m] = cmo;
-                        data[m]['todo'] = 'remove';
-                        delete data[m]['$$hashKey'];
-                        delete cm[m];
-                    }
-                    data[m]['gObj'] = cmo['gObj'];
-                }
-            }
-            var mArr = [];
-            var marker;
-            for (marker in data) {
-                var dm = data[marker];
-                if (dm['todo'] !== 'remove') {
-                    cm[dm['uid']] = dm;
-                }
-                mArr.push(dm);
-            }
-            $scope.markers = mArr;
-            init = true;*/
         });
     }
-    $scope.go();
+    gogo();
+    var myVar = setInterval(function () {gogo()}, 60000);
+    $scope.go = function() {
+        window.clearInterval(myVar);
+        alert('interval cleared');
+    }
 });

@@ -12,7 +12,7 @@
 				<div id="overlay">
 					<ol class="list-group">
 				    	<li class="list-group-item" data-ng-repeat="train in trains | orderBy:'-uid':true" train-repeat-directive>
-				    		<google-marker train="train" map="map" markers="markers"></google-marker>
+				    		<google-marker train="train" map="map" markers="markers" timestamp="timestamp"></google-marker>
 				    		<span class="badge">{{train.timeToStation}}</span>
 				    		{{$index+1}}. {{train.uid}} - {{train.currentLocation}} ({{train.naptanId.substring(8)}})
 				    	</li>
