@@ -91,7 +91,7 @@ angular.module('app.directives.googleMarker', [])
 				if ($scope.markers[trainUid]) {
 					var mObj = $scope.markers[trainUid];
 					//mObj['marker'].setPosition(location);
-					mObj['marker'].animateTo(location, {easing: 'linear', duration: 25000});
+					mObj['marker'].animateTo(location, {easing: 'linear', duration: 5000});
 					mObj['info'].setContent(info);
 					mObj['data'] = $scope.train;
 				} else {
