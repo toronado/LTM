@@ -25,6 +25,10 @@ var tubeLines = [
 
 //Main GET factory
 tubeApp.factory('dataFactory', function ($http) {
+    var urls = {
+        'line': 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals',
+        'station': 'https://api.tfl.gov.uk/StopPoint/%7Bids%7D/Arrivals'
+    }
     return {
         getArrivals : function(sid) {
             var lines = tubeLines;
@@ -180,7 +184,7 @@ tubeApp.factory('locationService', function () {
                     ratio = 0.5; //Exact position unknown
                     break;
                 case 'Lef': //Left
-                case 'Lea': //Left
+                case 'Lea': //Leaving
                 case 'Dep': //Departed
                     a = this.stationNameLookup(cls.substring(cls.indexOf(' ')+1));
                     b = sid;
@@ -227,7 +231,6 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, data
     var gogo = function() {
         dataFactory.getArrivals($routeParams.stationId).then(function (data) {
             $scope.timestamp = new Date().getTime() / 1000;
-            //Get the arrivals data and unify it
             $scope.trains = dataService.unifyData(data);
         });
     }

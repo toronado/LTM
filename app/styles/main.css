@@ -25,14 +25,32 @@ body {
 
 #overlay {
 	position: absolute;
-	top:80px;
-	right:50px;
+	top:30px;
+	left:40px;
+	bottom:30px;
 	width: 300px;
-	height:500px;
+	z-index: 1000;
+	overflow-y: scroll;
+	border-radius: 5px;
+}
+
+#overlay h1 {
+	padding:15px;
+	margin:0;
+	font-size: 1.5em;
+	color: #fff;
 	background-color: #000;
 	opacity: 0.8;
-	z-index: 1000;
-	overflow: hidden;
+}
+
+.list-group-item {
+	border-radius: 0 !important;
+	background-color: #000;
+	opacity: 0.8;
+	color: #777;
+	border:none;
+	border-bottom: #222 solid 1px;
+	margin:0;
 }
 
 /*# sourceMappingURL=main.css.map */

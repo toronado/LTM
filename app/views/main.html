@@ -1,7 +1,7 @@
 <nav class="navbar navbar-default">
 	<div class="container-fluid">
 		<div class="navbar-header">
-		  	<a class="navbar-brand" href="" ng-click="go()">{{station.name}}</a>
+		  	<a href="" class="navbar-brand">TFLive</a>
 		</div>
 	</div>
 </nav>
@@ -10,11 +10,12 @@
 		<div class="col-md-12" style="height:calc(100vh - 50px)">
 			<google-map map="map" center="station" path="'central'">
 				<div id="overlay">
+					<h1><a href="" ng-click="go()">{{station.name}}</a></h1>
 					<ol class="list-group">
-				    	<li class="list-group-item" data-ng-repeat="train in trains | orderBy:'-uid':true" train-repeat-directive>
+				    	<li class="list-group-item" data-ng-repeat="train in trains | orderBy:'-timeToStation':true" train-repeat-directive>
 				    		<google-marker train="train" map="map" markers="markers" timestamp="timestamp"></google-marker>
 				    		<span class="badge">{{train.timeToStation}}</span>
-				    		{{$index+1}}. {{train.uid}} - {{train.currentLocation}} ({{train.naptanId.substring(8)}})
+				    		{{train.currentLocation}} ({{train.naptanId.substring(8)}})
 				    	</li>
 				    </ol>
 				</div>

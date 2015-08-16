@@ -19,12 +19,11 @@ angular.module('app.directives.googleMap', [])
 				var lat = $scope.center.lat;
 				var lon = $scope.center.lon;
 				var center = new google.maps.LatLng(lat, lon);
-
 				var mapOptions = {
 	                zoom: 13,
-	                center: center//,
-	                /*mapTypeId: google.maps.MapTypeId.SATELLITE,
-	                disableDefaultUI: true*/
+	                center: center,
+	                disableDefaultUI: true
+	                /*mapTypeId: google.maps.MapTypeId.SATELLITE*/
 	            };
 	            var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 	            var location = new google.maps.LatLng(lat, lon);
@@ -100,7 +99,7 @@ angular.module('app.directives.googleMarker', [])
 		                position: location,
 		                icon: {
 		                    path: google.maps.SymbolPath.CIRCLE,
-		                    scale: 5,
+		                    scale: 6,
 		                    fillOpacity: 1,
 		                    fillColor: colors[$scope.train.lineId],
 		                    strokeWeight:0
@@ -117,7 +116,7 @@ angular.module('app.directives.googleMarker', [])
 		            google.maps.event.addListener(marker, 'mouseout', function () {
 		                infowindow.close(map,marker);
 		            });
-		            // Update markers object with Google marker object
+		            // Update markers object with market data
 		            $scope.markers[trainUid] = {
 		            	'marker': marker,
 		            	'info': infowindow,
