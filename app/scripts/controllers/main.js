@@ -226,8 +226,8 @@ tubeApp.factory('locationService', function () {
 tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, dataService) {
 
     $scope.station = sObj['sid'][$routeParams.stationId];
-    $scope.map;
     $scope.markers = {};
+    $scope.lines = sObj['paths']['central'];
     var gogo = function() {
         dataFactory.getArrivals($routeParams.stationId).then(function (data) {
             $scope.timestamp = new Date().getTime() / 1000;
