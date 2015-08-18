@@ -22,7 +22,9 @@ angular.module('app.directives.googleMap', [])
 				var mapOptions = {
 	                zoom: 13,
 	                center: center,
-	                disableDefaultUI: true
+	                disableDefaultUI: true//,
+	                //backgroundColor: '#222',
+	                //styles: [{"featureType":"all","stylers":[{"visibility":"off"}]}]
 	                /*mapTypeId: google.maps.MapTypeId.SATELLITE*/
 	            };
 	            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
@@ -45,10 +47,10 @@ angular.module('app.directives.googleMap', [])
 				                position: location,
 				                icon: {
 				                    path: google.maps.SymbolPath.CIRCLE,
-				                    scale: 8,
+				                    scale: 4,
 				                    fillOpacity: 1,
 				                    fillColor: '#ffffff',
-				                    strokeWeight:3,
+				                    strokeWeight:2,
 				                    strokeColor: '#000000'
 				                },
 				                map: map
@@ -59,7 +61,7 @@ angular.module('app.directives.googleMap', [])
 					    geodesic: true,
 					    strokeColor: '#FF0000',
 					    strokeOpacity: 1.0,
-					    strokeWeight: 2
+					    strokeWeight: 1
 					});
 					flightPath.setMap(map);
 				}
@@ -71,82 +73,32 @@ angular.module('app.directives.googleMap', [])
 		};
 	});
 angular.module('app.directives.googleMarker', [])
-	.directive('googleMarker', ['locationService', function(locationService) {
+	.directive('googleMarker', ['locationService', 'markerService', function(locationService, markerService) {
         return {
 			restrict: 'E',
 			scope: {
-				type: '=',
 				data: '=',
-				markers: '=',
-				timestamp: '='
+				timestamp: '=',
+				last: '='
 			},
 			controller: function($scope) {
-				switch($scope.type) {
-					case 'train':
-						//Get the location of the train, exit if null
-						var trainLoc = locationService.locateTrain($scope.data);
-						if (!trainLoc) return;
-						//Google map marker location
-						var location = new google.maps.LatLng(trainLoc.lat, trainLoc.lon);
-						//Marker popup messsage
-						var info = $scope.data['currentLocation'];
+				//Get the location of the train, exit if null
+				var trainLoc = locationService.locateTrain($scope.data);
+				if (!trainLoc) return;
 
-						//Check if train already has a marker
-						var trainUid = $scope.data.uid;
-						if ($scope.markers[trainUid]) {
-							var mObj = $scope.markers[trainUid];
-							//mObj['marker'].setPosition(location);
-							mObj['marker'].animateTo(location, {easing: 'linear', duration: 5000});
-							mObj['info'].setContent(info);
-							mObj['data'] = $scope.data;
-						} else {
-							//var map = $scope.map;
-							var marker = new google.maps.Marker({
-				                position: location,
-				                icon: {
-				                    path: google.maps.SymbolPath.CIRCLE,
-				                    scale: 5,
-				                    fillOpacity: 1,
-				                    fillColor: sObj['colors'][$scope.data.lineId],
-				                    strokeWeight:0
-				                },
-				                map: map
-				            });
-				            var infowindow = new google.maps.InfoWindow({
-				                maxWidth: 200,
-				                content: info
-				            });
-				            google.maps.event.addListener(marker, 'mouseover', function () {
-			                	infowindow.open(map,marker);
-				            });
-				            google.maps.event.addListener(marker, 'mouseout', function () {
-				                infowindow.close(map,marker);
-				            });
-				            // Update markers object with market data
-				            $scope.markers[trainUid] = {
-				            	'marker': marker,
-				            	'info': infowindow,
-				            	'data': $scope.data
-				            }
-						}
-						$scope.markers[trainUid]['timestamp'] = $scope.timestamp;
-					break;
+				$scope.data['coords'] = trainLoc;
+				$scope.data['timestamp'] = $scope.timestamp;
+				
+				var trainUid = $scope.data.uid;
+				if (markerService.markerCheck(trainUid)) {
+					markerService.moveMarker(trainUid, $scope.data);
+				} else {
+					markerService.addMarker('train', $scope.data);
+				}
+
+				if ($scope.last) {
+					markerService.removeOldMarkers($scope.timestamp);
 				}
 			}
 		};
-	}])
-	.directive('trainRepeatDirective', function() {
-  		return function(scope, element, attrs) {
-    		if (scope.$last) {
-    			var m, marker;
-    			for (m in scope.markers) {
-    				marker = scope.markers[m]
-    				if (marker['timestamp'] !== scope.timestamp) {
-    					marker['marker'].setMap(null);
-    					console.log(marker);
-    					delete scope.markers[m];
-    				}
-    			}
-    		}
-  		};
-	});
+	}]);

@@ -223,10 +223,71 @@ tubeApp.factory('locationService', function () {
     };
 });
 
+tubeApp.factory('markerService', function () {
+    return {
+        markers: {},
+        markerCheck: function(uid) {
+            return this.markers[uid] ? true : false;
+        },
+        location: function(coords) {
+            return new google.maps.LatLng(coords.lat, coords.lon);
+        },
+        addMarker: function(type, data) {
+            switch (type) {
+                case 'train':
+                    var marker = new google.maps.Marker({
+                        position: this.location(data['coords']),
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 6,
+                            fillOpacity: 1,
+                            fillColor: sObj['colors'][data['lineId']],
+                            strokeWeight: 0
+                        },
+                        zIndex: 1000,
+                        map: map
+                    });
+                    var infowindow = new google.maps.InfoWindow({
+                        maxWidth: 200,
+                        content: data['currentLocation']
+                    });
+                    google.maps.event.addListener(marker, 'mouseover', function () {
+                        infowindow.open(map,marker);
+                    });
+                    google.maps.event.addListener(marker, 'mouseout', function () {
+                        infowindow.close(map,marker);
+                    });
+                    marker['infoWin'] = infowindow;
+                    marker['data'] = data;
+                    break;
+                case 'station':
+                    break;
+            }
+            this.markers[data['uid']] = marker;
+        },
+        moveMarker: function(uid, data) {
+            var marker = this.markers[uid];
+            marker['data'] = data;
+            marker['infoWin'].setContent(data['currentLocation']);
+            marker.animateTo(this.location(data['coords']), {easing: 'linear', duration: 5000});
+        },
+        removeOldMarkers: function(timestamp) {
+            var key, marker;
+            for (key in this.markers) {
+                marker = this.markers[key];
+                if (marker['data']['timestamp'] !== timestamp) {
+                    marker.setMap(null);
+                    console.log(marker);
+                    delete this.markers[key];
+                }
+            }
+        }
+    }
+});
+
 tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, dataService) {
 
     $scope.station = sObj['sid'][$routeParams.stationId];
-    $scope.markers = {};
     $scope.lines = sObj['paths']['central'];
     var gogo = function() {
         dataFactory.getArrivals($routeParams.stationId).then(function (data) {
