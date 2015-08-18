@@ -24,17 +24,17 @@ body {
 }
 
 #overlay {
-	position: absolute;
+	/*position: absolute;
 	top:30px;
 	left:40px;
 	bottom:30px;
 	width: 300px;
-	z-index: 1000;
+	z-index: 1000;*/
+	height: 100%;
 	overflow-y: scroll;
-	border-radius: 5px;
 }
 
-#overlay h1 {
+h1 {
 	padding:15px;
 	margin:0;
 	font-size: 1.5em;

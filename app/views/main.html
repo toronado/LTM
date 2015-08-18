@@ -7,19 +7,18 @@
 </nav>
 <div class="container-fluid" id="main-container">
 	<div class="row">
-		<div class="col-md-12" style="height:calc(100vh - 50px)">
-			<google-map center="station" marker="true" path="lines">
-				<div id="overlay">
-					<h1>{{station.name}}</h1>
-					<ol class="list-group">
-				    	<li class="list-group-item" data-ng-repeat="train in trains | orderBy:'-timeToStation':true">
-				    		<google-marker data="train" timestamp="timestamp" last="$last"></google-marker>
-				    		<span class="badge">{{train.timeToStation}}</span>
-				    		{{train.currentLocation}} ({{train.naptanId.substring(8)}})
-				    	</li>
-				    </ol>
-				</div>
-		    </google-map>
+		<div class="col-md-3" style="height:calc(100vh - 50px); padding-right:0; overflow-y: scroll;">
+			<h1>{{station.name}}</h1>
+			<ol class="list-group">
+		    	<li class="list-group-item" data-ng-repeat="train in trains | orderBy:'-timeToStation':true">
+		    		<google-marker data="train" timestamp="timestamp" last="$last"></google-marker>
+		    		<span class="badge">{{train.timeToStation}}</span>
+		    		{{train.currentLocation}} ({{train.naptanId.substring(8)}})
+		    	</li>
+		    </ol>
+		</div>
+		<div class="col-md-9" style="height:calc(100vh - 50px); padding-left:0;">
+			<google-map center="station" marker="true" path="lines"></google-map>
 		</div>
 	</div>
 </div>
