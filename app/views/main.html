@@ -1,24 +1,26 @@
 <nav class="navbar navbar-default">
 	<div class="container-fluid">
 		<div class="navbar-header">
-		  	<a href="" ng-click="go()" class="navbar-brand">TFLive</a>
+		  	<a href="" ng-click="go()" class="navbar-brand">The Map</a>
 		</div>
 	</div>
 </nav>
 <div class="container-fluid" id="main-container">
-	<div class="row">
-		<div class="col-md-3" style="height:calc(100vh - 50px); padding-right:0; overflow-y: scroll;">
-			<h1>{{station.name}}</h1>
+	<div class="row-fluid" style="background-color:#222;">
+		<div class="col-md-3" style="padding:0; height:calc(100vh - 50px); overflow-y: scroll;">
+			<h1>{{station.name}} <small>{{stationId}}</small></h1>
 			<ol class="list-group">
-		    	<li class="list-group-item" data-ng-repeat="train in trains | orderBy:'-timeToStation':true">
-		    		<google-marker data="train" timestamp="timestamp" last="$last"></google-marker>
-		    		<span class="badge">{{train.timeToStation}}</span>
-		    		{{train.currentLocation}} ({{train.naptanId.substring(8)}})
+		    	<li class="list-group-item" data-ng-repeat="arrival in arrivals | orderBy:'-timeToStation':true" ng-if="arrival.naptanId === '940GZZLU'+stationId">
+		    		<span class="badge">{{arrival.timeToStation | convertTime}}</span>
+		    		<span class="towards">{{arrival.towards}}</span>
+		    		<small>{{arrival.currentLocation}}</small>
 		    	</li>
 		    </ol>
 		</div>
-		<div class="col-md-9" style="height:calc(100vh - 50px); padding-left:0;">
-			<google-map center="station" marker="true" path="lines"></google-map>
+		<div class="col-md-9" style="height:calc(100vh - 50px); padding:0;">
+			<google-map center="station" marker="true" path="lines">
+				<google-marker data-ng-repeat="train in trains" data="train" timestamp="timestamp" last="$last"></google-marker>
+			</google-map>
 		</div>
 	</div>
 </div>

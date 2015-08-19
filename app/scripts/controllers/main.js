@@ -25,19 +25,22 @@ var tubeLines = [
 
 //Main GET factory
 tubeApp.factory('dataFactory', function ($http) {
-    var urls = {
-        'line': 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals',
-        'station': 'https://api.tfl.gov.uk/StopPoint/%7Bids%7D/Arrivals'
-    }
     return {
-        getArrivals : function(sid) {
-            var lines = tubeLines;
-            if (sid) {
-                lines = Object.keys(sObj['sid'][sid]['line']);
+        getArrivals : function(url, params) {
+            switch (url) {
+                case 'station':
+                    var url = 'https://api.tfl.gov.uk/StopPoint/%7Bids%7D/Arrivals';
+                    var params = { 'ids': '940GZZLU' + params };
+                    break;
+                case 'line':
+                    var url = 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals';
+                    var params = { 'ids': Object.keys(sObj['sid'][params]['line']).join() };
+                    break;
             }
             return $http({
                     method: 'GET',
-                    url: 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals?ids='+lines.join(),
+                    url: url,
+                    params: params,
                     cache: false
                 })
                 .then(function (response) {
@@ -239,7 +242,7 @@ tubeApp.factory('markerService', function () {
                         position: this.location(data['coords']),
                         icon: {
                             path: google.maps.SymbolPath.CIRCLE,
-                            scale: 6,
+                            scale: 5,
                             fillOpacity: 1,
                             fillColor: sObj['colors'][data['lineId']],
                             strokeWeight: 0
@@ -259,11 +262,16 @@ tubeApp.factory('markerService', function () {
                     });
                     marker['infoWin'] = infowindow;
                     marker['data'] = data;
+                    this.markers[data['uid']] = marker;
                     break;
                 case 'station':
                     break;
+                default:
+                    var marker = new google.maps.Marker({
+                        position: this.location(data['coords']),
+                        map: map
+                    });
             }
-            this.markers[data['uid']] = marker;
         },
         moveMarker: function(uid, data) {
             var marker = this.markers[uid];
@@ -287,18 +295,33 @@ tubeApp.factory('markerService', function () {
 
 tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, dataService) {
 
+    $scope.stationId = $routeParams.stationId;
     $scope.station = sObj['sid'][$routeParams.stationId];
     $scope.lines = sObj['paths']['central'];
-    var gogo = function() {
-        dataFactory.getArrivals($routeParams.stationId).then(function (data) {
+    $scope.go = function() {
+        dataFactory.getArrivals('line', $routeParams.stationId).then(function (data) {
             $scope.timestamp = new Date().getTime() / 1000;
+            $scope.arrivals = data;
             $scope.trains = dataService.unifyData(data);
         });
     }
-    gogo();
+    $scope.go();
+    /*gogo();
     var myVar = setInterval(function () {gogo()}, 60000);
     $scope.go = function() {
         window.clearInterval(myVar);
         alert('interval cleared');
-    }
+    }*/
+});
+//Change seconds to minutes
+tubeApp.filter('convertTime', function () {
+    return function (input) {
+        if (input < 10) {
+            return 'Now';
+        }
+        if (input < 60) {
+            return input + 's';
+        }
+        return Math.floor(input / 60) + ' min';
+    };
 });

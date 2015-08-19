@@ -1,5 +1,5 @@
 angular.module('app.directives.googleMap', [])
-	.directive('googleMap', function() {
+	.directive('googleMap', ['markerService', function(markerService) {
 		return {
 			restrict: 'E', //Element E, Attribute A
 			scope: {
@@ -16,6 +16,7 @@ angular.module('app.directives.googleMap', [])
 				});*/
 			},
 			controller: function($scope) {
+
 				var lat = $scope.center.lat;
 				var lon = $scope.center.lon;
 				var center = new google.maps.LatLng(lat, lon);
@@ -29,11 +30,7 @@ angular.module('app.directives.googleMap', [])
 	            };
 	            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 	            if ($scope.marker) {
-		            var location = new google.maps.LatLng(lat, lon);
-		            var marker = new google.maps.Marker({
-		                position: location,
-		                map: map
-		            });
+		            markerService.addMarker('', {'coords':$scope.center});
 		        }
 	            for (var i=0; i<$scope.path.length; i++) {
 					var flightPlanCoordinates = [];
@@ -47,7 +44,7 @@ angular.module('app.directives.googleMap', [])
 				                position: location,
 				                icon: {
 				                    path: google.maps.SymbolPath.CIRCLE,
-				                    scale: 4,
+				                    scale: 7,
 				                    fillOpacity: 1,
 				                    fillColor: '#ffffff',
 				                    strokeWeight:2,
@@ -61,7 +58,7 @@ angular.module('app.directives.googleMap', [])
 					    geodesic: true,
 					    strokeColor: '#FF0000',
 					    strokeOpacity: 1.0,
-					    strokeWeight: 1
+					    strokeWeight: 2
 					});
 					flightPath.setMap(map);
 				}
@@ -71,7 +68,7 @@ angular.module('app.directives.googleMap', [])
 	            infowindow.open(map,marker);*/
 			}
 		};
-	});
+	}]);
 angular.module('app.directives.googleMarker', [])
 	.directive('googleMarker', ['locationService', 'markerService', function(locationService, markerService) {
         return {
