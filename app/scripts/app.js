@@ -11,6 +11,7 @@
 var tubeApp = angular.module('tubeApp', [
 		'ngRoute',
 		'app.directives.googleMap',
+        'app.directives.googlePath',
         'app.directives.googleMarker'
 	]);
 

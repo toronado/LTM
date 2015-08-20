@@ -1,7 +1,7 @@
 <nav class="navbar navbar-default">
 	<div class="container-fluid">
 		<div class="navbar-header">
-		  	<a href="" ng-click="go()" class="navbar-brand">The Map</a>
+		  	<a href="" ng-click="go()" class="navbar-brand">Live Tube Map</a>
 		</div>
 	</div>
 </nav>
@@ -18,7 +18,8 @@
 		    </ol>
 		</div>
 		<div class="col-md-9" style="height:calc(100vh - 50px); padding:0;">
-			<google-map center="station" marker="true" path="lines">
+			<google-map center="station">
+				<google-path data-ng-repeat="path in paths" data="path"></google-path>
 				<google-marker data-ng-repeat="train in trains" data="train" timestamp="timestamp" last="$last"></google-marker>
 			</google-map>
 		</div>

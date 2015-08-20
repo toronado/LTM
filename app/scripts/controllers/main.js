@@ -250,28 +250,51 @@ tubeApp.factory('markerService', function () {
                         zIndex: 1000,
                         map: map
                     });
-                    var infowindow = new google.maps.InfoWindow({
-                        maxWidth: 200,
-                        content: data['currentLocation']
+                    marker['data'] = data;
+                    marker['infoWin'] = this.addInfoWin(marker, data['currentLocation'], 'hover');
+                    this.markers[data['uid']] = marker;
+                    break;
+                case 'station':
+                    var marker = new google.maps.Marker({
+                        position: this.location(data),
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 7,
+                            fillOpacity: 1,
+                            fillColor: '#ffffff',
+                            strokeWeight:2,
+                            strokeColor: '#000000'
+                        },
+                        map: map
                     });
+                    break;
+                default:
+                    var marker = new google.maps.Marker({
+                        position: this.location(data),
+                        map: map
+                    });
+            }
+        },
+        addInfoWin: function(marker, data, ui) {
+            var infowindow = new google.maps.InfoWindow({
+                maxWidth: 200,
+                content: data
+            });
+            switch (ui) {
+                case 'hover':
                     google.maps.event.addListener(marker, 'mouseover', function () {
                         infowindow.open(map,marker);
                     });
                     google.maps.event.addListener(marker, 'mouseout', function () {
                         infowindow.close(map,marker);
                     });
-                    marker['infoWin'] = infowindow;
-                    marker['data'] = data;
-                    this.markers[data['uid']] = marker;
-                    break;
-                case 'station':
-                    break;
-                default:
-                    var marker = new google.maps.Marker({
-                        position: this.location(data['coords']),
-                        map: map
-                    });
+                break;
+                case 'click':
+                break;
+                case 'show':
+                break;
             }
+            return infowindow;
         },
         moveMarker: function(uid, data) {
             var marker = this.markers[uid];
@@ -297,7 +320,8 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, data
 
     $scope.stationId = $routeParams.stationId;
     $scope.station = sObj['sid'][$routeParams.stationId];
-    $scope.lines = sObj['paths']['central'];
+    //$scope.lines = sObj['paths']['central'];
+    $scope.paths = Object.keys($scope.station['line']);
     $scope.go = function() {
         dataFactory.getArrivals('line', $routeParams.stationId).then(function (data) {
             $scope.timestamp = new Date().getTime() / 1000;

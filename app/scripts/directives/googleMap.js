@@ -4,70 +4,65 @@ angular.module('app.directives.googleMap', [])
 			restrict: 'E', //Element E, Attribute A
 			scope: {
 				center: '=',
-				marker: '=',
-				path: '=' //look for attribute value(=)
+				marker: '='
 			},
 			replace: true, //replace custom html with compliant html
 			transclude: true, //allow other html without overwriting
 			templateUrl:'views/directives/googleMap.html',
-			link: function(scope, element, attrs) { //no dependancy injection
-				/*element.click(function() {
-					alert('hello');
-				});*/
-			},
 			controller: function($scope) {
-
-				var lat = $scope.center.lat;
-				var lon = $scope.center.lon;
-				var center = new google.maps.LatLng(lat, lon);
 				var mapOptions = {
 	                zoom: 13,
-	                center: center,
-	                disableDefaultUI: true//,
+	                center: markerService.location($scope.center),
+	                disableDefaultUI: true,
 	                //backgroundColor: '#222',
 	                //styles: [{"featureType":"all","stylers":[{"visibility":"off"}]}]
+	                styles: [{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#444444"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#adcedb"},{"visibility":"on"}]}] 
 	                /*mapTypeId: google.maps.MapTypeId.SATELLITE*/
 	            };
 	            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 	            if ($scope.marker) {
-		            markerService.addMarker('', {'coords':$scope.center});
+		            markerService.addMarker('', $scope.center);
 		        }
-	            for (var i=0; i<$scope.path.length; i++) {
-					var flightPlanCoordinates = [];
-					for (var j=0; j<$scope.path[i].length; j++) {
-						var sid = sObj['sid'][$scope.path[i][j]]
-						var lat = sid['lat'];
-						var lon = sid['lon'];
-						flightPlanCoordinates.push(new google.maps.LatLng(lat, lon));
-						var location = new google.maps.LatLng(lat, lon);
-						var marker = new google.maps.Marker({
-				                position: location,
-				                icon: {
-				                    path: google.maps.SymbolPath.CIRCLE,
-				                    scale: 7,
-				                    fillOpacity: 1,
-				                    fillColor: '#ffffff',
-				                    strokeWeight:2,
-				                    strokeColor: '#000000'
-				                },
-				                map: map
-				            });
-					}
-					var flightPath = new google.maps.Polyline({
-					    path: flightPlanCoordinates,
-					    geodesic: true,
-					    strokeColor: '#FF0000',
-					    strokeOpacity: 1.0,
-					    strokeWeight: 2
-					});
-					flightPath.setMap(map);
-				}
-	            /*var infowindow = new google.maps.InfoWindow({
-	                content: $scope.data.name
-	            });
-	            infowindow.open(map,marker);*/
 			}
 		};
+	}]);
+angular.module('app.directives.googlePath', [])
+	.directive('googlePath', ['markerService', function(markerService) {
+		return {
+			restrict: 'E',
+			scope: {
+				data: '='
+			},
+			controller: function($scope) {
+				var line = sObj['paths'][$scope.data];
+				var lineLen = line.length;
+				var pathLen, path, point, i, j, sid, pathCoords, coords;
+				for (i=0; i<lineLen; i++) {
+					path = line[i];
+					pathLen = line[i].length;
+					pathCoords = [];
+					for (j=0; j<pathLen; j++) {
+						point = path[j];
+						pathLen = pathLen;
+						sid = sObj['sid'][point];
+						coords = {
+							'lat': sid['lat'],
+							'lon': sid['lon']
+						};
+						markerService.addMarker('station', coords);
+						pathCoords.push(markerService.location(coords));
+					}
+					var linePath = new google.maps.Polyline({
+					    path: pathCoords,
+					    geodesic: true,
+					    strokeColor: sObj['colors'][$scope.data],
+					    strokeOpacity: 1.0,
+					    strokeWeight: 1.5
+					});
+					linePath.setMap(map);
+				}
+			}
+		}
 	}]);
 angular.module('app.directives.googleMarker', [])
 	.directive('googleMarker', ['locationService', 'markerService', function(locationService, markerService) {
