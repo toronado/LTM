@@ -15,13 +15,14 @@ angular.module('app.directives.googleMap', [])
 	                center: markerService.location($scope.center),
 	                disableDefaultUI: true,
 	                //backgroundColor: '#222',
+	                styles: [{"featureType":"all","stylers":[{"lightness":33}]}]
 	                //styles: [{"featureType":"all","stylers":[{"visibility":"off"}]}]
-	                styles: [{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#444444"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#adcedb"},{"visibility":"on"}]}] 
+	                //styles: [{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#444444"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#adcedb"},{"visibility":"on"}]}] 
 	                /*mapTypeId: google.maps.MapTypeId.SATELLITE*/
 	            };
 	            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 	            if ($scope.marker) {
-		            markerService.addMarker('', $scope.center);
+		            markerService.addMarker('center', $scope.center);
 		        }
 			}
 		};
@@ -49,14 +50,16 @@ angular.module('app.directives.googlePath', [])
 							'lat': sid['lat'],
 							'lon': sid['lon']
 						};
-						markerService.addMarker('station', coords);
+						//if (Object.keys(sid['line']).length > 1) {
+							markerService.addMarker('station', coords);
+						//}
 						pathCoords.push(markerService.location(coords));
 					}
 					var linePath = new google.maps.Polyline({
 					    path: pathCoords,
 					    geodesic: true,
 					    strokeColor: sObj['colors'][$scope.data],
-					    strokeOpacity: 1.0,
+					    strokeOpacity: 0.5,
 					    strokeWeight: 1.5
 					});
 					linePath.setMap(map);

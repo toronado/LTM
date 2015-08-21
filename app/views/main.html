@@ -1,13 +1,15 @@
 <nav class="navbar navbar-default">
 	<div class="container-fluid">
 		<div class="navbar-header">
-		  	<a href="" ng-click="go()" class="navbar-brand">Live Tube Map</a>
+		  	<a href="" ng-click="go()" class="navbar-brand">
+		  		<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+		  	</a>
 		</div>
 	</div>
 </nav>
 <div class="container-fluid" id="main-container">
 	<div class="row-fluid" style="background-color:#222;">
-		<div class="col-md-3" style="padding:0; height:calc(100vh - 50px); overflow-y: scroll;">
+		<div class="col-md-3" style="height:calc(100vh - 50px); overflow-y: scroll;">
 			<h1>{{station.name}} <small>{{stationId}}</small></h1>
 			<ol class="list-group">
 		    	<li class="list-group-item" data-ng-repeat="arrival in arrivals | orderBy:'-timeToStation':true" ng-if="arrival.naptanId === '940GZZLU'+stationId">
@@ -18,7 +20,7 @@
 		    </ol>
 		</div>
 		<div class="col-md-9" style="height:calc(100vh - 50px); padding:0;">
-			<google-map center="station">
+			<google-map center="station" marker="true">
 				<google-path data-ng-repeat="path in paths" data="path"></google-path>
 				<google-marker data-ng-repeat="train in trains" data="train" timestamp="timestamp" last="$last"></google-marker>
 			</google-map>

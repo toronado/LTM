@@ -242,12 +242,12 @@ tubeApp.factory('markerService', function () {
                         position: this.location(data['coords']),
                         icon: {
                             path: google.maps.SymbolPath.CIRCLE,
-                            scale: 5,
+                            scale: 7,
                             fillOpacity: 1,
                             fillColor: sObj['colors'][data['lineId']],
                             strokeWeight: 0
                         },
-                        zIndex: 1000,
+                        zIndex: 3,
                         map: map
                     });
                     marker['data'] = data;
@@ -259,12 +259,28 @@ tubeApp.factory('markerService', function () {
                         position: this.location(data),
                         icon: {
                             path: google.maps.SymbolPath.CIRCLE,
-                            scale: 7,
+                            scale: 4,
                             fillOpacity: 1,
-                            fillColor: '#ffffff',
-                            strokeWeight:2,
+                            fillColor: '#999999',
+                            strokeWeight:0,
+                            strokeColor: '#222222'
+                        },
+                        zIndex: 1,
+                        map: map
+                    });
+                    break;
+                case 'center':
+                    var marker = new google.maps.Marker({
+                        position: this.location(data),
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 8,
+                            fillOpacity: 1,
+                            fillColor: '#000000',
+                            strokeWeight:0,
                             strokeColor: '#000000'
                         },
+                        zIndex:2,
                         map: map
                     });
                     break;
