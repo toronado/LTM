@@ -9,7 +9,7 @@
 </nav>
 <div class="container-fluid" id="main-container">
 	<div class="row-fluid" style="background-color:#222;">
-		<div class="col-md-3" style="height:calc(100vh - 50px); overflow-y: scroll;">
+		<div class="col-md-3" style="height:calc(100vh - 50px); overflow-y: scroll; padding:0;">
 			<h1>{{station.name}} <small>{{stationId}}</small></h1>
 			<ol class="list-group">
 		    	<li class="list-group-item" data-ng-repeat="arrival in arrivals | orderBy:'-timeToStation':true" ng-if="arrival.naptanId === '940GZZLU'+stationId">
