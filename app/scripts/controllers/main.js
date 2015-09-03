@@ -281,29 +281,17 @@ tubeApp.factory('markerService', function() {
             }
             return infowindow;
         },
-        remove: function (id) {
-            console.log(id);
-            this.markers[id]['markerObj'].setMap(null);
-            //console.log(this.markers[id]);
-            delete this.markers[id];
-            //console.log(this.markers);
-        },
         removeOld: function (timestamp) {
-            var marker;
-            for (marker in this.markers) {
+            var m, marker;
+            for (m in this.markers) {
+                marker = this.markers[m];
                 if (marker['timestamp']) {
                     if (marker['timestamp'] !== timestamp) {
                         console.log(marker);
                         marker['markerObj'].setMap(null);
-                        delete this.markers[marker];
+                        delete this.markers[m];
                     }
                 }
-                /*var mtimestamp = this.markers[marker]['timestamp'];
-                if (!mtimestamp) continue;
-                if (mtimestamp !== timestamp) {
-                    //this.remove(marker);
-                    this.markers[marker].setMap(null);
-                }*/
             }
             console.log(this.markers);
         },
