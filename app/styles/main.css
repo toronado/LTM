@@ -47,7 +47,7 @@ h1 {
 }
 
 .list-group {
-	margin:0 15px;
+	margin:0;
 }
 
 .list-group-item {
@@ -57,7 +57,7 @@ h1 {
 	border:none;
 	border-bottom: #333 solid 1px;
 	margin:0;
-	padding:15px 0;
+	padding:15px;
 }
 .list-group-item .badge {
 	background: none;
