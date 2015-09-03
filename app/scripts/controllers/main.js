@@ -226,108 +226,92 @@ tubeApp.factory('locationService', function () {
     };
 });
 
-tubeApp.factory('markerService', function () {
+tubeApp.factory('markerService', function() {
     return {
         markers: {},
-        markerCheck: function(uid) {
-            return this.markers[uid] ? true : false;
+        get: function() {
+            return this.markers;
         },
-        location: function(coords) {
-            return new google.maps.LatLng(coords.lat, coords.lon);
-        },
-        addMarker: function(type, data) {
-            switch (type) {
-                case 'train':
-                    var marker = new google.maps.Marker({
-                        position: this.location(data['coords']),
-                        icon: {
-                            path: google.maps.SymbolPath.CIRCLE,
-                            scale: 7,
-                            fillOpacity: 1,
-                            fillColor: sObj['colors'][data['lineId']],
-                            strokeWeight: 0
-                        },
-                        zIndex: 3,
-                        map: map
-                    });
-                    marker['data'] = data;
-                    marker['infoWin'] = this.addInfoWin(marker, data['currentLocation'], 'hover');
-                    this.markers[data['uid']] = marker;
-                    break;
-                case 'station':
-                    var marker = new google.maps.Marker({
-                        position: this.location(data),
-                        icon: {
-                            path: google.maps.SymbolPath.CIRCLE,
-                            scale: 4,
-                            fillOpacity: 1,
-                            fillColor: '#999999',
-                            strokeWeight:0,
-                            strokeColor: '#222222'
-                        },
-                        zIndex: 1,
-                        map: map
-                    });
-                    break;
-                case 'center':
-                    var marker = new google.maps.Marker({
-                        position: this.location(data),
-                        icon: {
-                            path: google.maps.SymbolPath.CIRCLE,
-                            scale: 8,
-                            fillOpacity: 1,
-                            fillColor: '#000000',
-                            strokeWeight:0,
-                            strokeColor: '#000000'
-                        },
-                        zIndex:2,
-                        map: map
-                    });
-                    break;
-                default:
-                    var marker = new google.maps.Marker({
-                        position: this.location(data),
-                        map: map
-                    });
+        addMove: function (mObj) {
+            if (this.markers[mObj['id']]) {
+                //move marker
+                var marker = this.markers[mObj['id']];
+                if (mObj['lon'] !== marker['lon']) {
+                    var position = new google.maps.LatLng(mObj['lat'], mObj['lon']);
+                    marker['markerObj'].animateTo(position, {easing: 'linear',duration: 5000});
+                    if (mObj['info']) {
+                        marker['infoObj'].setContent(mObj['info']['content']);
+                    }
+                }
+                if (mObj['timestamp']){
+                    marker['timestamp'] = mObj['timestamp'];
+                }
+            } else {
+                //add marker
+                var icon = {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    fillOpacity: 1,
+                    strokeWeight:0,
+                    scale: mObj['scale'],
+                    fillColor: mObj['color'],
+                };
+                mObj['markerObj'] = new google.maps.Marker({
+                    position: new google.maps.LatLng(mObj['lat'], mObj['lon']),
+                    icon: icon,
+                    map: map
+                });
+                if (mObj['info']) {
+                    mObj['infoObj'] = this.infoWindow(mObj['info'], mObj['markerObj']);
+                }
+                this.markers[mObj['id']] = mObj;
             }
         },
-        addInfoWin: function(marker, data, ui) {
+        infoWindow: function (iObj, marker) {
             var infowindow = new google.maps.InfoWindow({
                 maxWidth: 200,
-                content: data
+                content: iObj['content']
             });
-            switch (ui) {
-                case 'hover':
-                    google.maps.event.addListener(marker, 'mouseover', function () {
-                        infowindow.open(map,marker);
-                    });
-                    google.maps.event.addListener(marker, 'mouseout', function () {
-                        infowindow.close(map,marker);
-                    });
-                break;
-                case 'click':
-                break;
-                case 'show':
-                break;
+            if (iObj['ux'] === 'hover') {
+                google.maps.event.addListener(marker, 'mouseover', function () {
+                    infowindow.open(map,marker);
+                });
+                google.maps.event.addListener(marker, 'mouseout', function () {
+                    infowindow.close(map,marker);
+                });
             }
             return infowindow;
         },
-        moveMarker: function(uid, data) {
-            var marker = this.markers[uid];
-            marker['data'] = data;
-            marker['infoWin'].setContent(data['currentLocation']);
-            marker.animateTo(this.location(data['coords']), {easing: 'linear', duration: 5000});
+        remove: function (id) {
+            console.log(id);
+            this.markers[id]['markerObj'].setMap(null);
+            //console.log(this.markers[id]);
+            delete this.markers[id];
+            //console.log(this.markers);
         },
-        removeOldMarkers: function(timestamp) {
-            var key, marker;
-            for (key in this.markers) {
-                marker = this.markers[key];
-                if (marker['data']['timestamp'] !== timestamp) {
-                    marker.setMap(null);
-                    console.log(marker);
-                    delete this.markers[key];
+        removeOld: function (timestamp) {
+            var marker;
+            for (marker in this.markers) {
+                if (marker['timestamp']) {
+                    if (marker['timestamp'] !== timestamp) {
+                        console.log(marker);
+                        marker['markerObj'].setMap(null);
+                        delete this.markers[marker];
+                    }
                 }
+                /*var mtimestamp = this.markers[marker]['timestamp'];
+                if (!mtimestamp) continue;
+                if (mtimestamp !== timestamp) {
+                    //this.remove(marker);
+                    this.markers[marker].setMap(null);
+                }*/
             }
+            console.log(this.markers);
+        },
+        hide: function (id) {
+            markers[id]['markerObj'].setVisible(false);
+        },
+        show: function (id) {
+            markers[id]['markerObj'].setVisible(true);
         }
     }
 });
