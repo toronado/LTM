@@ -167,16 +167,17 @@ tubeApp.factory('locationService', function () {
 
             //Locate the train using Current Location String    
             var cls = train['currentLocation'].replace(/,| depot| sidings| platform.*$|/gi,''); //Remove unwanted words
-            //Train is between station id, a and b
+            //Train is at or between station id, a and b
             var a = null;
             var b = null;
             switch (cls.substring(0,3)) {
                 case 'At ':
-                    a = this.stationNameLookup(cls.split('At ')[1]);
+                    a = this.stationNameLookup(cls.split('Almost at ')[1]);
                     if (a) {
+                        var aid = sObj['sid'][a];
                         return {
-                            'lat': a['lat'],
-                            'lon': a['lon']
+                            'lat': aid['lat'],
+                            'lon': aid['lon']
                         }
                     }
                 case 'Bet': //Between
@@ -229,40 +230,44 @@ tubeApp.factory('locationService', function () {
 tubeApp.factory('markerService', function() {
     return {
         markers: {},
-        get: function() {
-            return this.markers;
-        },
         addMove: function (mObj) {
             if (this.markers[mObj['id']]) {
-                //move marker
+                //Marker exists so prepare to move it
                 var marker = this.markers[mObj['id']];
+                //Avoid unnecessary marker movements by assuming new position will never be a perfect longitudinal straight line
                 if (mObj['lon'] !== marker['lon']) {
                     var position = new google.maps.LatLng(mObj['lat'], mObj['lon']);
+                    //Using markerAnimate plugin
                     marker['markerObj'].animateTo(position, {easing: 'linear',duration: 5000});
+                    //Update info window
                     if (mObj['info']) {
                         marker['infoObj'].setContent(mObj['info']['content']);
                     }
                 }
+                //Update timestamp
                 if (mObj['timestamp']){
                     marker['timestamp'] = mObj['timestamp'];
                 }
             } else {
-                //add marker
+                //New marker needs adding
                 var icon = {
                     path: google.maps.SymbolPath.CIRCLE,
                     fillOpacity: 1,
                     strokeWeight:0,
                     scale: mObj['scale'],
-                    fillColor: mObj['color'],
+                    fillColor: mObj['color']
                 };
+                //Place marker and store as markerObj
                 mObj['markerObj'] = new google.maps.Marker({
                     position: new google.maps.LatLng(mObj['lat'], mObj['lon']),
                     icon: icon,
                     map: map
                 });
+                //Add an infowindow and store as infoObj
                 if (mObj['info']) {
                     mObj['infoObj'] = this.infoWindow(mObj['info'], mObj['markerObj']);
                 }
+                //Add marker to markers object for tracking puroposes
                 this.markers[mObj['id']] = mObj;
             }
         },
@@ -271,13 +276,24 @@ tubeApp.factory('markerService', function() {
                 maxWidth: 200,
                 content: iObj['content']
             });
-            if (iObj['ux'] === 'hover') {
-                google.maps.event.addListener(marker, 'mouseover', function () {
-                    infowindow.open(map,marker);
-                });
-                google.maps.event.addListener(marker, 'mouseout', function () {
-                    infowindow.close(map,marker);
-                });
+            switch (iObj['ux']) {
+                case 'hover':
+                    google.maps.event.addListener(marker, 'mouseover', function () {
+                        infowindow.open(map,marker);
+                    });
+                    google.maps.event.addListener(marker, 'mouseout', function () {
+                        infowindow.close(map,marker);
+                    });
+                    break;
+                case 'click':
+                    google.maps.event.addListener(marker, 'click', function () {
+                        if (iObj['callback']) {
+                            iObj.callback();
+                        } else {
+                            infowindow.open(map,marker);
+                        }
+                    });
+                    break;
             }
             return infowindow;
         },
@@ -293,7 +309,6 @@ tubeApp.factory('markerService', function() {
                     }
                 }
             }
-            console.log(this.markers);
         },
         hide: function (id) {
             markers[id]['markerObj'].setVisible(false);
@@ -308,7 +323,6 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, data
 
     $scope.stationId = $routeParams.stationId;
     $scope.station = sObj['sid'][$routeParams.stationId];
-    //$scope.lines = sObj['paths']['central'];
     $scope.paths = Object.keys($scope.station['line']);
     $scope.go = function() {
         dataFactory.getArrivals('line', $routeParams.stationId).then(function (data) {

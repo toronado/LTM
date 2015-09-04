@@ -45,15 +45,18 @@ angular.module('app.directives.googlePath', [])
 						point = path[j];
 						pathLen = pathLen;
 						sid = sObj['sid'][point];
-						//if (Object.keys(sid['line']).length > 1) {
-							//markerService.addMarker('station', coords);
-						//}
 						var mObj = {
 							scale: 4,
 							color: '#999999',
 							lat: sid['lat'],
 							lon: sid['lon'],
-							info: sid['name'],
+							info: {
+								content: point,
+								ux: 'click',
+								callback: function() {
+									location.replace('#/'+this.content+'/');
+								}
+							},
 							id: point
 						};
 						markerService.addMove(mObj);
@@ -92,16 +95,12 @@ angular.module('app.directives.googleMarker', [])
 							lat: trainLoc['lat'],
 							lon: trainLoc['lon'],
 							info: {
-								content: $scope.data['vehicleId'] + $scope.data['currentLocation'],
+								content: $scope.data['vehicleId'] + ': ' + $scope.data['currentLocation'] + ' towards ' + $scope.data['towards'],
 								ux: 'hover'
 							},
 							id: $scope.data['uid'],
 							timestamp: $scope.timestamp
 						};
-						if ($scope.last) {
-							//console.log(markerService.get());
-							markerService.removeOld($scope.timestamp);
-						}
 						break;
 					case 'station':
 						var mObj = {
@@ -118,6 +117,10 @@ angular.module('app.directives.googleMarker', [])
 						break;
 				}
 				markerService.addMove(mObj);
+				if ($scope.last) {
+					console.log(markerService.markers);
+					//markerService.removeOld($scope.timestamp);
+				}
 			}
 		};
 	}]);
