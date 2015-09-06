@@ -12,7 +12,7 @@
 		<div class="col-md-3" style="height:calc(100vh - 50px); overflow-y: scroll; padding:0;">
 			<h1>{{station.name}} <small>{{stationId}}</small></h1>
 			<ol class="list-group">
-		    	<li class="list-group-item" data-ng-repeat="arrival in arrivals | orderBy:'-timeToStation':true" ng-if="arrival.naptanId === '940GZZLU'+stationId">
+		    	<li class="list-group-item {{arrival.lineId}}" data-ng-repeat="arrival in arrivals | orderBy:'-timeToStation':true" ng-if="arrival.naptanId === '940GZZLU'+stationId">
 		    		<span class="badge">{{arrival.timeToStation | convertTime}}</span>
 		    		<span class="towards">{{arrival.towards}}</span>
 		    		<small>{{arrival.currentLocation}}</small>

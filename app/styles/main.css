@@ -27,23 +27,11 @@ body {
 	font-size: 14px;
 }
 
-#overlay {
-	/*position: absolute;
-	top:30px;
-	left:40px;
-	bottom:30px;
-	width: 300px;
-	z-index: 1000;*/
-	height: 100%;
-	overflow-y: scroll;
-}
-
 h1 {
 	padding:0 15px 15px 15px;
 	margin:0;
 	font-size: 1.5em;
 	color: #fff;
-	opacity: 0.8;
 }
 
 .list-group {
@@ -55,13 +43,28 @@ h1 {
 	background: none;
 	color: #555;
 	border:none;
-	border-bottom: #333 solid 1px;
 	margin:0;
 	padding:15px;
+	border-left:#000 solid 3px;
+}
+.list-group-item:nth-of-type(odd) {
+    background: #252525;
 }
 .list-group-item .badge {
 	background: none;
 }
+
+.bakerloo {border-color:#AE6118 !important;}
+.central {border-color:#E41F1F !important;}
+.circle {border-color:#F8D42D !important;}
+.district {border-color:#007229 !important;}
+.hammersmith-city {border-color:#E899A8 !important;}
+.jubilee {border-color:#686E72 !important;}
+.metropolitan {border-color:#893267 !important;}
+.northern {border-color:#000 !important;}
+.piccadilly {border-color:#0450A1 !important;}
+.victoria {border-color:#009FE0 !important;}
+.waterloo-city {border-color:#70C3CE !important;}
 
 span.towards {
 	color:#fff;

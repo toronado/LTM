@@ -14,15 +14,12 @@ angular.module('app.directives.googleMap', [])
 	                center: new google.maps.LatLng($scope.center['lat'], $scope.center['lon']),
 	                disableDefaultUI: true,
 	                //backgroundColor: '#222',
-	                styles: [{"featureType":"all","stylers":[{"lightness":33}]}]
+	                styles: [{"featureType":"all","stylers":[{"lightness":66}]}]
 	                //styles: [{"featureType":"all","stylers":[{"visibility":"off"}]}]
 	                //styles: [{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#444444"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#adcedb"},{"visibility":"on"}]}] 
 	                /*mapTypeId: google.maps.MapTypeId.SATELLITE*/
 	            };
 	            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-	            /*if ($scope.marker) {
-		            markerService.addMarker('center', $scope.center);
-		        }*/
 			}
 		};
 	});
@@ -36,7 +33,7 @@ angular.module('app.directives.googlePath', [])
 			controller: function($scope) {
 				var line = sObj['paths'][$scope.data];
 				var lineLen = line.length;
-				var pathLen, path, point, i, j, sid, pathCoords, coords;
+				var pathLen, path, point, i, j, sid, pathCoords, coords, mObj;
 				for (i=0; i<lineLen; i++) {
 					path = line[i];
 					pathLen = line[i].length;
@@ -45,19 +42,18 @@ angular.module('app.directives.googlePath', [])
 						point = path[j];
 						pathLen = pathLen;
 						sid = sObj['sid'][point];
-						var mObj = {
+						mObj = {
+							id: point,
 							scale: 4,
 							color: '#999999',
 							lat: sid['lat'],
 							lon: sid['lon'],
 							info: {
 								content: point,
-								ux: 'click',
-								callback: function() {
+								clickback: function() {
 									location.replace('#/'+this.content+'/');
 								}
-							},
-							id: point
+							}
 						};
 						markerService.addMove(mObj);
 						pathCoords.push(new google.maps.LatLng(sid['lat'], sid['lon']));
@@ -66,7 +62,7 @@ angular.module('app.directives.googlePath', [])
 					    path: pathCoords,
 					    geodesic: true,
 					    strokeColor: sObj['colors'][$scope.data],
-					    strokeOpacity: 0.5,
+					    strokeOpacity: 1,
 					    strokeWeight: 1.5
 					});
 					linePath.setMap(map);
@@ -85,41 +81,42 @@ angular.module('app.directives.googleMarker', [])
 				last: '='
 			},
 			controller: function($scope) {
+				var mObj;
 				switch ($scope.icon) {
 					case 'train':
 						var trainLoc = locationService.locateTrain($scope.data);
-						if (!trainLoc) return;
-						var mObj = {
-							scale: 7,
-							color: sObj['colors'][$scope.data['lineId']],
-							lat: trainLoc['lat'],
-							lon: trainLoc['lon'],
-							info: {
-								content: $scope.data['vehicleId'] + ': ' + $scope.data['currentLocation'] + ' towards ' + $scope.data['towards'],
-								ux: 'hover'
-							},
-							id: $scope.data['uid'],
-							timestamp: $scope.timestamp
-						};
+						if (trainLoc) {
+							mObj = {
+								scale: 7,
+								color: sObj['colors'][$scope.data['lineId']],
+								lat: trainLoc['lat'],
+								lon: trainLoc['lon'],
+								info: {
+									content: $scope.data['vehicleId'] + ': ' + $scope.data['currentLocation'] + ' towards ' + $scope.data['towards']
+								},
+								id: $scope.data['uid'],
+								timestamp: $scope.timestamp
+							};
+						}
 						break;
 					case 'station':
-						var mObj = {
+						mObj = {
 							scale: 6,
 							color: '#000000',
 							lat: $scope.data['lat'],
 							lon: $scope.data['lon'],
 							info: {
-								content: $scope.data['name'],
-								ux: 'hover'
+								content: $scope.data['name']
 							},
 							id: 'center'
 						};
 						break;
 				}
-				markerService.addMove(mObj);
+				if (mObj) {
+					markerService.addMove(mObj);
+				}
 				if ($scope.last) {
-					console.log(markerService.markers);
-					//markerService.removeOld($scope.timestamp);
+					markerService.removeOld($scope.timestamp);
 				}
 			}
 		};

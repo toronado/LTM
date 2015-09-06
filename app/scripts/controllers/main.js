@@ -276,25 +276,18 @@ tubeApp.factory('markerService', function() {
                 maxWidth: 200,
                 content: iObj['content']
             });
-            switch (iObj['ux']) {
-                case 'hover':
-                    google.maps.event.addListener(marker, 'mouseover', function () {
-                        infowindow.open(map,marker);
-                    });
-                    google.maps.event.addListener(marker, 'mouseout', function () {
-                        infowindow.close(map,marker);
-                    });
-                    break;
-                case 'click':
-                    google.maps.event.addListener(marker, 'click', function () {
-                        if (iObj['callback']) {
-                            iObj.callback();
-                        } else {
-                            infowindow.open(map,marker);
-                        }
-                    });
-                    break;
+            google.maps.event.addListener(marker, 'mouseover', function () {
+                infowindow.open(map,marker);
+            });
+            google.maps.event.addListener(marker, 'mouseout', function () {
+                infowindow.close(map,marker);
+            });
+            if (iObj['clickback']) {
+                google.maps.event.addListener(marker, 'click', function () {
+                    iObj.clickback();
+                });
             }
+            //return infowindow object so it can be updated
             return infowindow;
         },
         removeOld: function (timestamp) {
@@ -315,12 +308,16 @@ tubeApp.factory('markerService', function() {
         },
         show: function (id) {
             markers[id]['markerObj'].setVisible(true);
+        },
+        reset: function() {
+            this.markers = {};
         }
     }
 });
 
-tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, dataService) {
+tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, dataService, markerService) {
 
+    markerService.reset();
     $scope.stationId = $routeParams.stationId;
     $scope.station = sObj['sid'][$routeParams.stationId];
     $scope.paths = Object.keys($scope.station['line']);
