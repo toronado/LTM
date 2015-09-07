@@ -14,7 +14,7 @@ angular.module('app.directives.googleMap', [])
 	                center: new google.maps.LatLng($scope.center['lat'], $scope.center['lon']),
 	                disableDefaultUI: true,
 	                //backgroundColor: '#222',
-	                styles: [{"featureType":"all","stylers":[{"lightness":66}]}]
+	                styles: [{"featureType":"all","stylers":[{"lightness":50}]}]
 	                //styles: [{"featureType":"all","stylers":[{"visibility":"off"}]}]
 	                //styles: [{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#444444"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#adcedb"},{"visibility":"on"}]}] 
 	                /*mapTypeId: google.maps.MapTypeId.SATELLITE*/
