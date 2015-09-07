@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>London</title>
+    </head>
+    </body>
+        <button onclick="getLiveData()">Get Live</button>
+        <button onclick="logData()">Log</button>
+        <button onclick="theEnd()">Test</button>
+        <script src="js/jquery-2.1.3.min.js"></script>
+        <script src="data/stationData2.min.js"></script>
+        <script type="text/javascript">
+
+            var routes = {
+                "central": {
+                    "trunk": [
+                        ["NAN","EAN","WCY","SBC","HPK","NHG","QWY","LGT","MBA","BND","OXC","TCR","HBN","CHL","SPU","BNK","LVT","BLG","MED","STD","LYN","LYS"]
+                    ],
+                    "NAN": [
+                        ["WRP","RSG","SRP","NHT","GFD","PVL","HGR"],
+                        ["EBY","WTA"]
+                    ],
+                    "LYS": [
+                        ["WSD","RBG","GTH","NBP","BKE","FLP","HLT","GGH","CWL","RVY","WOF"],
+                        ["SNB","SWF","WOF","BKH","LGN","DBN","THB","EPG"]
+                    ]
+                }
+            }
+
+            var data = {  
+                "$type":"Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
+                "id":"-1230210341",
+                "operationType":1,
+                "vehicleId":"026",
+                "naptanId":"940GZZLUBND",
+                "stationName":"Bond Street Underground Station",
+                "lineId":"central",
+                "lineName":"Central",
+                "platformName":"Eastbound - Platform 2",
+                "direction":"outbound",
+                "destinationNaptanId":"940GZZLUEPG",
+                "destinationName":"Epping Underground Station",
+                "timestamp":"2015-09-04T09:49:11.977Z",
+                "timeToStation":418,
+                "currentLocation":"At Notting Hill Gate",
+                "towards":"Epping",
+                "expectedArrival":"2015-09-04T09:56:09.977Z",
+                "timeToLive":"2015-09-04T09:56:09.977Z",
+                "modeName":"tube"
+            };
+
+            var line = routes['central'];
+            var start = data['naptanId'].substring(8); //BND - Bond Street
+            var end = data['destinationNaptanId'].substring(8); // EPG - Epping
+            var middle = "BKE"; //Caller - Barkingside
+            var via = null; //Perform via check
+
+            //Find the end branch
+            var route, routeArr, r, i;
+            for (route in line) {
+                r = line[route];
+                for (i=0; i<r.length; i++) {
+                    routeArr = r[i];
+                    if (routeArr.indexOf[end] > -1) {
+                        var endBranch = routeArr;
+                        break;
+                    }
+                }
+            }
+
+            function branch(sid) {
+                
+            }
+
+            var line = routes['central'];
+            var caller = 'BKE';
+            var train = 'STD';
+            var terminus = 'HLT';
+            var via = 'NBP';
+
+            if (caller === terminus || caller === train || caller === via) {
+                return true;
+            }
+
+            var terminusTrunkPos = line['trunk'].indexOf[terminus];
+            if (terminusTrunkPos > -1) {
+                //terminus is on main trunk, check train heading towads it
+
+            }
+
+            //console.log(routes);
+            //var sObj = {sid:{},sidLookup:{}} = stationData.min.js
+            /*var stnObj = {};
+            var endPoints = {
+                'central': ['HLT','EPG','EBY','WRP'],
+                'bakerloo': ['HAW','EAC'],
+                'central': ['HLT','EPG','EBY','WRP'],
+                'circle': ['HSC'],
+                'district': ['UPM','RMD','WIM','ERC','KOY'],
+                'hammersmith-city': ['HSC','BKG'],
+                'jubilee': ['STM','STD'],
+                'metropolitan': ['ALD','UXB','CSM','AMS'],
+                'northern': ['MDN','HBT','EGW','MHL'],
+                'piccadilly': ['CKS','UXB','HR5'],
+                'victoria': ['WWL','BXN'],
+                'waterloo-city': ['BNK','WLO']
+            };
+
+            var validRoutes = {"bakerloo":{"inbound":{"HAW":["EAC"]},"outbound":{"EAC":["HAW"]}},"central":{"inbound":{"HLT":["WRP","EBY"],"EPG":["WRP","EBY"]},"outbound":{"WRP":["HLT","EPG"],"EBY":["HLT","EPG"]}},"district":{"inbound":{"UPM":["WIM","EBY","RMD"],"ERC":["WIM","KOY","EBY","RMD"]},"outbound":{"WIM":["UPM","ERC"],"KOY":["UPM","ERC"],"EBY":["UPM","ERC"],"RMD":["UPM","ERC"]}},"hammersmith-city":{"inbound":{"BKG":["HSC"]},"outbound":{"HSC":["BKG"]}},"jubilee":{"inbound":{"STD":["STM"]},"outbound":{"STM":["STD"]}},"metropolitan":{"inbound":{"ALD":["UXB","WAF","AMS","CSM"],"WAF":["RKW"]},"outbound":{"UXB":["ALD"],"CSM":["WAF","ALD"],"WAF":["ALD"],"AMS":["ALD"]}},"northern":{"inbound":{"EGW":["MDN"],"HBT":["MDN"],"MHL":["MDN"]},"outbound":{"MDN":["EGW","HBT","MHL"]}},"piccadilly":{"inbound":{"CKS":["UXB","HRC","HR5"]},"outbound":{"UXB":["CKS"],"HR5":["CKS"],"HR4":["CKS"]}},"victoria":{"inbound":{"WWL":["BXN"]},"outbound":{"BXN":["WWL"]}},"waterloo-city":{"inbound":{"BNK":["WLO"]},"outbound":{"WLO":["BNK"]}},"circle":{"inbound":{"ERC":["HSC"]},"outbound":{"HSC":["ERC"]}}};
+
+            var boundObj = {
+                'central': {
+                    'inbound': ['westbound'],
+                    'outbound': ['eastbound']
+                },
+                'bakerloo': {
+                    'inbound': ['southbound'],
+                    'outbound': ['northbound']
+                },
+                'district': {
+                    'inbound': ['westbound'],
+                    'outbound': ['eastbound']
+                },
+                'hammersmith-city': {
+                    'inbound': ['westbound', 'southbound'],
+                    'outbound': ['northbound', 'eastbound']
+                },
+                'jubilee': {
+                    'inbound': ['westbound', 'northbound'],
+                    'outbound': ['eastbound', 'southbound']
+                },
+                'metropolitan': {
+                    'outbound': ['eastbound', 'southbound'],
+                    'inbound': ['westbound','northbound']
+                },
+                'northern': {
+                    'inbound': ['southbound'],
+                    'outbound': ['northbound']
+                },
+                'piccadilly': {
+                    'inbound': ['westbound'],
+                    'outbound': ['eastbound']
+                },
+                'victoria': {
+                    'inbound': ['southbound'],
+                    'outbound': ['northbound']
+                },
+                'waterloo-city': {
+                    'inbound': ['eastbound'],
+                    'outbound': ['westbound']
+                },
+                'circle': {
+                    'inbound':['westbound', 'southbound'],
+                    'outbound':['eastbound', 'northbound']
+                }
+            };
+
+            function theEnd() {
+                var terminus = {};
+                for (var stn in sObj['sid']) {
+                    var station = sObj['sid'][stn];
+                    var lines = station['line'];
+                    //console.log(lines);
+                    for (line in lines) {
+                        var platforms = lines[line];
+                        //for (var platform in platforms) {
+                            if (Object.keys(platforms).length === 1) {
+                                //console.log(station);
+                                for (var platform in platforms) {
+                                    var keyName = stn+line;
+                                    terminus[keyName] = platform;
+                                }
+                            }
+                        //}
+                    }
+                }
+                console.log(JSON.stringify(terminus));
+            }
+
+            var dataObj = {};
+            function compassBound() {
+                //Get valie routes
+                for (var line in validRoutes) {
+                    $.ajax({
+                        url: 'https://api.tfl.gov.uk/Line/%7Bid%7D/Route/Sequence/%7Bdirection%7D',
+                        type: 'GET',
+                        data: {
+                            id: line
+                        },
+                        async: false
+                    }).done(function (data) {
+                        
+                        var routesObj = data['orderedLineRoutes'];
+                        for (var k=0; k<2; k++) {
+                            for (var key in routesObj) {
+                                var routesArr = routesObj[key]['naptanIds'];
+                                if (k) routesArr.reverse();
+                                var routeLen = routesArr.length;
+                                var origin = routesArr[0].substring(8);
+
+                                var bound = 'inbound';
+                                if (validRoutes[line]['outbound'][origin]) {
+                                    bound = 'outbound';
+                                }
+
+                                for (var i=0; i<routeLen; i++) {
+                                    var sid = routesArr[i].substring(8);
+                                    var possDirectionArr = boundObj[line][bound];
+                                    var actDirectionArr = sObj['sid'][sid]['lines'][line];
+                                    var direction = null;
+                                    for (var j=0; j<possDirectionArr.length; j++) {
+                                        if (actDirectionArr.indexOf(possDirectionArr[j]) > -1) {
+                                            direction = boundObj[line][bound][j];
+                                        } else {
+
+                                        }
+                                    }
+                                    var nid = null;
+                                    if (i<routeLen-1) {
+                                        nid = routesArr[i+1].substring(8);
+                                    }
+                                    if (nid) {
+                                        if (!dataObj[sid]) dataObj[sid] = {};
+                                        if (!dataObj[sid][line]) dataObj[sid][line] = {};
+                                        if (!direction) {
+                                            console.log(line + '-> ' + sid + '-' + nid + ' s:' + possDirectionArr + ' sObj:' + actDirectionArr);
+                                            continue;
+                                        }
+                                        if (!dataObj[sid][line][direction]) dataObj[sid][line][direction] = {};
+                                        if (!dataObj[sid][line][direction][nid]) {
+                                            dataObj[sid][line][direction][nid] = sObj['sid'][sid]['route'][nid];
+                                        }
+                                    }
+                                }
+                                
+                            }
+                        }
+                    });
+                }
+                console.log(dataObj);
+            }
+
+            function mergeData() {
+                for (var key in routeObj) {
+                    for (var adj in routeObj[key]) {
+                        if (!stationsObj[key]['route']) {
+                            stationsObj[key]['route'] = {};
+                        }
+                        stationsObj[key]['route'][adj] = key;
+                    } 
+                }
+                console.log(stationsObj);
+            }
+
+            function getLiveData() {
+                var line, sid;
+
+                for (line in endPoints) {
+                    for (sid in endPoints[line]) {
+                        $.ajax({
+                            url: 'https://api.tfl.gov.uk/Line/%7Bid%7D/Timetable/%7BfromStopPointId%7D',
+                            type: 'GET',
+                            data: { 
+                                fromStopPointId: "940GZZLU"+endPoints[line][sid],
+                                id: line
+                            }
+                        }).done(function (data) {
+                            var i;
+                            var dataArr = data.timetable.routes[0].stationIntervals;
+                            var dataLen = dataArr.length;
+                            for (i=0; i<dataLen; i++) {
+                                process(dataArr[i].intervals);
+                            }
+                        });
+                    }
+                }
+            }
+
+            function process(data) {
+
+                var dataLen = data.length;
+                var i,
+                    sid, // This station id
+                    pid, // Previous station id
+                    nid, // Next station id
+                    ttp, // Time to previous station
+                    ttn; // Time to next station
+
+                for (i = 0; i < dataLen; i++) {
+
+                    sid = data[i]['stopId'].substring(8);
+                   
+                    // Check if station exists in station object. If not, create it.
+                    if (!stnObj[sid]) {
+                        stnObj[sid] = {};
+                    }
+
+                    // Has a previous station
+                    if (i) {
+                        pid = data[i-1]['stopId'].substring(8);
+                        ttp = Math.round((data[i]['timeToArrival']-data[i-1]['timeToArrival'])*10)/10;
+                        if (stnObj[sid][pid]) {
+                            stnObj[sid][pid].push(ttp);
+                        } else {
+                            stnObj[sid][pid] = [ttp];
+                        }
+                    }
+
+                    // Has a next station
+                    if (i < dataLen-1) {
+                        nid = data[i+1]['stopId'].substring(8);
+                        ttn = Math.round((data[i+1]['timeToArrival']-data[i]['timeToArrival'])*10)/10;
+                        if (stnObj[sid][nid]) {
+                            stnObj[sid][nid].push(ttn);
+                        } else {
+                            stnObj[sid][nid] = [ttn];
+                        }
+                    }
+
+                }
+            }
+
+            function logData() {
+                var i, stn, adj, total;
+                for (stn in stnObj) {
+                    for (adj in stnObj[stn]) {
+                        total = 0;
+                        var adjLen = stnObj[stn][adj].length;
+                        for (i=0; i<adjLen; i++) {
+                            total += stnObj[stn][adj][i];
+                        }
+                        stnObj[stn][adj] = Math.round((total/adjLen)*60);
+                    }
+                }
+                console.log(stnObj);
+            }*/
+        </script>
+    </body>
+</html>
