@@ -5,7 +5,7 @@
     </head>
     </body>
         <button onclick="getLiveData()">Get Live</button>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>-->
         <script type="text/javascript">
             var data = [{"$type":"Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities","id":"-1230210341","operationType":1,"vehicleId":"026","naptanId":"940GZZLUBND","stationName":"Bond Street Underground Station","lineId":"central","lineName":"Central","platformName":"Eastbound - Platform 2","direction":"outbound","destinationNaptanId":"940GZZLUEPG","destinationName":"Epping Underground Station","timestamp":"2015-09-04T09:49:11.977Z","timeToStation":418,"currentLocation":"At Notting Hill Gate","towards":"Epping","expectedArrival":"2015-09-04T09:56:09.977Z","timeToLive":"2015-09-04T09:56:09.977Z","modeName":"tube"},{"$type":"Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities","id":"334938528","operationType":1,"vehicleId":"066","naptanId":"940GZZLUBKE","stationName":"Barkingside Underground Station","lineId":"central","lineName":"Central","platformName":"Inner Rail - Platform 2","direction":"outbound","destinationNaptanId":"940GZZLUHLT","destinationName":"Hainault Underground Station","timestamp":"2015-09-04T09:49:11.68Z","timeToStation":298,"currentLocation":"Between Redbridge and Gants Hill","towards":"Hainault via Newbury Park","expectedArrival":"2015-09-04T09:54:09.68Z","timeToLive":"2015-09-04T09:54:09.68Z","modeName":"tube"},{"$type":"Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities","id":"-1019785503","operationType":1,"vehicleId":"113","naptanId":"940GZZLULYN","stationName":"Leyton Underground Station","lineId":"central","lineName":"Central","platformName":"Eastbound - Platform 2","direction":"inbound","destinationNaptanId":"940GZZLULVT","destinationName":"Liverpool Street Underground Station","timestamp":"2015-09-04T09:49:13.383Z","timeToStation":267,"currentLocation":"Between Mile End and Stratford","towards":"Loughton","expectedArrival":"2015-09-04T09:53:40.383Z","timeToLive":"2015-09-04T09:53:40.383Z","modeName":"tube"}];
             var routes = {
@@ -17,7 +17,184 @@
                 ]
             }
 
-            function routeChecker(line, sidArr) {
+            var lines = {
+                "bakerloo": {
+                    "stops": [
+                        ["EAC","LBN","WLO","EMB","CHX","PCC","OXC","RGP","BST","MYB","ERB","PAC","WKA","MVL","KPK","QPS","KSL","WJN","HSN","SGP","WYC","NWY","SKT","KEN","HAW"]
+                    ],
+                    "colour": "#AE6118"
+                },
+                "central": {
+                    "stops": [
+                        ["EAN","WCY","SBC","HPK","NHG","QWY","LGT","MBA","BND","OXC","TCR","HBN","CHL","SPU","BNK","LVT","BLG","MED","STD","LYN"],
+                        ["WSD","RBG","GTH","NBP","BKE","FLP","HLT","GGH","CWL","RVY","WOF"],
+                        ["SNB","SWF","WOF","BKH","LGN","DBN","THB","EPG"],
+                        ["WRP","RSG","SRP","NHT","GFD","PVL","HGR"],
+                        ["EBY","WTA"],
+                        ["LYS"],
+                        ["NAN"]
+                    ],
+                    "routes": [
+                        [3,6,0,5,1],
+                        [3,6,0,5,2],
+                        [4,6,0,5,1],
+                        [4,6,0,5,2]
+                    ],
+                    "paths": [
+                        [5,0,6],
+                        [1,5],
+                        [2,5],
+                        [3,6],
+                        [4,6]
+                    ],
+                    "colour": '#E41F1F'
+                },
+                "circle": {
+                    "stops": [
+                        ["HSC","GHK","SBM","WLA","LRD","LAD","WSP","RYO","PAH","ERC","BST","GPS","ESQ","KSX","FCN","BBN","MGT","LVT","ALD","TWH","MMT","CST","MSH","BKF","TMP","EMB","WSM","SJP","VIC","SSQ","SKS","GTR","HSK","NHG","BWT","PAC","ERC"]
+                    ],
+                    "colour": "#F8D42D"
+                },
+                "district": {
+                    "stops": [
+                        ["GTR","SKS","SSQ","VIC","SJP","WSM","EMB","TMP","BKF","MSH","CST","MMT","TWH","ADE","WPL","SGN","MED","BWR","BBB","WHM","PLW","UPK","EHM","BKG","UPY","BEC","DGY","DGE","EPK","HCH","UPB","UPM"],
+                        ["WIM","WIP","SFS","EPY","PYB","PSG","FBY","WBN"],
+                        ["SFB","RVP","HSD","BSC","WKN"],
+                        ["HSK","NHG","BWT","PAC","ERC"],
+                        ["EBY","ECM","ACT","CWP"],
+                        ["RMD","KWG","GBY"],
+                        ["KOY"],
+                        ["ECT"],
+                        ["TNG"]
+                    ],
+                    "routes": [
+                        [4,8,2,7,0],
+                        [4,8,2,7,3],
+                        [5,8,2,7,0],
+                        [5,8,2,7,3],
+                        [1,7,0],
+                        [1,7,3],
+                        [6,7,0],
+                        [6,7,3],
+                    ],
+                    "paths": [
+                        [8,2,7],
+                        [4,8],
+                        [5,8],
+                        [1,7],
+                        [7,3],
+                        [6,7],
+                        [7,0]
+                    ],
+                    "colour": "#007229"
+                },
+                "hammersmith-city": {
+                    "stops": [
+                        ["HSC","GHK","SBM","WLA","LRD","LAD","WSP","RYO","PAH","ERC","BST","GPS","ESQ","KSX","FCN","BBN","MGT","LVT","ADE","WPL","SGN","MED","BWR","BBB","WHM","PLW","UPK","EHM","BKG"]
+                    ],
+                    "colour": "#E899A8"
+                },
+                "jubilee": {
+                    "stops": [
+                        ["STM","CPK","QBY","KBY","WYP","NDN","DOH","WIG","KBN","WHP","FYR","SWC","SJW","BST","BND","GPK","WSM","WLO","SWK","LNB","BMY","CWR","CYF","NGW","CGT","WHM","STD"]
+                    ],
+                    "colour": "#686E72"
+                },
+                "metropolitan": {
+                    "stops": [
+                        ["ALD","LVT","MGT","BBN","FCN","KSX","ESQ","GPS","BST","FYR","WYP","PRD","NKP"],
+                        ["WHW","RYL","EAE","RSM","RSP","ICK","HGD","UXB"],
+                        ["NHA","PNR","NWH","NOW"],
+                        ["CXY","WAF"],
+                        ["RKW","CYD"],
+                        ["CSM"],
+                        ["AMS"],
+                        ["MPK"],
+                        ["HOH"],
+                        ["CAL"]
+                    ],
+                    "routes": [
+                        [0,8,2,7,4,9,6],
+                        [0,8,2,7,4,9,5],
+                        [0,8,2,7,3],
+                        [0,8,1]
+                    ],
+                    "paths": [
+                        [0,8],
+                        [8,1],
+                        [8,2,7],
+                        [7,3],
+                        [7,4,9],
+                        [9,5],
+                        [9,6]
+                    ],
+                    "colour": "#893267"
+                },
+                "northern": {
+                    "stops": [
+                        ["MDN","SWN","CSD","TBY","TBC","BLM","CPS","CPC","CPN","SKW","OVL"],
+                        ["CFM","BZP","HTD","GGN","BTX","HCL","CND","BTK","EGW"],
+                        ["EAC","BOR","LNB","BNK","MGT","ODS","AGL","KSX"],
+                        ["WLO","EMB","CHX","LSQ","TCR","GDG","WRR"],
+                        ["KSH","TFP","ACY","HGT","EFY"],
+                        ["WFN","WOP","TAW","HBT"],
+                        ["KNG"],
+                        ["EUS"],
+                        ["MTC"],
+                        ["CTN"],
+                        ["FYC"],
+                        ["MHL"]
+                    ],
+                    "routes": [
+                        [0,6,3,7,8,9,1],
+                        [0,6,3,7,8,9,4,10,11],
+                        [0,6,3,7,8,9,4,10,5],
+                        [0,6,3,7,9,1],
+                        [0,6,3,7,9,4,10,11],
+                        [0,6,3,7,9,4,10,5]
+                    ],
+                    "colour": "#000000"
+                },
+                "victoria": {
+                    "stops": [
+                        ["BXN","SKW","VXL","PCO","VIC","GPK","OXC","WRR","EUS","KSX","HAI","FPK","SVS","TMH","BLR","WWL"]
+                    ],
+                    "colour": "#009FE0"
+                },
+                "waterloo-city": {
+                    "stops": [
+                        ["WLO","BNK"]
+                    ],
+                    "colour": "#70C3CE"
+                }
+            }
+
+            function buildRoute(lineId) {
+                var line = lines[lineId];
+                var stops = line['stops'];
+                var routesToBuild = line['routes'];
+                if (!routesToBuild) {
+                    return stops;
+                }
+                var routes = [];
+                var route, i, j, iLen, jLen;
+                iLen = routesToBuild.length;
+                for (i=0; i<iLen; i++) {
+                    route = routesToBuild[i];
+                    jLen = route.length;
+                    for (j=0; j<jLen; j++) {
+                        if (routes[i]) {
+                            routes[i] = routes[i].concat(stops[route[j]]);
+                        } else {
+                            routes[i] = stops[route[j]];
+                        }
+                    }
+                }
+                return routes;
+            }
+            console.log(buildRoute('northern'));
+
+            /*function routeChecker(line, sidArr) {
                 var i, j, routeArr, routeLen, sidLen;
                 routeArr = routes[line];
                 routeLen = routeArr.length;
@@ -41,26 +218,26 @@
                     }
                 }
                 return false;
-            }
+            }*/
             function between(a, b, c) {
                 if (a > b) {
-                    if (c < a && c > b) {
+                    if (c <= a && c >= b) {
                         return true;
                     }
                 } else {
-                    if (c < b && c > a) {
+                    if (c <= b && c >= a) {
                         return true;
                     }
                 }
                 return false;
             }
 
-            for (var p=0; p<data.length; p++) {
+            /*for (var p=0; p<data.length; p++) {
                 var d = data[p];
                 var line = d['lineId'];
-                var a = d['naptanId'].substring(8); // Train will definitly be here *** Change to current location
+                var a = d['naptanId'].substring(8); // Train will definitly be here *** Change to current location - should be 
                 var b = d['destinationNaptanId'].substring(8); // Train heading here
-                var c = 'NBP'; // Caller - will the train be here?
+                var c = 'LVT'; // Caller - will the train be here?
 
                 var route = routeChecker(line, [a, b, c]);
                 if (route) {
@@ -74,7 +251,7 @@
                     console.log('No');
                 }
                 console.log(a + ' - ' + b + ' - ' + c);
-            }
+            }*/
 
             //buildRoute('EBY', 'BKE');
 
