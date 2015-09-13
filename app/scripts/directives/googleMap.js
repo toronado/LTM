@@ -13,9 +13,30 @@ angular.module('app.directives.googleMap', [])
 	                zoom: 13,
 	                center: new google.maps.LatLng($scope.center['lat'], $scope.center['lon']),
 	                disableDefaultUI: true,
-	                //backgroundColor: '#222',
-	                styles: [{"featureType":"all","stylers":[{"lightness":50}]}]
-	                //styles: [{"featureType":"all","stylers":[{"visibility":"off"}]}]
+	                backgroundColor: '#000',
+	                /*styles: [
+	                	{
+	                		"featureType":"all",
+	                		"stylers":[
+	                			{
+	                				"lightness":33
+	                			}
+	                		]
+	                	},
+	                	{
+    						featureType: 'road',
+    						stylers: [
+      							{ visibility: 'off' }
+    						]
+  						},
+	                	{
+    						featureType: 'train',
+    						stylers: [
+      							{ visibility: 'off' }
+    						]
+  						}
+  					]*/
+	                styles: [{"featureType":"all","stylers":[{"visibility":"off"}]}]
 	                //styles: [{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#444444"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#adcedb"},{"visibility":"on"}]}] 
 	                /*mapTypeId: google.maps.MapTypeId.SATELLITE*/
 	            };
@@ -24,14 +45,15 @@ angular.module('app.directives.googleMap', [])
 		};
 	});
 angular.module('app.directives.googlePath', [])
-	.directive('googlePath', ['markerService', function(markerService) {
+	.directive('googlePath', ['markerService', 'lineService', function(markerService, lineService) {
 		return {
 			restrict: 'E',
 			scope: {
 				data: '='
 			},
 			controller: function($scope) {
-				var line = sObj['paths'][$scope.data];
+				//var line = sObj['paths'][$scope.data];
+				var line = lineService.buildLine('paths', $scope.data);
 				var lineLen = line.length;
 				var pathLen, path, point, i, j, sid, pathCoords, coords, mObj;
 				for (i=0; i<lineLen; i++) {
@@ -45,7 +67,7 @@ angular.module('app.directives.googlePath', [])
 						mObj = {
 							id: point,
 							scale: 4,
-							color: '#999999',
+							color: '#222',
 							lat: sid['lat'],
 							lon: sid['lon'],
 							info: {
@@ -61,7 +83,8 @@ angular.module('app.directives.googlePath', [])
 					var linePath = new google.maps.Polyline({
 					    path: pathCoords,
 					    geodesic: true,
-					    strokeColor: sObj['colors'][$scope.data],
+					    //strokeColor: sObj['lines'][$scope.data]['colour'],
+					    strokeColor: '#222',
 					    strokeOpacity: 1,
 					    strokeWeight: 1.5
 					});
@@ -71,13 +94,14 @@ angular.module('app.directives.googlePath', [])
 		}
 	}]);
 angular.module('app.directives.googleMarker', [])
-	.directive('googleMarker', ['locationService', 'markerService', function(locationService, markerService) {
+	.directive('googleMarker', ['lineService', 'locationService', 'markerService', function(lineService, locationService, markerService) {
         return {
 			restrict: 'E',
 			scope: {
 				icon: '=',
 				data: '=',
 				timestamp: '=',
+				station: '=',
 				last: '='
 			},
 			controller: function($scope) {
@@ -87,8 +111,8 @@ angular.module('app.directives.googleMarker', [])
 						var trainLoc = locationService.locateTrain($scope.data);
 						if (trainLoc) {
 							mObj = {
-								scale: 7,
-								color: sObj['colors'][$scope.data['lineId']],
+								scale: 5,
+								color: sObj['lines'][$scope.data['lineId']]['colour'],
 								lat: trainLoc['lat'],
 								lon: trainLoc['lon'],
 								info: {
@@ -97,12 +121,48 @@ angular.module('app.directives.googleMarker', [])
 								id: $scope.data['uid'],
 								timestamp: $scope.timestamp
 							};
+							// Some trains have 'Check fron of train' thus no destination
+	                		if ($scope.data['destinationNaptanId']) {
+	                			// At
+	                			var a = $scope.data['naptanId'].substring(8);
+	                			// To
+	                			var b = $scope.data['destinationNaptanId'].substring(8);
+	                			// Caller
+	                			var c = $scope.station;
+	                			// If caller is destination or caller is current location, train on route
+	                			if (c !== b && c !== a) {	                			
+		                			// Route to contain a, b, c to be worth displaying train
+		                			var stations = [a,b,c];
+		                			// Check for a via station
+		                			var via = $scope.data['towards'].split(' via ');
+		                			if (via) {
+										var sidVia = locationService.stationNameLookup(via[1]);
+										if (sidVia) {
+											stations.push(sidVia);
+										}
+									}
+									// Get possible routes for the line
+									var routes = lineService.buildLine('routes', $scope.data['lineId']);
+									// Check for a valid route - containing all stations
+									var route = lineService.findRoute(routes, stations);
+									if (!route) {
+										mObj = null;
+									} else {
+										// If Route found, check if train is on route
+										var onRoute = lineService.onRoute(route[0], route[1], route[2]);
+										// Exit if train not heading my way
+										if (!onRoute) {
+											mObj = null;
+										}
+									}
+								}
+	                		}
 						}
 						break;
 					case 'station':
 						mObj = {
 							scale: 6,
-							color: '#000000',
+							color: '#fff',
 							lat: $scope.data['lat'],
 							lon: $scope.data['lon'],
 							info: {

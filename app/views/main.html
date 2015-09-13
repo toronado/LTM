@@ -23,7 +23,7 @@
 			<google-map center="station">
 				<google-path data-ng-repeat="path in paths" data="path"></google-path>
 				<google-marker icon="'station'" data="station"></google-marker>
-				<google-marker data-ng-repeat="train in trains" icon="'train'" data="train" timestamp="timestamp" last="$last"></google-marker>
+				<google-marker data-ng-repeat="train in trains" icon="'train'" data="train" timestamp="timestamp" last="$last" station="stationId"></google-marker>
 			</google-map>
 		</div>
 	</div>

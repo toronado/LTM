@@ -210,6 +210,7 @@
                             }
                         }
                         if (correct) {
+                            console.log(rtnArr[i]);
                             return between(rtnArr[i].indexOf(stnArr[0]),rtnArr[i].indexOf(stnArr[1]),rtnArr[i].indexOf(stnArr[2]));
                         }
                     }
@@ -232,14 +233,15 @@
                 }
                 return false;
             }
-            for (var p=0; p<data.length; p++) {
+            for (var p=0; p<1; p++) {
                 var d = data[p];
                 var line = d['lineId'];
                 var a = d['naptanId'].substring(8); // Train will definitly be here *** Change to current location
                 var b = d['destinationNaptanId'].substring(8); // Train heading here
                 var c = 'EPG'; // Caller - will the train be here?
 
-                console.log(routeChecker('routes',line, [a,b,c]));
+                //console.log(routeChecker('routes',line, [a,b,c]));
+                console.log(routeChecker('routes',line,['LYS','WOF','BKE']));
 
                 /*var route = routeChecker(line, [a, b, c]);
                 if (route) {

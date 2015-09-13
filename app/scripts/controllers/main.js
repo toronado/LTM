@@ -32,6 +32,9 @@ tubeApp.factory('dataFactory', function ($http) {
                     var url = 'https://api.tfl.gov.uk/StopPoint/%7Bids%7D/Arrivals';
                     var params = { 'ids': '940GZZLU' + params };
                     break;
+                case 'sample':
+                    var url = 'data/sample.json';
+                    break;
                 case 'line':
                     var url = 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals';
                     var params = { 'ids': Object.keys(sObj['sid'][params]['line']).join() };
@@ -82,6 +85,69 @@ tubeApp.factory('dataService', function () {
             return trainsArr;
         }
     };
+});
+
+tubeApp.factory('lineService', function() {
+    return {
+        buildLine: function(pathsOrRoutes, lineId) {
+            var lines = sObj['lines'][lineId];
+            var stops = lines['stops'];
+            var porsA = lines[pathsOrRoutes];
+            //Some lines have no forks e.g. jubilee
+            if (!porsA) return stops;
+
+            var porsL = porsA.length;
+            var rtnPr = [];
+            var i, j;
+
+            for (i=0; i<porsL; i++) {
+                var porA = porsA[i];
+                var porL = porA.length;
+                for (j=0; j<porL; j++) {
+                    if (rtnPr[i]) {
+                        rtnPr[i] = rtnPr[i].concat(stops[porA[j]]);
+                    } else {
+                        rtnPr[i] = stops[porA[j]];
+                    }
+                }
+            }
+            return rtnPr;
+        },
+        findRoute: function(routes, stations) {
+            var i, j, route, routesLen, stationsLen, routeFound, indexArr;
+            routesLen = routes.length;
+            stationsLen = stations.length;
+            for (i=0; i<routesLen; i++) {
+                route = routes[i];
+                indexArr = [];
+                for (j=0; j<stationsLen; j++) {
+                    var station = stations[j];
+                    var index = route.indexOf(station);
+                    if (index === -1) {
+                        indexArr = [];
+                        break;
+                    }
+                    indexArr.push(index);
+                    if (indexArr.length === stationsLen) {
+                        return indexArr;
+                    }
+                }
+            }
+            return false;
+        },
+        onRoute: function(a, b, c) {
+            if (a > b) {
+                if (c <= a && c >= b) {
+                    return true;
+                }
+            } else {
+                if (c <= b && c >= a) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 });
 
 tubeApp.factory('locationService', function () {
@@ -302,6 +368,10 @@ tubeApp.factory('markerService', function() {
                     }
                 }
             }
+        },
+        remove: function (id) {
+            markers[id]['markerObj'].setMap(null);
+            delete this.markers[id];
         },
         hide: function (id) {
             markers[id]['markerObj'].setVisible(false);
