@@ -315,18 +315,11 @@ tubeApp.factory('markerService', function() {
                     marker['timestamp'] = mObj['timestamp'];
                 }
             } else {
-                //New marker needs adding
-                var icon = {
-                    path: google.maps.SymbolPath.CIRCLE,
-                    fillOpacity: 1,
-                    strokeWeight:0,
-                    scale: mObj['scale'],
-                    fillColor: mObj['color']
-                };
                 //Place marker and store as markerObj
                 mObj['markerObj'] = new google.maps.Marker({
                     position: new google.maps.LatLng(mObj['lat'], mObj['lon']),
-                    icon: icon,
+                    icon: mObj['icon'],
+                    zIndex: mObj['icon']['zIndex'],
                     map: map
                 });
                 //Add an infowindow and store as infoObj

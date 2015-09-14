@@ -3,7 +3,7 @@
 }
 .navbar {
 	margin-bottom: 0;
-	background: none;
+	background: black;
 	border-radius: 0;
 	border:none;
 }
@@ -13,11 +13,12 @@
 
 html,
 body {
-  padding: 0;
-  margin: 0;
-  height: 100%;
-  -webkit-font-smoothing: antialiased;
-  background-color: #222;
+	padding: 0;
+	margin: 0;
+	height: 100%;
+	-webkit-font-smoothing: antialiased;
+	background-color: #222;
+	background: url(../images/grid.gif) #292929;
 }
 
 .navbar-default .navbar-brand {
@@ -27,11 +28,27 @@ body {
 	font-size: 14px;
 }
 
-h1 {
-	padding:0 15px 15px 15px;
+.navbar-brand h1 {
+	padding:0;
 	margin:0;
+	margin-left: 5px;
 	font-size: 1.5em;
 	color: #fff;
+	letter-spacing: 1px;
+	text-transform: capitalize;
+	float: left;
+	font-weight: 400;
+}
+
+#arrivalList {
+	position: absolute;
+	top:75px;
+	left:20px;
+	width: 25%;
+	/*max-height:calc(100vh - 500px);*/
+	max-height: 360px;
+	overflow-y: scroll;
+	box-shadow: 6px 8px 6px -6px #111;
 }
 
 .list-group {
@@ -40,15 +57,17 @@ h1 {
 
 .list-group-item {
 	border-radius: 0 !important;
-	background: none;
+	background: #fff;
 	color: #555;
 	border:none;
 	margin:0;
+	margin-bottom: 5px;
 	padding:15px;
-	border-left:#000 solid 3px;
+	opacity: 1;
+	/*border-left:#000 solid 3px;*/
 }
 .list-group-item:nth-of-type(odd) {
-    background: #252525;
+    /*background: #252525;*/
 }
 .list-group-item .badge {
 	background: none;
@@ -72,6 +91,7 @@ span.towards {
 	letter-spacing: 1px;
 	font-weight: 500;
 	display: block;
+	background-color: #eee;
 }
 
 /*# sourceMappingURL=main.css.map */

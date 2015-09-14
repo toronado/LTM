@@ -3,23 +3,14 @@
 		<div class="navbar-header">
 		  	<a href="" ng-click="go()" class="navbar-brand">
 		  		<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+		  		<h1>{{station.name}} <small>{{stationId}}</small></h1>
 		  	</a>
 		</div>
 	</div>
 </nav>
 <div class="container-fluid" id="main-container">
-	<div class="row-fluid" style="background-color:#222;">
-		<div class="col-md-3" style="height:calc(100vh - 50px); overflow-y: scroll; padding:0;">
-			<h1>{{station.name}} <small>{{stationId}}</small></h1>
-			<ol class="list-group">
-		    	<li class="list-group-item {{arrival.lineId}}" data-ng-repeat="arrival in arrivals | orderBy:'-timeToStation':true" ng-if="arrival.naptanId === '940GZZLU'+stationId">
-		    		<span class="badge">{{arrival.timeToStation | convertTime}}</span>
-		    		<span class="towards">{{arrival.towards}}</span>
-		    		<small>{{arrival.currentLocation}}</small>
-		    	</li>
-		    </ol>
-		</div>
-		<div class="col-md-9" style="height:calc(100vh - 50px); padding:0;">
+	<div class="row-fluid">
+		<div class="col-md-12" style="height:calc(100vh - 50px); padding:0;">
 			<google-map center="station">
 				<google-path data-ng-repeat="path in paths" data="path"></google-path>
 				<google-marker icon="'station'" data="station"></google-marker>
@@ -27,4 +18,13 @@
 			</google-map>
 		</div>
 	</div>
+</div>
+<div id="arrivalList">
+	<ol class="list-group">
+    	<li class="list-group-item {{arrival.lineId}}" data-ng-repeat="arrival in arrivals | orderBy:'-timeToStation':true" ng-if="arrival.naptanId === '940GZZLU'+stationId">
+    		<span class="badge">{{arrival.timeToStation | convertTime}}</span>
+    		<span class="towards">{{arrival.towards}}</span>
+    		<small>{{arrival.currentLocation}}</small>
+    	</li>
+    </ol>
 </div>
