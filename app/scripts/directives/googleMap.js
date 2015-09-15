@@ -40,7 +40,7 @@ angular.module('app.directives.googleMap', [])
 	                	{"featureType":"all","stylers":[{"visibility":"off"}]},
 	                	{"featureType": "administrative","elementType": "labels.text", "stylers": [{ "visibility": "on" }]},
 	                	{"featureType": "administrative","elementType": "labels.text.stroke", "stylers": [{ "visibility": "off" }]},
-	                	{"featureType": "administrative","elementType": "labels.text.fill", "stylers": [{ "color": "#444444" }]}
+	                	{"featureType": "administrative","elementType": "labels.text.fill", "stylers": [{ "color": "#333333" }]}
 	                ]
 	                //styles: [{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#444444"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#adcedb"},{"visibility":"on"}]}] 
 	                /*mapTypeId: google.maps.MapTypeId.SATELLITE*/
@@ -77,12 +77,12 @@ angular.module('app.directives.googlePath', [])
 							icon: {
 								path: google.maps.SymbolPath.CIRCLE,
 								fillOpacity: 1,
-                    			strokeWeight: 1.5,
-                    			strokeColor: sObj['lines'][$scope.data]['colour'],
-                    			strokeOpacity: 0.5,
-                    			scale: 6,
-                    			fillColor: '#292929',
-                    			zIndex: 1
+                    			strokeWeight: 0,
+                    			strokeColor: '#292929',
+                    			strokeOpacity: 1,
+                    			scale: 3,
+                    			fillColor: '#777',
+                    			zIndex: 2
 							},
 							info: {
 								content: point,
@@ -187,11 +187,11 @@ angular.module('app.directives.googleMarker', [])
 							lon: $scope.data['lon'],
 							icon: {
 								path: google.maps.SymbolPath.CIRCLE,
-								fillOpacity: 1,
+								fillOpacity: 0,
                     			strokeWeight: 1.5,
                     			strokeColor: '#fff',
-                    			scale: 7,
-                    			fillColor: '#292929',
+                    			scale: 8,
+                    			fillColor: '#fff',
                     			zIndex: 2
 							},
 							info: {
