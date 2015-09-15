@@ -47,11 +47,11 @@ body {
 	width: 25%;
 	overflow: hidden;
 	/*max-height:calc(100vh - 500px);*/
-	box-shadow: 6px 8px 6px -6px #111;
-	background-color: #000;
+	box-shadow: 0 8px 6px -6px #111;
+	background-color: #151515;
 }
 #arrivalList {
-	max-height: 330px;
+	max-height: 325px;
 	overflow-y: scroll;
 }
 
@@ -59,6 +59,7 @@ body {
 	margin:0;
 	padding:15px;
 	font-size: 20px;
+	color: #fff;
 }
 
 .list-group {
@@ -69,13 +70,15 @@ body {
 	border-radius: 0 !important;
 	color: #555;
 	border:none;
-	border-bottom:#111 solid 1px;
+	border-bottom:#1d1d1d solid 1px;
 	margin:0;
 	padding:15px;
 	opacity: 1;
-	font-size: 12px;
+	font-size: 13px;
 	background: transparent;
-	/*border-left:#000 solid 3px;*/
+}
+.list-group-item .badge {
+	color:#777;
 }
 .list-group-item:nth-of-type(odd) {
     /*background: #252525;*/
@@ -84,23 +87,38 @@ body {
 	background: none;
 }
 
-/*.bakerloo {border-color:#AE6118 !important;}
-.central {border-color:#E41F1F !important;}
-.circle {border-color:#F8D42D !important;}
-.district {border-color:#007229 !important;}
-.hammersmith-city {border-color:#E899A8 !important;}
-.jubilee {border-color:#686E72 !important;}
-.metropolitan {border-color:#893267 !important;}
-.northern {border-color:#000 !important;}
-.piccadilly {border-color:#0450A1 !important;}
-.victoria {border-color:#009FE0 !important;}
-.waterloo-city {border-color:#70C3CE !important;}*/
+.bakerloo {border-right-color:#AE6118 !important;}
+.central {border-right-color:#E41F1F !important;}
+.circle {border-right-color:#F8D42D !important;}
+.district {border-right-color:#007229 !important;}
+.hammersmith-city {border-right-color:#E899A8 !important;}
+.jubilee {border-right-color:#686E72 !important;}
+.metropolitan {border-right-color:#893267 !important;}
+.northern {border-right-color:#000 !important;}
+.piccadilly {border-right-color:#0450A1 !important;}
+.victoria {border-right-color:#009FE0 !important;}
+.waterloo-city {border-right-color:#70C3CE !important;}
 
 span.towards {
 	color:#777;
 	font-size: 12px;
 	font-weight: 500;
 	display: block;
+}
+
+.footer {
+	position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 15px;
+    background-color: #222;
+    text-align: center;
+    box-shadow: 0 8px 6px 7px #000;
+}
+.footer p {
+	margin:0;
+	color: white;
+	opacity: 0.5;
 }
 
 /*# sourceMappingURL=main.css.map */

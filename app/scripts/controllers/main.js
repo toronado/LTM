@@ -304,7 +304,7 @@ tubeApp.factory('markerService', function() {
                 if (mObj['lon'] !== marker['lon']) {
                     var position = new google.maps.LatLng(mObj['lat'], mObj['lon']);
                     //Using markerAnimate plugin
-                    marker['markerObj'].animateTo(position, {easing: 'linear',duration: 5000});
+                    marker['markerObj'].animateTo(position, {easing: 'linear', duration: 3000});
                     //Update info window
                     if (mObj['info']) {
                         marker['infoObj'].setContent(mObj['info']['content']);
