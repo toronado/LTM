@@ -40,15 +40,25 @@ body {
 	font-weight: 400;
 }
 
-#arrivalList {
+#arrivals {
 	position: absolute;
-	top:75px;
+	top:25px;
 	left:20px;
 	width: 25%;
+	overflow: hidden;
 	/*max-height:calc(100vh - 500px);*/
-	max-height: 360px;
-	overflow-y: scroll;
 	box-shadow: 6px 8px 6px -6px #111;
+	background-color: #000;
+}
+#arrivalList {
+	max-height: 330px;
+	overflow-y: scroll;
+}
+
+#arrivals h1 {
+	margin:0;
+	padding:15px;
+	font-size: 20px;
 }
 
 .list-group {
@@ -57,13 +67,14 @@ body {
 
 .list-group-item {
 	border-radius: 0 !important;
-	background: #fff;
 	color: #555;
 	border:none;
+	border-bottom:#111 solid 1px;
 	margin:0;
-	margin-bottom: 5px;
 	padding:15px;
 	opacity: 1;
+	font-size: 12px;
+	background: transparent;
 	/*border-left:#000 solid 3px;*/
 }
 .list-group-item:nth-of-type(odd) {
@@ -73,7 +84,7 @@ body {
 	background: none;
 }
 
-.bakerloo {border-color:#AE6118 !important;}
+/*.bakerloo {border-color:#AE6118 !important;}
 .central {border-color:#E41F1F !important;}
 .circle {border-color:#F8D42D !important;}
 .district {border-color:#007229 !important;}
@@ -83,15 +94,13 @@ body {
 .northern {border-color:#000 !important;}
 .piccadilly {border-color:#0450A1 !important;}
 .victoria {border-color:#009FE0 !important;}
-.waterloo-city {border-color:#70C3CE !important;}
+.waterloo-city {border-color:#70C3CE !important;}*/
 
 span.towards {
-	color:#fff;
-	font-size: 13px;
-	letter-spacing: 1px;
+	color:#777;
+	font-size: 12px;
 	font-weight: 500;
 	display: block;
-	background-color: #eee;
 }
 
 /*# sourceMappingURL=main.css.map */
