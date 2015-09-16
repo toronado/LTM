@@ -18,7 +18,7 @@ body {
 	height: 100%;
 	-webkit-font-smoothing: antialiased;
 	background-color: #222;
-	background: url(../images/grid.gif) #292929;
+	background: url(../images/grid2.gif) #292929;
 }
 
 .navbar-default .navbar-brand {
@@ -43,15 +43,15 @@ body {
 #arrivals {
 	position: absolute;
 	top:25px;
-	left:20px;
-	width: 25%;
+	left:25px;
+	width: 330px;
 	overflow: hidden;
-	/*max-height:calc(100vh - 500px);*/
-	box-shadow: 0 8px 6px -6px #111;
-	background-color: #151515;
+	box-shadow: 0 0px 2px 0px #111;
+	background-color: #252525;
+	font-family: 'Roboto', sans-serif;
 }
 #arrivalList {
-	max-height: 325px;
+	max-height: 410px;
 	overflow-y: scroll;
 }
 
@@ -60,6 +60,7 @@ body {
 	padding:15px;
 	font-size: 20px;
 	color: #fff;
+	font-weight: 500;
 }
 
 .list-group {
@@ -70,7 +71,7 @@ body {
 	border-radius: 0 !important;
 	color: #555;
 	border:none;
-	border-bottom:#1d1d1d solid 1px;
+	border-bottom:#222 solid 1px;
 	margin:0;
 	padding:15px;
 	opacity: 1;
@@ -101,7 +102,7 @@ body {
 
 span.towards {
 	color:#777;
-	font-size: 12px;
+	font-size: 14px;
 	font-weight: 500;
 	display: block;
 }
@@ -114,6 +115,8 @@ span.towards {
     background-color: #222;
     text-align: center;
     box-shadow: 0 8px 6px 7px #000;
+    opacity: 0.9;
+    display: none;
 }
 .footer p {
 	margin:0;
