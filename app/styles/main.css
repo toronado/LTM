@@ -18,7 +18,7 @@ body {
 	height: 100%;
 	-webkit-font-smoothing: antialiased;
 	background-color: #222;
-	background: url(../images/grid2.gif) #292929;
+	background: url(../images/grid.gif) #292929;
 }
 
 .navbar-default .navbar-brand {
@@ -49,6 +49,7 @@ body {
 	box-shadow: 0 0px 2px 0px #111;
 	background-color: #252525;
 	font-family: 'Roboto', sans-serif;
+	opacity: 0.9;
 }
 #arrivalList {
 	max-height: 410px;
