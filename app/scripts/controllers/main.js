@@ -410,7 +410,8 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, data
     lineService.reset();
 
     $scope.stationId = $routeParams.stationId;
-    $scope.station = sObj['sid'][$routeParams.stationId];
+    $scope.stations = sObj['sid'];
+    $scope.station = $scope.stations[$routeParams.stationId];
     $scope.paths = Object.keys($scope.station['line']);
     $scope.go = function() {
         dataFactory.getArrivals('line', $routeParams.stationId).then(function (data) {

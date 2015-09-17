@@ -145,7 +145,7 @@ angular.module('app.directives.googleMarker', [])
 	                		}
 						}
 						break;
-					case 'station':
+					case 'center':
 						mObj = {
 							id: 'center',
 							lat: $scope.data['lat'],
@@ -163,6 +163,26 @@ angular.module('app.directives.googleMarker', [])
 								content: $scope.data['name']
 							}
 						};
+						break;
+					case 'station':
+						mObj = {
+							id: $scope.data['name'],
+							lat: $scope.data['lat'],
+							lon: $scope.data['lon'],
+							icon: {
+								path: google.maps.SymbolPath.CIRCLE,
+								fillOpacity: 1,
+                    			strokeWeight: 0,
+                    			strokeColor: '#292929',
+                    			strokeOpacity: 1,
+                    			scale: 1,
+                    			fillColor: '#fff',
+                    			zIndex: 2
+							},
+							info: {
+								content: $scope.data['name']
+							}
+						}
 						break;
 				}
 				if (mObj) {

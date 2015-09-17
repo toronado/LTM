@@ -17,8 +17,12 @@ body {
 	margin: 0;
 	height: 100%;
 	-webkit-font-smoothing: antialiased;
-	background-color: #222;
-	background: url(../images/grid3.gif) #292929;
+	background-color:#292929;
+	background-image: 
+		linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px), 
+		linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+	background-size:18px 18px;
+	background-position:-1px -1px;
 }
 
 .navbar-default .navbar-brand {
@@ -51,7 +55,7 @@ body {
 	opacity: 0.9;
 }
 #arrivalList {
-	max-height: 410px;
+	max-height: 415px;
 	overflow-y: scroll;
 }
 
@@ -61,6 +65,21 @@ body {
 	font-size: 20px;
 	color: #fff;
 	font-weight: 500;
+	text-align: center;
+}
+
+.nav-justified li a {
+	padding:15px;
+	border-left:#1c1c1c solid 1px;
+	border-top:#1c1c1c solid 1px;
+	text-align: center;
+	text-transform: uppercase;
+	font-size: 22px;
+	line-height: 22px;
+	border-radius: 0;
+}
+.nav-justified li:first-child {
+	border-left:none;
 }
 
 .list-group {
@@ -99,6 +118,18 @@ body {
 .piccadilly {border-right-color:#0450A1 !important;}
 .victoria {border-right-color:#009FE0 !important;}
 .waterloo-city {border-right-color:#70C3CE !important;}
+
+.tc-bakerloo {color:#AE6118 !important;}
+.tc-central {color:#E41F1F !important;}
+.tc-circle {color:#F8D42D !important;}
+.tc-district {color:#007229 !important;}
+.tc-hammersmith-city {color:#E899A8 !important;}
+.tc-jubilee {color:#686E72 !important;}
+.tc-metropolitan {color:#893267 !important;}
+.tc-northern {color:#000 !important;}
+.tc-piccadilly {color:#0450A1 !important;}
+.tc-victoria {color:#009FE0 !important;}
+.tc-waterloo-city {color:#70C3CE !important;}
 
 span.towards {
 	color:#777;
