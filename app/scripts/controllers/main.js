@@ -89,6 +89,32 @@ tubeApp.factory('dataService', function () {
 
 tubeApp.factory('lineService', function() {
     return {
+        paths: {},
+        reset: function() {
+            this.paths = {};
+        },
+        drawPath: function(id, points) {
+            var linePath = new google.maps.Polyline({
+                path: points,
+                geodesic: true,
+                strokeColor: sObj['lines'][id]['colour'],
+                strokeOpacity: 0.5,
+                strokeWeight: 1.5
+            });
+            linePath.setMap(map);
+            if (this.paths[id]) {
+                this.paths[id].push(linePath);
+            } else {
+                this.paths[id] = [linePath];
+            }
+        },
+        hidePath: function(id) {
+            this.paths[id].setVisible(false);
+        },
+        showPath: function(id) {
+            this.paths[id].setVisible(true);
+        },
+        // Returns all possible routes or paths for a given line
         buildLine: function(pathsOrRoutes, lineId) {
             var lines = sObj['lines'][lineId];
             var stops = lines['stops'];
@@ -378,9 +404,11 @@ tubeApp.factory('markerService', function() {
     }
 });
 
-tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, dataService, markerService) {
+tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, dataService, markerService, lineService) {
 
     markerService.reset();
+    lineService.reset();
+
     $scope.stationId = $routeParams.stationId;
     $scope.station = sObj['sid'][$routeParams.stationId];
     $scope.paths = Object.keys($scope.station['line']);

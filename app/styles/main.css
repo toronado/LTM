@@ -18,7 +18,7 @@ body {
 	height: 100%;
 	-webkit-font-smoothing: antialiased;
 	background-color: #222;
-	background: url(../images/grid.gif) #292929;
+	background: url(../images/grid3.gif) #292929;
 }
 
 .navbar-default .navbar-brand {
@@ -46,9 +46,8 @@ body {
 	left:25px;
 	width: 330px;
 	overflow: hidden;
-	box-shadow: 0 0px 2px 0px #111;
-	background-color: #252525;
-	font-family: 'Roboto', sans-serif;
+	/*box-shadow: 0 0px 2px 0px #111;*/
+	background-color: #161616;
 	opacity: 0.9;
 }
 #arrivalList {
@@ -72,7 +71,7 @@ body {
 	border-radius: 0 !important;
 	color: #555;
 	border:none;
-	border-bottom:#222 solid 1px;
+	border-top:#1c1c1c solid 1px;
 	margin:0;
 	padding:15px;
 	opacity: 1;

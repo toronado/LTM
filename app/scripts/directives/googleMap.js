@@ -14,36 +14,12 @@ angular.module('app.directives.googleMap', [])
 	                center: new google.maps.LatLng($scope.center['lat'], $scope.center['lon']),
 	                disableDefaultUI: true,
 	                backgroundColor: 'none',
-	                /*styles: [
-	                	{
-	                		"featureType":"all",
-	                		"stylers":[
-	                			{
-	                				"lightness":33
-	                			}
-	                		]
-	                	},
-	                	{
-    						featureType: 'road',
-    						stylers: [
-      							{ visibility: 'off' }
-    						]
-  						},
-	                	{
-    						featureType: 'train',
-    						stylers: [
-      							{ visibility: 'off' }
-    						]
-  						}
-  					]*/
 	                styles: [
 	                	{"featureType":"all","stylers":[{"visibility":"off"}]},
 	                	{"featureType": "administrative","elementType": "labels.text", "stylers": [{ "visibility": "on" }]},
 	                	{"featureType": "administrative","elementType": "labels.text.stroke", "stylers": [{ "visibility": "off" }]},
 	                	{"featureType": "administrative","elementType": "labels.text.fill", "stylers": [{ "color": "#333333" }]}
 	                ]
-	                //styles: [{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#444444"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#adcedb"},{"visibility":"on"}]}] 
-	                /*mapTypeId: google.maps.MapTypeId.SATELLITE*/
 	            };
 	            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 	            //map.panBy(-150, 0);
@@ -58,20 +34,18 @@ angular.module('app.directives.googlePath', [])
 				data: '='
 			},
 			controller: function($scope) {
-				//var line = sObj['paths'][$scope.data];
 				var line = lineService.buildLine('paths', $scope.data);
 				var lineLen = line.length;
-				var pathLen, path, point, i, j, sid, pathCoords, coords, mObj;
+				var pathLen, path, point, i, j, sid, pathCoords;
 				for (i=0; i<lineLen; i++) {
 					path = line[i];
 					pathLen = line[i].length;
 					pathCoords = [];
 					for (j=0; j<pathLen; j++) {
 						point = path[j];
-						pathLen = pathLen;
 						sid = sObj['sid'][point];
-						mObj = {
-							id: point,
+						markerService.addMove({
+							id: $scope.data.substring(0,2)+point,
 							lat: sid['lat'],
 							lon: sid['lon'],
 							icon: {
@@ -81,7 +55,7 @@ angular.module('app.directives.googlePath', [])
                     			strokeColor: '#292929',
                     			strokeOpacity: 1,
                     			scale: 3,
-                    			fillColor: '#777',
+                    			fillColor: '#999',
                     			zIndex: 2
 							},
 							info: {
@@ -90,19 +64,10 @@ angular.module('app.directives.googlePath', [])
 									location.replace('#/'+this.content+'/');
 								}
 							}
-						};
-						markerService.addMove(mObj);
+						});
 						pathCoords.push(new google.maps.LatLng(sid['lat'], sid['lon']));
 					}
-					var linePath = new google.maps.Polyline({
-					    path: pathCoords,
-					    geodesic: true,
-					    strokeColor: sObj['lines'][$scope.data]['colour'],
-					    //strokeColor: '#ccc',
-					    strokeOpacity: 0.5,
-					    strokeWeight: 1.5
-					});
-					linePath.setMap(map);
+					lineService.drawPath($scope.data, pathCoords);
 				}
 			}
 		}
