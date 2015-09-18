@@ -81,6 +81,7 @@ angular.module('app.directives.googleMarker', [])
 				data: '=',
 				timestamp: '=',
 				station: '=',
+				filter: '=',
 				last: '='
 			},
 			controller: function($scope) {
@@ -189,6 +190,7 @@ angular.module('app.directives.googleMarker', [])
 					markerService.addMove(mObj);
 				}
 				if ($scope.last) {
+					markerService.showOnly($scope.filter);
 					markerService.removeOld($scope.timestamp);
 				}
 			}

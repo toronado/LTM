@@ -87,95 +87,6 @@ tubeApp.factory('dataService', function () {
     };
 });
 
-tubeApp.factory('lineService', function() {
-    return {
-        paths: {},
-        reset: function() {
-            this.paths = {};
-        },
-        drawPath: function(id, points) {
-            var linePath = new google.maps.Polyline({
-                path: points,
-                geodesic: true,
-                strokeColor: sObj['lines'][id]['colour'],
-                strokeOpacity: 0.5,
-                strokeWeight: 1.5
-            });
-            linePath.setMap(map);
-            if (this.paths[id]) {
-                this.paths[id].push(linePath);
-            } else {
-                this.paths[id] = [linePath];
-            }
-        },
-        hidePath: function(id) {
-            this.paths[id].setVisible(false);
-        },
-        showPath: function(id) {
-            this.paths[id].setVisible(true);
-        },
-        // Returns all possible routes or paths for a given line
-        buildLine: function(pathsOrRoutes, lineId) {
-            var lines = sObj['lines'][lineId];
-            var stops = lines['stops'];
-            var porsA = lines[pathsOrRoutes];
-            //Some lines have no forks e.g. jubilee
-            if (!porsA) return stops;
-
-            var porsL = porsA.length;
-            var rtnPr = [];
-            var i, j;
-
-            for (i=0; i<porsL; i++) {
-                var porA = porsA[i];
-                var porL = porA.length;
-                for (j=0; j<porL; j++) {
-                    if (rtnPr[i]) {
-                        rtnPr[i] = rtnPr[i].concat(stops[porA[j]]);
-                    } else {
-                        rtnPr[i] = stops[porA[j]];
-                    }
-                }
-            }
-            return rtnPr;
-        },
-        findRoute: function(routes, stations) {
-            var i, j, route, routesLen, stationsLen, routeFound, indexArr;
-            routesLen = routes.length;
-            stationsLen = stations.length;
-            for (i=0; i<routesLen; i++) {
-                route = routes[i];
-                indexArr = [];
-                for (j=0; j<stationsLen; j++) {
-                    var station = stations[j];
-                    var index = route.indexOf(station);
-                    if (index === -1) {
-                        indexArr = [];
-                        break;
-                    }
-                    indexArr.push(index);
-                    if (indexArr.length === stationsLen) {
-                        return indexArr;
-                    }
-                }
-            }
-            return false;
-        },
-        onRoute: function(a, b, c) {
-            if (a > b) {
-                if (c <= a && c >= b) {
-                    return true;
-                }
-            } else {
-                if (c <= b && c >= a) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-});
-
 tubeApp.factory('locationService', function () {
     return {
         stationNameLookup: function(name) {
@@ -319,6 +230,117 @@ tubeApp.factory('locationService', function () {
     };
 });
 
+tubeApp.factory('lineService', function() {
+    return {
+        paths: {},
+        reset: function() {
+            this.paths = {};
+        },
+        drawPath: function(id, points) {
+            var linePath = new google.maps.Polyline({
+                path: points,
+                geodesic: true,
+                strokeColor: sObj['lines'][id]['colour'],
+                strokeOpacity: 0.5,
+                strokeWeight: 1.5
+            });
+            linePath.setMap(map);
+            if (this.paths[id]) {
+                this.paths[id].push(linePath);
+            } else {
+                this.paths[id] = [linePath];
+            }
+        },
+        showOnly: function(lineId) {
+            var line;
+            for (line in this.paths) {
+                if (line !== lineId) {
+                    this.visible(line, false);
+                } else {
+                    this.visible(line, true);
+                }
+            }
+        },
+        showAll: function() {
+            var line;
+            for (line in this.paths) {
+                this.visible(line, true);
+            }
+        },
+        visible: function(line, bool) {
+            var paths = this.paths[line];
+            var i, arrLen;
+            arrLen = paths.length;
+            for (i=0; i<arrLen; i++) {
+                if (bool) {
+                    paths[i].setVisible(true);
+                } else {
+                    paths[i].setVisible(false);
+                }
+            }
+        },
+        // Returns all possible routes or paths for a given line
+        buildLine: function(pathsOrRoutes, lineId) {
+            var lines = sObj['lines'][lineId];
+            var stops = lines['stops'];
+            var porsA = lines[pathsOrRoutes];
+            //Some lines have no forks e.g. jubilee
+            if (!porsA) return stops;
+
+            var porsL = porsA.length;
+            var rtnPr = [];
+            var i, j;
+
+            for (i=0; i<porsL; i++) {
+                var porA = porsA[i];
+                var porL = porA.length;
+                for (j=0; j<porL; j++) {
+                    if (rtnPr[i]) {
+                        rtnPr[i] = rtnPr[i].concat(stops[porA[j]]);
+                    } else {
+                        rtnPr[i] = stops[porA[j]];
+                    }
+                }
+            }
+            return rtnPr;
+        },
+        findRoute: function(routes, stations) {
+            var i, j, route, routesLen, stationsLen, routeFound, indexArr;
+            routesLen = routes.length;
+            stationsLen = stations.length;
+            for (i=0; i<routesLen; i++) {
+                route = routes[i];
+                indexArr = [];
+                for (j=0; j<stationsLen; j++) {
+                    var station = stations[j];
+                    var index = route.indexOf(station);
+                    if (index === -1) {
+                        indexArr = [];
+                        break;
+                    }
+                    indexArr.push(index);
+                    if (indexArr.length === stationsLen) {
+                        return indexArr;
+                    }
+                }
+            }
+            return false;
+        },
+        onRoute: function(a, b, c) {
+            if (a > b) {
+                if (c <= a && c >= b) {
+                    return true;
+                }
+            } else {
+                if (c <= b && c >= a) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+});
+
 tubeApp.factory('markerService', function() {
     return {
         markers: {},
@@ -381,22 +403,32 @@ tubeApp.factory('markerService', function() {
                 marker = this.markers[m];
                 if (marker['timestamp']) {
                     if (marker['timestamp'] !== timestamp) {
-                        console.log(marker);
                         marker['markerObj'].setMap(null);
                         delete this.markers[m];
                     }
                 }
             }
         },
-        remove: function (id) {
-            markers[id]['markerObj'].setMap(null);
-            delete this.markers[id];
+        showOnly: function (lineId) {
+            //Show hide dependant on line id
+            var markers = this.markers;
+            var marker, mid, m;
+            for (marker in markers) {
+                m = markers[marker];
+                mid = m['id'];
+                if (mid === 'center') continue;
+                if (lineId === '' || mid.substring(0,2) === lineId.substring(0,2)) {
+                    m['markerObj'].setVisible(true);
+                } else {
+                    m['markerObj'].setVisible(false);
+                }
+            }
         },
-        hide: function (id) {
-            markers[id]['markerObj'].setVisible(false);
-        },
-        show: function (id) {
-            markers[id]['markerObj'].setVisible(true);
+        showAll: function() {
+            var marker;
+            for (marker in this.markers) {
+                this.markers[marker]['markerObj'].setVisible(true);
+            }
         },
         reset: function() {
             this.markers = {};
@@ -413,6 +445,22 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, data
     $scope.stations = sObj['sid'];
     $scope.station = $scope.stations[$routeParams.stationId];
     $scope.paths = Object.keys($scope.station['line']);
+    $scope.lineFilter = {
+        lineId: '',
+        set: function (line) {
+            if (line === this.lineId) {
+                return;
+            }
+            this.lineId = line;
+            if (line === '') {
+                lineService.showAll();
+                markerService.showAll();
+            } else {
+                lineService.showOnly(this.lineId);
+                markerService.showOnly(this.lineId);
+            }
+        }
+    }
     $scope.go = function() {
         dataFactory.getArrivals('line', $routeParams.stationId).then(function (data) {
             $scope.timestamp = new Date().getTime() / 1000;
