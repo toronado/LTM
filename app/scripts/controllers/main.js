@@ -241,7 +241,7 @@ tubeApp.factory('lineService', function() {
                 path: points,
                 geodesic: true,
                 strokeColor: sObj['lines'][id]['colour'],
-                strokeOpacity: 0.5,
+                strokeOpacity: 0.7,
                 strokeWeight: 1.5
             });
             linePath.setMap(map);

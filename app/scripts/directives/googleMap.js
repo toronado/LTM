@@ -55,7 +55,7 @@ angular.module('app.directives.googlePath', [])
                     			strokeColor: '#292929',
                     			strokeOpacity: 1,
                     			scale: 3,
-                    			fillColor: '#999',
+                    			fillColor: '#ccc',
                     			zIndex: 2
 							},
 							info: {
