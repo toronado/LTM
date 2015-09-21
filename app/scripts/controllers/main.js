@@ -445,9 +445,10 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, data
     $scope.stations = sObj['sid'];
     $scope.station = $scope.stations[$routeParams.stationId];
     $scope.paths = Object.keys($scope.station['line']);
+    $scope.activeTab = null;
     $scope.lineFilter = {
         lineId: '',
-        set: function (line) {
+        set: function (line, index) {
             if (line === this.lineId) {
                 return;
             }
@@ -459,6 +460,7 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, data
                 lineService.showOnly(this.lineId);
                 markerService.showOnly(this.lineId);
             }
+            $scope.activeTab = index;
         }
     }
     $scope.go = function() {
@@ -469,6 +471,14 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, data
         });
     }
     $scope.go();
+
+    var stations = [];
+    var station;
+    for (station in $scope.stations) {
+        $scope.stations[station]['id'] = station;
+        stations.push($scope.stations[station]);
+    }
+    $scope.stationList = stations;
     /*gogo();
     var myVar = setInterval(function () {gogo()}, 60000);
     $scope.go = function() {

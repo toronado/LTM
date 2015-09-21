@@ -45,19 +45,33 @@ body {
 	font-weight: 400;
 }
 
+.input-group {
+	width: 100%;
+}
+
+.input-group input {
+	border:none;
+	width: 100%;
+	border-radius: 0;
+	padding:10px;
+}
+
+h1 a {
+	color: #fff;
+}
+
 #arrivals {
 	position: absolute;
-	top:25px;
-	left:25px;
-	width: 330px;
+	top:36px;
+	left:36px;
+	width: 323px;
 	overflow: hidden;
-	box-shadow: 0 0px 3px 0px #000;
-	background-color: #212121;
-	border-radius: 5px;
-	/*opacity: 0.95;*/
+	/*box-shadow: 0 0px 2px 0px #000;*/
+	border-radius: 0px;
+	opacity: 0.95;
 }
 #arrivalList {
-	max-height: 340px;
+	max-height: 347px;
 	overflow-y: scroll;
 }
 
@@ -68,6 +82,7 @@ body {
 	font-weight: 500;
 	text-align: center;
 	color: #fff;
+	background-color: #212121;
 }
 #arrivals h1 small {
 	text-transform: capitalize;
@@ -76,9 +91,10 @@ body {
 .nav-justified {
 	border-bottom: #1d1d1d solid 1px;
 	border-top:#1d1d1d solid 1px;
+	background-color: #1d1d1d;
 }
 .nav-justified li a {
-	padding:15px;
+	padding:6px 15px;
 	text-align: center;
 	text-transform: uppercase;
 	font-size: 24px;
@@ -89,6 +105,17 @@ body {
 .nav-justified li:first-child a {
 	border-left:none;
 }
+.nav>li>a:focus, .nav>li>a:hover, .nav-justified li.active a {
+	background-color: #1d1d1d !important;
+}
+
+p.filter-text {
+	margin: 0;
+    padding: 5px;
+    text-align: center;
+    text-transform: capitalize;
+    color: #777;
+}
 
 .list-group {
 	margin:0;
@@ -98,18 +125,20 @@ body {
 	border-radius: 0 !important;
 	color: #555;
 	border:none;
-	border-bottom:#1d1d1d solid 1px;
 	margin:0;
+	margin-bottom:1px;
 	padding:15px;
 	opacity: 1;
 	font-size: 13px;
 	background: transparent;
+	background-color: #212121;
+	/*border-left:#222 solid 1px;*/
 }
 .list-group-item:last-child {
 	border:none;
 }
 .list-group-item .badge {
-	color:#777;
+	color:#fff;
 }
 .list-group-item:nth-of-type(odd) {
     /*background: #252525;*/
@@ -118,17 +147,17 @@ body {
 	background: none;
 }
 
-.bakerloo {border-right-color:#AE6118 !important;}
-.central {border-right-color:#E41F1F !important;}
-.circle {border-right-color:#F8D42D !important;}
-.district {border-right-color:#007229 !important;}
-.hammersmith-city {border-right-color:#E899A8 !important;}
-.jubilee {border-right-color:#686E72 !important;}
-.metropolitan {border-right-color:#893267 !important;}
-.northern {border-right-color:#000 !important;}
-.piccadilly {border-right-color:#0450A1 !important;}
-.victoria {border-right-color:#009FE0 !important;}
-.waterloo-city {border-right-color:#70C3CE !important;}
+.bakerloo {border-left-color:#AE6118 !important;}
+.central {border-left-color:#E41F1F !important;}
+.circle {border-left-color:#F8D42D !important;}
+.district {border-left-color:#007229 !important;}
+.hammersmith-city {border-left-color:#E899A8 !important;}
+.jubilee {border-left-color:#686E72 !important;}
+.metropolitan {border-left-color:#893267 !important;}
+.northern {border-left-color:#000 !important;}
+.piccadilly {border-left-color:#0450A1 !important;}
+.victoria {border-left-color:#009FE0 !important;}
+.waterloo-city {border-left-color:#70C3CE !important;}
 
 .tc-bakerloo {color:#AE6118 !important;}
 .tc-central {color:#E41F1F !important;}
@@ -143,10 +172,13 @@ body {
 .tc-waterloo-city {color:#70C3CE !important;}
 
 span.towards {
-	color:#4c4c4c;
+	color:#777;
 	font-size: 14px;
 	font-weight: 600;
 	display: block;
+}
+.badge-bull {
+	font-size: 1.2em;
 }
 
 .footer {

@@ -1,13 +1,3 @@
-<!--<nav class="navbar navbar-default">
-	<div class="container-fluid">
-		<div class="navbar-header">
-		  	<a href="" ng-click="go()" class="navbar-brand">
-		  		<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
-		  		<h1>{{station.name}} <small>{{stationId}}</small></h1>
-		  	</a>
-		</div>
-	</div>
-</nav>-->
 <div class="container-fluid" id="main-container">
 	<div class="row-fluid">
 		<div class="col-md-12" style="height:calc(100vh); padding:0;">
@@ -20,21 +10,31 @@
 	</div>
 </div>
 <div id="arrivals">
-	<h1>{{station.name}}
+	<div class="input-group">
+	  	<input id="station-search" type="text" data-ng-model="search" placeholder="search">
+	</div>
+	<ul data-ng-show="(filteredData = (stationList | filter:search)) && search">
+        <li data-ng-repeat="station in filteredData">
+        	<a href="#/{{station.id}}/">{{station.name}}</a>
+        </li>
+    </ul>
+	<h1><a href="" data-ng-click="go()">{{station.name}}</a>
 		<small>
-			<a href="" data-ng-click="go()">...</a><br />
+			<br />
 			{{lineFilter.lineId || 'All Arrivals'}}
 			<a href="" data-ng-click="lineFilter.set('')" data-ng-if="lineFilter.lineId !== ''">x</a>
 		</small>
 	</h1>
 	<ul class="nav nav-pills nav-justified">
-		<li data-ng-repeat="(key, value) in station.line">
-			<a href="" data-ng-click="lineFilter.set(key)" class="tc-{{key}}">&bull;</a>
+		<li data-ng-repeat="(key, value) in station.line" data-ng-class="{active: $index === activeTab}">
+			<a href="" data-ng-click="lineFilter.set(key, $index)" class="tc-{{key}}">&bull;</a>
 		</li>
 	</ul>
 	<ol class="list-group" id="arrivalList">
     	<li class="list-group-item {{arrival.lineId}}" data-ng-repeat="arrival in arrivals | orderBy:'-timeToStation':true | filter:lineFilter" ng-if="arrival.naptanId === '940GZZLU'+stationId">
-    		<span class="badge">{{arrival.timeToStation | convertTime}}</span>
+    		<span class="badge">
+    			{{arrival.timeToStation | convertTime}}
+    		</span>
     		<span class="towards">{{arrival.towards}}</span>
     		<small>{{arrival.currentLocation}}</small>
     	</li>
