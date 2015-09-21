@@ -21,7 +21,7 @@ body {
 	background-image: 
 		linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px), 
 		linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
-	background-size:36px 36px;
+	background-size:40px 40px;
 	background-position:-1px -1px;
 	font-family: 'Source Sans Pro', sans-serif;
 }
@@ -47,6 +47,7 @@ body {
 
 .input-group {
 	width: 100%;
+	margin-bottom: 1px;
 }
 
 .input-group input {
@@ -54,6 +55,8 @@ body {
 	width: 100%;
 	border-radius: 0;
 	padding:10px;
+	line-height: 20px;
+	background-color: #ccc;
 }
 
 h1 a {
@@ -62,51 +65,51 @@ h1 a {
 
 #arrivals {
 	position: absolute;
-	top:36px;
-	left:36px;
-	width: 323px;
+	top:40px;
+	left:40px;
+	width: 359px;
 	overflow: hidden;
 	/*box-shadow: 0 0px 2px 0px #000;*/
 	border-radius: 0px;
 	opacity: 0.95;
 }
 #arrivalList {
-	max-height: 347px;
+	max-height: 319px;
 	overflow-y: scroll;
 }
 
 #arrivals h1 {
 	margin:0;
-	padding:15px;
+	padding:34px 15px;
 	font-size: 20px;
+	line-height: 25px;
 	font-weight: 500;
 	text-align: center;
 	color: #fff;
 	background-color: #212121;
+	margin-bottom: 1px;
 }
 #arrivals h1 small {
 	text-transform: capitalize;
 }
 
 .nav-justified {
-	border-bottom: #1d1d1d solid 1px;
-	border-top:#1d1d1d solid 1px;
 	background-color: #1d1d1d;
+	margin-bottom: 1px;
 }
 .nav-justified li a {
-	padding:6px 15px;
+	padding:10px 15px;
 	text-align: center;
 	text-transform: uppercase;
 	font-size: 24px;
-	line-height: 24px;
+	line-height: 19px;
 	border-radius: 0;
-	border-left:#1d1d1d solid 1px;
 }
 .nav-justified li:first-child a {
 	border-left:none;
 }
 .nav>li>a:focus, .nav>li>a:hover, .nav-justified li.active a {
-	background-color: #1d1d1d !important;
+	background-color: #ccc !important;
 }
 
 p.filter-text {
@@ -127,7 +130,7 @@ p.filter-text {
 	border:none;
 	margin:0;
 	margin-bottom:1px;
-	padding:15px;
+	padding:20px 20px 21px;
 	opacity: 1;
 	font-size: 13px;
 	background: transparent;
