@@ -22,7 +22,7 @@ angular.module('app.directives.googleMap', [])
 	                ]
 	            };
 	            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-	            //map.panBy(-150, 0);
+	            //map.panBy(-50, 0);
 			}
 		};
 	});
@@ -52,9 +52,9 @@ angular.module('app.directives.googlePath', [])
 								path: google.maps.SymbolPath.CIRCLE,
 								fillOpacity: 1,
                     			strokeWeight: 0,
-                    			strokeColor: '#292929',
+                    			strokeColor: '#ccc',
                     			strokeOpacity: 1,
-                    			scale: 3,
+                    			scale: 2.5,
                     			fillColor: '#ccc',
                     			zIndex: 2
 							},

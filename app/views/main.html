@@ -11,9 +11,12 @@
 </div>
 <div id="arrivals">
 	<div class="input-group">
-	  	<input id="station-search" type="text" data-ng-model="search" placeholder="search">
+  		<input id="station-search" type="text" data-ng-model="search" placeholder="Station Search">
+		<span class="input-group-btn" data-ng-show="search">
+			<a data-ng-click="search=null" href="">x</a>
+		</span>
 	</div>
-	<ul data-ng-show="(filteredData = (stationList | filter:search)) && search">
+	<ul data-ng-show="(filteredData = (stationList | filter:search)) && search" id="station-list">
         <li data-ng-repeat="station in filteredData">
         	<a href="#/{{station.id}}/">{{station.name}}</a>
         </li>
@@ -21,8 +24,7 @@
 	<h1><a href="" data-ng-click="go()">{{station.name}}</a>
 		<small>
 			<br />
-			{{lineFilter.lineId || 'All Arrivals'}}
-			<a href="" data-ng-click="lineFilter.set('')" data-ng-if="lineFilter.lineId !== ''">x</a>
+			{{lineFilter.lineId || station.id}}
 		</small>
 	</h1>
 	<ul class="nav nav-pills nav-justified">

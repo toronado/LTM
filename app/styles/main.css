@@ -48,15 +48,25 @@ body {
 .input-group {
 	width: 100%;
 	margin-bottom: 1px;
+	background-color: #fff;
 }
 
 .input-group input {
 	border:none;
-	width: 100%;
-	border-radius: 0;
 	padding:10px;
 	line-height: 20px;
-	background-color: #ccc;
+	width: 100%;
+	outline: none;
+}
+.input-group a {
+	border: none;
+    font-size: 18px;
+    color: #999 !important;
+    font-size: 16px;
+    background: none !important;
+    outline: none;
+    padding:6px 15px;
+    text-decoration: none !important;
 }
 
 h1 a {
@@ -69,7 +79,7 @@ h1 a {
 	left:40px;
 	width: 359px;
 	overflow: hidden;
-	/*box-shadow: 0 0px 2px 0px #000;*/
+	box-shadow: 0 8px 6px -6px #111;
 	border-radius: 0px;
 	opacity: 0.95;
 }
@@ -80,9 +90,9 @@ h1 a {
 
 #arrivals h1 {
 	margin:0;
-	padding:34px 15px;
+	padding:21px 15px;
 	font-size: 20px;
-	line-height: 25px;
+	line-height: 18px;
 	font-weight: 500;
 	text-align: center;
 	color: #fff;
@@ -94,7 +104,7 @@ h1 a {
 }
 
 .nav-justified {
-	background-color: #1d1d1d;
+	background-color: #212121;
 	margin-bottom: 1px;
 }
 .nav-justified li a {
@@ -104,12 +114,16 @@ h1 a {
 	font-size: 24px;
 	line-height: 19px;
 	border-radius: 0;
+	border-left: #2D2D2D solid 1px;
 }
 .nav-justified li:first-child a {
 	border-left:none;
 }
-.nav>li>a:focus, .nav>li>a:hover, .nav-justified li.active a {
-	background-color: #ccc !important;
+.nav>li>a:hover, .nav-justified li.active a {
+	background-color: #111 !important;
+}
+.nav>li>a:focus {
+	background: none;
 }
 
 p.filter-text {
@@ -135,10 +149,7 @@ p.filter-text {
 	font-size: 13px;
 	background: transparent;
 	background-color: #212121;
-	/*border-left:#222 solid 1px;*/
-}
-.list-group-item:last-child {
-	border:none;
+	/*border-right:#222 solid 3px;*/
 }
 .list-group-item .badge {
 	color:#fff;
@@ -150,17 +161,35 @@ p.filter-text {
 	background: none;
 }
 
-.bakerloo {border-left-color:#AE6118 !important;}
-.central {border-left-color:#E41F1F !important;}
-.circle {border-left-color:#F8D42D !important;}
-.district {border-left-color:#007229 !important;}
-.hammersmith-city {border-left-color:#E899A8 !important;}
-.jubilee {border-left-color:#686E72 !important;}
-.metropolitan {border-left-color:#893267 !important;}
-.northern {border-left-color:#000 !important;}
-.piccadilly {border-left-color:#0450A1 !important;}
-.victoria {border-left-color:#009FE0 !important;}
-.waterloo-city {border-left-color:#70C3CE !important;}
+#station-list {
+	position: absolute;
+    top: 40px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: #eee;
+    margin: 0;
+    padding: 0;
+    z-index: 2;
+}
+
+#station-list li a {
+	display: block;
+    padding: 10px 20px;
+    border-bottom: #ddd solid 1px;
+}
+
+.bakerloo {border-color:#AE6118 !important;}
+.central {border-color:#E41F1F !important;}
+.circle {border-color:#F8D42D !important;}
+.district {border-color:#007229 !important;}
+.hammersmith-city {border-color:#E899A8 !important;}
+.jubilee {border-color:#686E72 !important;}
+.metropolitan {border-color:#893267 !important;}
+.northern {border-color:#000 !important;}
+.piccadilly {border-color:#0450A1 !important;}
+.victoria {border-color:#009FE0 !important;}
+.waterloo-city {border-color:#70C3CE !important;}
 
 .tc-bakerloo {color:#AE6118 !important;}
 .tc-central {color:#E41F1F !important;}
@@ -199,6 +228,26 @@ span.towards {
 	margin:0;
 	color: white;
 	opacity: 0.5;
+}
+@media (max-width: 768px) {
+	#arrivals {
+		top:0;
+		bottom: 0;
+		right: 0;
+		left:0;
+		width: 100%;
+	}
+	#arrivalList {
+		max-height: 100%;
+		overflow-y: scroll;
+	}
+	.nav-justified > li {
+    	display: table-cell;
+    	width: 1%;
+    }
+  	.nav-justified > li > a {
+    	margin-bottom: 0 !important;
+    }
 }
 
 /*# sourceMappingURL=main.css.map */

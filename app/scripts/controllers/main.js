@@ -352,7 +352,7 @@ tubeApp.factory('markerService', function() {
                 if (mObj['lon'] !== marker['lon']) {
                     var position = new google.maps.LatLng(mObj['lat'], mObj['lon']);
                     //Using markerAnimate plugin
-                    marker['markerObj'].animateTo(position, {easing: 'linear', duration: 3000});
+                    marker['markerObj'].animateTo(position, {easing: 'linear', duration: 5000});
                     //Update info window
                     if (mObj['info']) {
                         marker['infoObj'].setContent(mObj['info']['content']);
@@ -450,17 +450,16 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, data
         lineId: '',
         set: function (line, index) {
             if (line === this.lineId) {
-                return;
-            }
-            this.lineId = line;
-            if (line === '') {
                 lineService.showAll();
                 markerService.showAll();
+                $scope.activeTab = null;
+                this.lineId = '';
             } else {
+                this.lineId = line;
                 lineService.showOnly(this.lineId);
                 markerService.showOnly(this.lineId);
+                $scope.activeTab = index;
             }
-            $scope.activeTab = index;
         }
     }
     $scope.go = function() {
