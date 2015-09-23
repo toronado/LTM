@@ -380,14 +380,17 @@ tubeApp.factory('markerService', function() {
         },
         infoWindow: function (iObj, marker) {
             var infowindow = new google.maps.InfoWindow({
-                maxWidth: 200,
+                maxWidth: 300,
                 content: iObj['content']
             });
-            google.maps.event.addListener(marker, 'mouseover', function () {
+            /*google.maps.event.addListener(marker, 'mouseover', function () {
                 infowindow.open(map,marker);
             });
             google.maps.event.addListener(marker, 'mouseout', function () {
                 infowindow.close(map,marker);
+            });*/
+            google.maps.event.addListener(marker, 'click', function () {
+                infowindow.open(map,marker);
             });
             if (iObj['clickback']) {
                 google.maps.event.addListener(marker, 'click', function () {
@@ -429,6 +432,11 @@ tubeApp.factory('markerService', function() {
             for (marker in this.markers) {
                 this.markers[marker]['markerObj'].setVisible(true);
             }
+        },
+        showInfo: function(mid) {
+            var m = this.markers[mid];
+            if (!m) return;
+            m['infoObj'].open(map, m['markerObj']);
         },
         reset: function() {
             this.markers = {};
@@ -478,6 +486,10 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, data
         stations.push($scope.stations[station]);
     }
     $scope.stationList = stations;
+    $scope.popInfo = function(arrival) {
+        var mid = arrival.lineId.substring(0,2)+arrival.vehicleId;
+        markerService.showInfo(mid);
+    }
     /*gogo();
     var myVar = setInterval(function () {gogo()}, 60000);
     $scope.go = function() {

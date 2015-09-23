@@ -104,7 +104,10 @@ angular.module('app.directives.googleMarker', [])
 	                    			zIndex: 3
 								},
 								info: {
-									content: $scope.data['currentLocation'] + ' towards ' + $scope.data['towards']
+									content: '<div class="marker">'
+												+ '<h3>' + $scope.data['vehicleId'] + ': ' + $scope.data['towards'] + '</span></h3>'
+												+ '<p>' + $scope.data['currentLocation'] + '</p>'
+											+ '</div>'
 								},
 								timestamp: $scope.timestamp
 							};
