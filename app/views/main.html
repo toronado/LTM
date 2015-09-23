@@ -33,7 +33,7 @@
 		</li>
 	</ul>
 	<ol class="list-group" id="arrivalList">
-    	<li class="list-group-item {{arrival.lineId}}" data-ng-repeat="arrival in arrivals | orderBy:'-timeToStation':true | filter:lineFilter" ng-if="arrival.naptanId === '940GZZLU'+stationId">
+    	<li class="list-group-item" data-ng-repeat="arrival in arrivals | orderBy:'-timeToStation':true | filter:lineFilter" ng-if="arrival.naptanId === '940GZZLU'+stationId">
     		<span class="badge">
     			{{arrival.timeToStation | convertTime}}
     		</span>
