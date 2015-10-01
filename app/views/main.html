@@ -33,7 +33,7 @@
 		</li>
 	</ul>
 	<div class="list-group" id="arrivalList">
-    	<a href="" class="list-group-item" data-ng-click="popInfo(arrival)" data-ng-repeat="arrival in arrivals | orderBy:'-timeToStation':true | filter:lineFilter" ng-if="arrival.naptanId === '940GZZLU'+stationId">
+    	<a href="" class="list-group-item slideInDown animated" data-ng-click="popInfo(arrival)" data-ng-repeat="arrival in arrivals | orderBy:'-timeToStation':true | filter:lineFilter" ng-if="arrival.naptanId === '940GZZLU'+stationId">
     		<span class="badge">
     			{{arrival.timeToStation | convertTime}}
     		</span>

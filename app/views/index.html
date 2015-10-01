@@ -1,0 +1,15 @@
+<div class="container">
+	<div class="col-md-4">
+		<div class="input-group">
+			<input id="station-search" type="text" data-ng-model="search" placeholder="Station Search">
+			<span class="input-group-btn" data-ng-show="search">
+				<a data-ng-click="search=null" href="">x</a>
+			</span>
+		</div>
+		<ul data-ng-show="(filteredData = (stationList | filter:search))" id="station-list">
+		    <li data-ng-repeat="station in filteredData">
+		    	<a href="#/{{station.id}}/">{{station.name}}</a>
+		    </li>
+		</ul>
+	</div>
+</div>

@@ -22,7 +22,7 @@ tubeApp.config(function ($routeProvider) {
             controller: 'MainCtrl'
         })
         .otherwise({
-            templateUrl: 'views/about.html',
-            controller: 'AboutCtrl'
+            templateUrl: 'views/index.html',
+            controller: 'IndexCtrl'
         });
 });

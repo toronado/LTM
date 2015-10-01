@@ -383,15 +383,15 @@ tubeApp.factory('markerService', function() {
                 maxWidth: 300,
                 content: iObj['content']
             });
-            /*google.maps.event.addListener(marker, 'mouseover', function () {
+            google.maps.event.addListener(marker, 'mouseover', function () {
                 infowindow.open(map,marker);
             });
             google.maps.event.addListener(marker, 'mouseout', function () {
                 infowindow.close(map,marker);
-            });*/
-            google.maps.event.addListener(marker, 'click', function () {
-                infowindow.open(map,marker);
             });
+            /*google.maps.event.addListener(marker, 'click', function () {
+                infowindow.open(map,marker);
+            });*/
             if (iObj['clickback']) {
                 google.maps.event.addListener(marker, 'click', function () {
                     iObj.clickback();
