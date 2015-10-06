@@ -104,8 +104,8 @@ angular.module('app.directives.googleMarker', [])
 	                    			zIndex: 3
 								},
 								info: {
-									content: '<div class="marker">'
-												+ '<h3>' + $scope.data['vehicleId'] + ': ' + $scope.data['towards'] + '</span></h3>'
+									content: '<div class="info-window">'
+												+ '<h3>' + $scope.data['towards'] + ' :: ' + $scope.data['timeToStation'] + '</span></h3>'
 												+ '<p>' + $scope.data['currentLocation'] + '</p>'
 											+ '</div>'
 								},
@@ -162,9 +162,6 @@ angular.module('app.directives.googleMarker', [])
                     			scale: 8,
                     			fillColor: '#fff',
                     			zIndex: 2
-							},
-							info: {
-								content: $scope.data['name']
 							}
 						};
 						break;

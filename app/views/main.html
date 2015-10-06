@@ -1,6 +1,14 @@
-<div class="container-fluid" id="main-container">
+<nav class="navbar navbar-inverse" id="header">
+	<div class="container-fluid">
+		<span class="navbar-right" id="rajinho">#REDDIE</span>
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#">Tube Mapp</a>
+		</div>
+	</div>
+</nav>
+<div class="container-fluid" id="mainContainer">
 	<div class="row-fluid">
-		<div class="col-md-12" style="height:calc(100vh); padding:0;">
+		<div class="col-md-12" id="mapColumn">
 			<google-map center="station">
 				<google-path data-ng-repeat="path in paths" data="path"></google-path>
 				<google-marker icon="'center'" data="station"></google-marker>
@@ -10,38 +18,38 @@
 	</div>
 </div>
 <div id="arrivals">
-	<div class="input-group">
-  		<input id="station-search" type="text" data-ng-model="search" placeholder="Station Search">
-		<span class="input-group-btn" data-ng-show="search">
-			<a data-ng-click="search=null" href="">x</a>
+	<div class="input-group" id="stationSearch">
+  		<input type="text" data-ng-model="search" placeholder="Station Search">
+		<span class="input-group-btn">
+			<a data-ng-click="search=null" href="">
+				<span data-ng-show="!search" class="glyphicon glyphicon-search" aria-hidden="true"></span>
+			</a>
+			<a data-ng-click="search=null" href="" data-ng-show="search">
+				<span data-ng-show="search" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+			</a>
 		</span>
 	</div>
-	<ul data-ng-show="(filteredData = (stationList | filter:search)) && search" id="station-list">
+	<ul data-ng-show="(filteredData = (stationList | filter:search)) && search" id="stationList">
         <li data-ng-repeat="station in filteredData">
         	<a href="#/{{station.id}}/">{{station.name}}</a>
         </li>
     </ul>
-	<h1><a href="" data-ng-click="go()">{{station.name}}</a>
-		<small>
-			<br />
-			{{lineFilter.lineId || station.id}}
-		</small>
+	<h1>
+		<a href="" data-ng-click="go()">{{station.name}}</a>
 	</h1>
-	<ul class="nav nav-pills nav-justified">
+	<ul class="nav nav-pills nav-justified" id="arrivalTabs">
 		<li data-ng-repeat="(key, value) in station.line" data-ng-class="{active: $index === activeTab}">
-			<a href="" data-ng-click="lineFilter.set(key, $index)" class="tc-{{key}}">&bull;</a>
+			<a href="" data-ng-click="lineFilter.set(key, $index)" class="tc-{{key}}">{{key.substring(0,2)}}</a>
 		</li>
 	</ul>
 	<div class="list-group" id="arrivalList">
-    	<a href="" class="list-group-item fadeIn animated" data-ng-click="popInfo(arrival)" data-ng-repeat="arrival in arrivals | orderBy:'-timeToStation':true | filter:lineFilter" ng-if="arrival.naptanId === '940GZZLU'+stationId">
+    	<a href="" class="list-group-item" data-ng-click="popInfo(arrival)" data-ng-repeat="arrival in arrivals | orderBy:'-timeToStation':true | filter:lineFilter" ng-if="arrival.naptanId === '940GZZLU'+stationId">
     		<span class="badge">
     			{{arrival.timeToStation | convertTime}}
+    			<span class="tc-{{arrival.lineId}}" style="font-size:2em;">&middot;</span>
     		</span>
     		<span class="towards">{{arrival.towards}}</span>
     		<small>{{arrival.currentLocation}}</small>
     	</a>
     </div>
 </div>
-<footer class="footer">
-	<p>Hire Me! &copy; 2015</p>
-</footer>
