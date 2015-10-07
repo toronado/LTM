@@ -444,7 +444,7 @@ tubeApp.factory('markerService', function() {
     }
 });
 
-tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, dataService, markerService, lineService) {
+tubeApp.controller('MainCtrl', function ($scope, $routeParams, $timeout, dataFactory, dataService, markerService, lineService) {
 
     markerService.reset();
     lineService.reset();
@@ -496,6 +496,29 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, dataFactory, data
         window.clearInterval(myVar);
         alert('interval cleared');
     }*/
+    var count, counter;
+    var liveArrivals = {
+        start : function () {
+            count = 4500;
+            this.countdown();        
+        },
+        countdown : function () {
+            count--;
+            if (!count) {
+                //getArrivals();
+                count = 4500;
+
+                //return;
+            }
+            $scope.count = Math.floor(count/100);
+            $scope.width = (count/4500)*100;
+            counter = $timeout(liveArrivals.countdown, 10);
+        },
+        stop : function () {
+            $timeout.cancel(counter);
+        }
+    }
+    //liveArrivals.start();
 });
 //Change seconds to minutes
 tubeApp.filter('convertTime', function () {

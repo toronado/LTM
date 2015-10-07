@@ -59,9 +59,12 @@ angular.module('app.directives.googlePath', [])
                     			zIndex: 2
 							},
 							info: {
-								content: point,
+								content: '<div class="info-window station">'
+												+ '<h3>' + sid['name'] + '</h3>'
+											+ '</div>',
+								naptan: point,
 								clickback: function() {
-									location.replace('#/'+this.content+'/');
+									location.replace('#/'+this.naptan+'/');
 								}
 							}
 						});
@@ -104,8 +107,8 @@ angular.module('app.directives.googleMarker', [])
 	                    			zIndex: 3
 								},
 								info: {
-									content: '<div class="info-window">'
-												+ '<h3>' + $scope.data['towards'] + ' :: ' + $scope.data['timeToStation'] + '</span></h3>'
+									content: '<div class="info-window train">'
+												+ '<h3>' + $scope.data['towards'] + '</span></h3>'
 												+ '<p>' + $scope.data['currentLocation'] + '</p>'
 											+ '</div>'
 								},

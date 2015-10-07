@@ -2,8 +2,9 @@
 	<div class="container-fluid">
 		<span class="navbar-right" id="rajinho">#166</span>
 		<div class="navbar-header">
-			<a class="navbar-brand" href="#">Tube Mapp</a>
+			<a class="navbar-brand" href="#">Tube Mapp // {{count}}</a>
 		</div>
+		<p id="counter" style="width:{{width}}%;"></p>
 	</div>
 </nav>
 <div class="container-fluid" id="mainContainer">
@@ -34,7 +35,7 @@
         	<a href="#/{{station.id}}/">{{station.name}}</a>
         </li>
     </ul>
-	<h1>
+	<h1 style="position:relative;">
 		<a href="" data-ng-click="go()">{{station.name}}</a>
 	</h1>
 	<ul class="nav nav-pills nav-justified" id="arrivalTabs">

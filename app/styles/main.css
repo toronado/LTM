@@ -58,14 +58,13 @@
 /* Header 
 -------------------------*/
 	#header {
-		height: 39px;
+		height: 40px;
 		min-height: 0;
 		border-radius: 0;
 		border:none;
 		margin: 0;
-		background-color: #111;
-		opacity: 0.2;
-		z-index: 1;
+		background-color: #292929;
+		border-bottom: #333 solid 1px;
 	}
 	a.navbar-brand {
 		padding:0 40px;
@@ -84,6 +83,17 @@
 		font-weight: 600;
 		font-size: 13px;
 	}
+	#counter {
+		border-bottom: #fff solid 1px;
+	    width: 100%;
+	    text-align: right;
+	    position: absolute;
+	    width: 100%;
+	    left: 0;
+	    bottom: -1px;
+	    padding: 0;
+	    margin: 0;
+	}
 
 /* Container 
 -------------------------*/
@@ -97,10 +107,9 @@
 		height: 100%;
 	}
 	#mapColumn {
-		height:calc(100vh + 25px);
+		height:calc(100vh - 14px);
 		padding:0;
 		overflow: hidden;
-		margin-top: -40px;
 	}
 
 
@@ -138,7 +147,9 @@
 		position: absolute;
 	    top: 40px;
 	    left: 0;
-	    bottom: 0;
+	    height: calc(100% - 40px);
+	    width: 100%;
+	    overflow-y: scroll; 
 	    right: 0;
 	    margin: 0;
 	    padding: 0;
@@ -149,7 +160,7 @@
 		display: block;
 	    padding: 10px 20px 9px 15px;
 	    border-bottom: #2d2d2d solid 1px;
-	    color: #444;
+	    color: #ccc;
 	    font-weight: 600;
 	    font-size: 12px;
 	}
@@ -218,6 +229,9 @@
 		#arrivalTabs li a:hover {
 			background-color: #222 !important;
 		}
+		#arrivalTabs li.active a {
+			box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.75);
+		}
 		#arrivalTabs li a:focus {
 			background: none;
 		}
@@ -277,6 +291,14 @@
 	    margin-bottom: 2px;
 	    font-weight: bold;
 	    text-transform: capitalize;
+	}
+	.info-window.station {
+		background: url(../images/icon_tube.png) no-repeat left center;
+		padding-left: 20px;
+	}
+	.info-window.train {
+		background: url(../images/icon_train.png) no-repeat left center;
+		padding-left: 40px;
 	}
 	.info-window p {
 		margin: 5px 0 0 0;
