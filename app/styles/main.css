@@ -84,7 +84,8 @@
 		font-size: 13px;
 	}
 	#counter {
-		border-bottom: #fff solid 1px;
+		border-bottom: #333 solid 1px;
+		border-right:#c33 solid 1px;
 	    width: 100%;
 	    text-align: right;
 	    position: absolute;
@@ -118,7 +119,7 @@
 	#stationSearch {
 		width: 100%;
 		margin-bottom: 1px;
-		background-color: #ccc;
+		background-color: #252525;
 	}
 	#stationSearch input {
 		border:none;
@@ -230,7 +231,7 @@
 			background-color: #222 !important;
 		}
 		#arrivalTabs li.active a {
-			box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.75);
+			box-shadow: inset 0px 0px 3px 0px rgba(0,0,0,0.3);
 		}
 		#arrivalTabs li a:focus {
 			background: none;
