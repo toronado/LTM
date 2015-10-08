@@ -74,6 +74,7 @@
 	    font-weight: 600;
 	    letter-spacing: 1px;
 	    font-size: 13px;
+	    color:white !important;
 	}
 	#rajinho {
 		line-height: 40px;
@@ -84,8 +85,7 @@
 		font-size: 13px;
 	}
 	#counter {
-		border-bottom: #333 solid 1px;
-		border-right:#c33 solid 1px;
+		border-bottom: #3dffd6 solid 1px;
 	    width: 100%;
 	    text-align: right;
 	    position: absolute;
@@ -119,7 +119,7 @@
 	#stationSearch {
 		width: 100%;
 		margin-bottom: 1px;
-		background-color: #252525;
+		background-color: #3dffd6;
 	}
 	#stationSearch input {
 		border:none;
@@ -128,19 +128,33 @@
 		width: 100%;
 		outline: none;
 		background: transparent;
+		font-weight: bold;
+		color: #0E5F4D;
+	}
+	::-webkit-input-placeholder { /* WebKit browsers */
+    	color:    #16AD8D;
+	}
+	:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+	    color:    #16AD8D;
+	}
+	::-moz-placeholder { /* Mozilla Firefox 19+ */
+	    color:    #16AD8D;
+	}
+	:-ms-input-placeholder { /* Internet Explorer 10+ */
+	    color:    #16AD8D;
 	}
 	#stationSearch a {
 		border: none;
 	    font-size: 18px;
-	    color: #999 !important;
+	    color: #0E5F4D !important;
 	    font-size: 16px;
 	    background: none !important;
 	    outline: none;
-	    padding:6px 15px;
+	    padding:6px 14px;
 	    text-decoration: none !important;
 	}
 	#stationSearch .glyphicon {
-		font-size: 12px;
+		font-size: 14px;
 	}
 /* Station List 
 -------------------------*/

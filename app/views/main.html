@@ -1,10 +1,9 @@
 <nav class="navbar navbar-inverse" id="header">
 	<div class="container-fluid">
-		<span class="navbar-right" id="rajinho">#166</span>
 		<div class="navbar-header">
-			<a class="navbar-brand" href="#">Tube Mapp // {{count}}</a>
+			<a class="navbar-brand" href="" data-ng-click="stopCounter()">Live // <span style="color:#3dffd6">{{count}}</span></a>
 		</div>
-		<p id="counter" style="width:{{width}}%;"></p>
+		<!--<p id="counter" style="width:{{width}}%;"><small>{{count}}</small></p>-->
 	</div>
 </nav>
 <div class="container-fluid" id="mainContainer">
@@ -20,7 +19,7 @@
 </div>
 <div id="arrivals">
 	<div class="input-group" id="stationSearch">
-  		<input type="text" data-ng-model="search" placeholder="Station Search">
+  		<input type="text" data-ng-model="search" placeholder="Search">
 		<span class="input-group-btn">
 			<a data-ng-click="search=null" href="">
 				<span data-ng-show="!search" class="glyphicon glyphicon-search" aria-hidden="true"></span>

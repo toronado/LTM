@@ -499,26 +499,39 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, $timeout, dataFac
     var count, counter;
     var liveArrivals = {
         start : function () {
-            count = 4500;
+            count = 1200;
             this.countdown();        
         },
         countdown : function () {
             count--;
             if (!count) {
                 //getArrivals();
-                count = 4500;
+                count = 1200;
 
                 //return;
             }
-            $scope.count = Math.floor(count/100);
-            $scope.width = (count/4500)*100;
-            counter = $timeout(liveArrivals.countdown, 10);
+            $scope.count = Math.floor(count/20);
+            $scope.width = (count/1200)*100;
+            counter = $timeout(liveArrivals.countdown, 50);
         },
         stop : function () {
             $timeout.cancel(counter);
+        },
+        toggle: function() {
+            if (counter) {
+                $timeout.cancel(counter);
+            } else {
+                $timeout(liveArrivals.countdown, 50);
+            }
         }
     }
-    //liveArrivals.start();
+    liveArrivals.start();
+    $scope.stopCounter = function () {
+        liveArrivals.toggle();
+    }
+    $scope.$on("$destroy",function (event) { 
+        liveArrivals.stop();
+    });
 });
 //Change seconds to minutes
 tubeApp.filter('convertTime', function () {
