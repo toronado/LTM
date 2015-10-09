@@ -3,7 +3,7 @@
 		<div class="navbar-header">
 			<a class="navbar-brand" href="" data-ng-click="stopCounter()">Live // <span style="color:#3dffd6">{{count}}</span></a>
 		</div>
-		<!--<p id="counter" style="width:{{width}}%;"><small>{{count}}</small></p>-->
+		<p id="counter" style="width:{{width}}%;"></p>
 	</div>
 </nav>
 <div class="container-fluid" id="mainContainer">
@@ -19,15 +19,15 @@
 </div>
 <div id="arrivals">
 	<div class="input-group" id="stationSearch">
-  		<input type="text" data-ng-model="search" placeholder="Search">
 		<span class="input-group-btn">
-			<a data-ng-click="search=null" href="">
-				<span data-ng-show="!search" class="glyphicon glyphicon-search" aria-hidden="true"></span>
+			<a data-ng-show="!search" href="">
+				<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 			</a>
-			<a data-ng-click="search=null" href="" data-ng-show="search">
-				<span data-ng-show="search" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+			<a data-ng-click="search=null" data-ng-show="search" href="" data-ng-show="search">
+				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 			</a>
 		</span>
+		<input type="text" data-ng-model="search" placeholder="Search">
 	</div>
 	<ul data-ng-show="(filteredData = (stationList | filter:search)) && search" id="stationList">
         <li data-ng-repeat="station in filteredData">
