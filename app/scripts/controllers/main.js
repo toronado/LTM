@@ -105,7 +105,6 @@ tubeApp.factory('locationService', function () {
             }
         },
         locateTrain: function(train) {
-
             //Station ID - time to station is relative to this station
             var sid = train['naptanId'].substring(8);
             //Station Object
@@ -175,7 +174,7 @@ tubeApp.factory('locationService', function () {
             var b = null;
             switch (cls.substring(0,3)) {
                 case 'At ':
-                    a = this.stationNameLookup(cls.split('Almost at ')[1]);
+                    a = this.stationNameLookup(cls.split('At ')[1]);
                     if (a) {
                         var aid = sObj['sid'][a];
                         return {
@@ -352,7 +351,7 @@ tubeApp.factory('markerService', function() {
                 if (mObj['lon'] !== marker['lon']) {
                     var position = new google.maps.LatLng(mObj['lat'], mObj['lon']);
                     //Using markerAnimate plugin
-                    marker['markerObj'].animateTo(position, {easing: 'linear', duration: 5000});
+                    marker['markerObj'].animateTo(position, {easing: 'linear', duration: 10000});
                     //Update info window
                     if (mObj['info']) {
                         marker['infoObj'].setContent(mObj['info']['content']);
@@ -449,6 +448,8 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, $timeout, dataFac
     markerService.reset();
     lineService.reset();
 
+    $scope.live = 1;
+    $scope.visible = 1;
     $scope.stationId = $routeParams.stationId;
     $scope.stations = sObj['sid'];
     $scope.station = $scope.stations[$routeParams.stationId];
@@ -472,58 +473,62 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, $timeout, dataFac
     }
     $scope.go = function() {
         dataFactory.getArrivals('line', $routeParams.stationId).then(function (data) {
+            $scope.ajax = 0;
             $scope.timestamp = new Date().getTime() / 1000;
             $scope.arrivals = data;
             $scope.trains = dataService.unifyData(data);
         });
     }
-    $scope.go();
 
     var stations = [];
     var station;
     for (station in $scope.stations) {
-        $scope.stations[station]['id'] = station;
-        stations.push($scope.stations[station]);
+        stations.push({
+            'id': station,
+            'name': $scope.stations[station]['name']
+        });
     }
     $scope.stationList = stations;
     $scope.popInfo = function(arrival) {
         var mid = arrival.lineId.substring(0,2)+arrival.vehicleId;
         markerService.showInfo(mid);
     }
-    /*gogo();
-    var myVar = setInterval(function () {gogo()}, 60000);
-    $scope.go = function() {
-        window.clearInterval(myVar);
-        alert('interval cleared');
-    }*/
+
     var counter;
-    var liveArrivals = {
-        count: 1200,
-        start : function () {
-            this.countdown();        
-        },
-        countdown : function () {
-            liveArrivals.count--;
-            if (!liveArrivals.count) {
-                go();
-                liveArrivals.time = 1200;
-                //return;
+    var cd = {
+        count: 0,
+        start: function() {
+            if (!cd.count) {
+                $scope.ajax = 1;
+                $scope.go();
+                cd.count = 50;
             }
-            $scope.count = Math.floor(liveArrivals.count/20);
-            $scope.width = (liveArrivals.count/1200)*100;
-            counter = $timeout(liveArrivals.countdown, 50);
+            $scope.count = cd.count;
+            cd.count--;
+            counter = $timeout(cd.start, 1000);
         },
-        stop : function () {
+        stop: function() {
             $timeout.cancel(counter);
+            cd.count = 0;
         }
     }
-    liveArrivals.start();
-    $scope.stopCounter = function () {
-        liveArrivals.stop();
+    cd.start();
+
+    $scope.toggleLive = function() {
+        $scope.live = 1 - $scope.live;
+        if ($scope.live) {
+            cd.start();
+        } else {
+            cd.stop();
+        }
     }
     $scope.$on("$destroy",function (event) { 
-        liveArrivals.stop();
+        cd.stop();
     });
+
+    $scope.toggleVisible = function() {
+        $scope.visible = 1 - $scope.visible;
+    }
 });
 //Change seconds to minutes
 tubeApp.filter('convertTime', function () {

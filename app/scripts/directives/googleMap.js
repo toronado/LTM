@@ -108,7 +108,7 @@ angular.module('app.directives.googleMarker', [])
 								},
 								info: {
 									content: '<div class="info-window train">'
-												+ '<h3>' + $scope.data['towards'] + '</span></h3>'
+												+ '<h3><i class="fa fa-subway"></i> ' + $scope.data['towards'] + '</span></h3>'
 												+ '<p>' + $scope.data['currentLocation'] + '</p>'
 											+ '</div>'
 								},

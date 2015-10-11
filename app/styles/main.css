@@ -64,7 +64,7 @@
 		border:none;
 		margin: 0;
 		background: transparent;
-		border-bottom: #444 solid 1px;
+		border-bottom: #295149 solid 1px;
 	}
 	a.navbar-brand {
 		padding:0 40px;
@@ -108,11 +108,10 @@
 		height: 100%;
 	}
 	#mapColumn {
-		height:calc(100vh - 14px);
+		height:calc(100vh + 25px);
 		padding:0;
 		overflow: hidden;
 	}
-
 
 /* Station Search 
 -------------------------*/
@@ -133,29 +132,53 @@
 		color: #3dffd6;
 	}
 	::-webkit-input-placeholder { /* WebKit browsers */
-    	color:    #777;
+    	color:    #444;
 	}
 	:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-	    color:    #777;
+	    color:    #444;
 	}
 	::-moz-placeholder { /* Mozilla Firefox 19+ */
-	    color:    #777;
+	    color:    #444;
 	}
 	:-ms-input-placeholder { /* Internet Explorer 10+ */
-	    color:    #777;
+	    color:    #444;
 	}
-	#stationSearch a {
+	#stationSearch span.input-group-btn {
+		width: 40px;
+		text-align: center;
+		color: #444;
+	}
+	#stationSearch span.input-group-btn a {
 		border: none;
-	    font-size: 18px;
-	    color: #3dffd6 !important;
 	    font-size: 16px;
-	    background: none !important;
+	    background: none;
 	    outline: none;
-	    padding:6px 14px;
-	    text-decoration: none !important;
+	    display: block;
+	    text-decoration: none;
+	    line-height: 39px;
 	}
-	#stationSearch .glyphicon {
-		font-size: 12px;
+	#stationSearch .glyphicon,
+	#stationSearch .fa {
+		font-size: 11px;
+	}
+	#stationSearch span#minimise,
+	#stationSearch span#countdown {
+		border-left:#2d2d2d solid 1px;
+	}
+	#stationSearch span#minimise a,
+	#stationSearch span#countdown a {
+		color: #555;
+		font-size: 11px;
+		font-weight: bold;
+	}
+	#stationSearch span#countdown #spinner {
+		font-size: 13px;
+	}
+	#stationSearch span#countdown a.active {
+		color: #3dffd6;
+	}
+	#stationSearch span#minimise a.active {
+		color: #fff;
 	}
 /* Station List 
 -------------------------*/
@@ -194,9 +217,12 @@
 
 /* Arrivals 
 -------------------------*/
+	#arrivalsContainer.invisible {
+		display: none;
+	}
 	#arrivals {
 		position: absolute;
-		top:80px;
+		top:40px;
 		left:40px;
 		width: 359px;
 		overflow: hidden;
@@ -216,6 +242,7 @@
 	}
 	#arrivals h1 small {
 		text-transform: capitalize;
+		color: #444
 	}
 	#arrivals h1 a {
 		color: #fff;
@@ -266,7 +293,7 @@
 			margin:0;
 			border-bottom: #2d2d2d solid 1px;
 			padding:20px 20px 21px;
-			opacity: 1;
+			opacity: 0.9;
 			background: transparent;
 			background-color: #252525;
 		}
@@ -312,10 +339,6 @@
 		background: url(../images/icon_tube.png) no-repeat left center;
 		padding-left: 20px;
 	}
-	.info-window.train {
-		background: url(../images/icon_train.png) no-repeat left center;
-		padding-left: 40px;
-	}
 	.info-window p {
 		margin: 5px 0 0 0;
 		color:#888;
@@ -326,11 +349,15 @@
 /* Mobile Tweaks
 -------------------------*/
 @media (max-width: 768px) {
+	#mapColumn {
+		top:120px;
+		height:calc(100vh - 95px);
+		padding:0;
+		overflow: hidden;
+	}
 	#arrivals {
 		top:0;
-		bottom: 0;
-		right: 0;
-		left:0;
+		left: 0;
 		width: 100%;
 	}
 	#arrivalTabs li {
@@ -341,7 +368,7 @@
     	margin-bottom: 0 !important;
     }
     #arrivalList {
-		max-height: 100%;
+		max-height: calc(100vh - 160px);
 		overflow-y: scroll;
 	}
 }
