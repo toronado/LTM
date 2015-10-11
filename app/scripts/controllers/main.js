@@ -432,10 +432,15 @@ tubeApp.factory('markerService', function() {
                 this.markers[marker]['markerObj'].setVisible(true);
             }
         },
-        showInfo: function(mid) {
+        showHideInfo: function(mid) {
             var m = this.markers[mid];
             if (!m) return;
-            m['infoObj'].open(map, m['markerObj']);
+            var io = m['infoObj'];
+            if (io.getMap()) {
+                io.close(map, m['markerObj']);
+            } else {
+                io.open(map, m['markerObj']);
+            }
         },
         reset: function() {
             this.markers = {};
@@ -491,7 +496,7 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, $timeout, dataFac
     $scope.stationList = stations;
     $scope.popInfo = function(arrival) {
         var mid = arrival.lineId.substring(0,2)+arrival.vehicleId;
-        markerService.showInfo(mid);
+        markerService.showHideInfo(mid);
     }
 
     var counter;

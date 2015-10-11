@@ -58,13 +58,12 @@
 /* Header 
 -------------------------*/
 	#header {
-		height: 40px;
+		height: 39px;
 		min-height: 0;
 		border-radius: 0;
 		border:none;
 		margin: 0;
-		background: transparent;
-		border-bottom: #295149 solid 1px;
+		background: #292929;
 	}
 	a.navbar-brand {
 		padding:0 40px;
@@ -150,7 +149,6 @@
 	}
 	#stationSearch span.input-group-btn a {
 		border: none;
-	    font-size: 16px;
 	    background: none;
 	    outline: none;
 	    display: block;
@@ -159,7 +157,7 @@
 	}
 	#stationSearch .glyphicon,
 	#stationSearch .fa {
-		font-size: 11px;
+		font-size: 12px;
 	}
 	#stationSearch span#minimise,
 	#stationSearch span#countdown {
@@ -168,7 +166,7 @@
 	#stationSearch span#minimise a,
 	#stationSearch span#countdown a {
 		color: #555;
-		font-size: 11px;
+		font-size: 12px;
 		font-weight: bold;
 	}
 	#stationSearch span#countdown #spinner {
@@ -222,7 +220,7 @@
 	}
 	#arrivals {
 		position: absolute;
-		top:40px;
+		top:80px;
 		left:40px;
 		width: 359px;
 		overflow: hidden;
