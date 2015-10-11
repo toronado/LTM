@@ -226,7 +226,6 @@
 		left:40px;
 		width: 359px;
 		overflow: hidden;
-		/*box-shadow: 0 8px 6px -6px #111;*/
 		border-radius: 0px;
 	}
 	#arrivals h1 {
@@ -243,9 +242,6 @@
 	#arrivals h1 small {
 		text-transform: capitalize;
 		color: #444
-	}
-	#arrivals h1 a {
-		color: #fff;
 	}
 
 	/* Arrivals Tabs
@@ -344,6 +340,17 @@
 		color:#888;
 		font-weight: 500;
 		line-height: 14px;
+	}
+
+/* Footer
+-------------------------*/
+	.footer {
+	    position: absolute;
+	    bottom: 0;
+	    width: 100%;
+	    height: 40px;
+	    text-align: center;
+	    color:#333;
 	}
 
 /* Mobile Tweaks
