@@ -8,12 +8,14 @@
  * Controller of the tubeApp
  */
 tubeApp.controller('IndexCtrl', function ($scope) {
-	var stations = sObj['sid'];
-	var arr = [];
-	var station;
-	for (station in stations) {
-		stations[station]['id'] = station;
-	    arr.push(stations[station]);
-	}
-	$scope.stationList = arr;
+	$scope.stations = sObj['sid'];
+	var stations = [];
+    var station;
+    for (station in $scope.stations) {
+        stations.push({
+            'id': station,
+            'name': $scope.stations[station]['name']
+        });
+    }
+    $scope.stationList = stations;
 });

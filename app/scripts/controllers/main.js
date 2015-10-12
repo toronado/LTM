@@ -454,7 +454,6 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, $timeout, dataFac
     lineService.reset();
 
     $scope.live = 1;
-    $scope.visible = 1;
     $scope.stationId = $routeParams.stationId;
     $scope.stations = sObj['sid'];
     $scope.station = $scope.stations[$routeParams.stationId];
@@ -531,6 +530,7 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, $timeout, dataFac
         cd.stop();
     });
 
+    $scope.visible = 1;
     $scope.toggleVisible = function() {
         $scope.visible = 1 - $scope.visible;
     }

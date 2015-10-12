@@ -1,8 +1,13 @@
 <nav class="navbar navbar-inverse" id="header">
 	<div class="container-fluid">
-		<div class="navbar-header">
-			<a class="navbar-brand" href="" data-ng-click="stopCounter()">Live Tube Map</a>
-		</div>
+		<!--div class="navbar-header">
+			<a class="navbar-brand" href="" data-ng-click="stopCounter()"><i class="fa fa-subway"></i> Tube Mapp</a>
+		</div-->
+		<ul class="nav nav-pills" id="navTabs">
+			<li>
+				<a href="#/" id="rajinho" data-ng-click="toggleAbout()"><span class="glyphicon glyphicon-flash" aria-hidden="true"></span> 166</a>
+			</li>
+		</ul>
 	</div>
 </nav>
 <div class="container-fluid" id="mainContainer">
@@ -43,12 +48,12 @@
 		{{station.name}}
 		<small>{{stationId}}</small>
 	</h1>
+	<ul class="nav nav-pills nav-justified" id="arrivalTabs">
+		<li data-ng-repeat="(key, value) in station.line" data-ng-class="{active: $index === activeTab}">
+			<a href="" data-ng-click="lineFilter.set(key, $index)" class="tc-{{key}}">&bull;</a>
+		</li>
+	</ul>
 	<div id="arrivalsContainer" data-ng-class="{'invisible' : !visible}">
-		<ul class="nav nav-pills nav-justified" id="arrivalTabs">
-			<li data-ng-repeat="(key, value) in station.line" data-ng-class="{active: $index === activeTab}">
-				<a href="" data-ng-click="lineFilter.set(key, $index)" class="tc-{{key}}">&bull;</a>
-			</li>
-		</ul>
 		<div class="list-group animated fadeIn" id="arrivalList">
 	    	<a href="" class="list-group-item" data-ng-click="popInfo(arrival)" data-ng-repeat="arrival in arrivals | orderBy:'-timeToStation':true | filter:lineFilter" ng-if="arrival.naptanId === '940GZZLU'+stationId">
 	    		<span class="badge">
