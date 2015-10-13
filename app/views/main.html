@@ -1,28 +1,23 @@
 <nav class="navbar navbar-inverse" id="header">
 	<ul class="nav nav-pills" id="navTabs">
-		<li class="sq-1">
-			<span class="glyphicon glyphicon-flash" aria-hidden="true"></span>
-		</li>
-		<li class="sq-4">
-			<a href="#/" id="rajinho">
-				<span>TUBE</span>MAPP
+		<li>
+			<a href="#/" id="logo">
+				TUBE
+				<span class="glyphicon glyphicon-flash" aria-hidden="true"></span>
+				MAPP
 			</a>
 		</li>
 	</ul>
 	<!--p id="counter" style="width:{{(count/50)*100}}%"></p-->
 </nav>
-<div class="container-fluid" id="mainContainer">
-	<div class="row-fluid">
-		<div class="col-md-12" id="mapColumn">
-			<google-map center="station">
-				<google-path data-ng-repeat="path in paths" data="path"></google-path>
-				<google-marker icon="'center'" data="station"></google-marker>
-				<google-marker data-ng-repeat="train in trains" icon="'train'" data="train" timestamp="timestamp" last="$last" station="stationId" filter="lineFilter.lineId"></google-marker>
-			</google-map>
-		</div>
-	</div>
+<div id="mapContainer">
+	<google-map center="station">
+		<google-path data-ng-repeat="path in paths" data="path"></google-path>
+		<google-marker icon="'center'" data="station"></google-marker>
+		<google-marker data-ng-repeat="train in trains" icon="'train'" data="train" timestamp="timestamp" last="$last" station="stationId" filter="lineFilter.lineId"></google-marker>
+	</google-map>
 </div>
-<div id="arrivals">
+<div id="stationDataCard">
 	<div class="input-group" id="stationSearch">
 		<span class="input-group-btn">
 			<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -39,20 +34,13 @@
 				<i class="fa fa-bars"></i>
 			</a>
 		</span>
-		<!--span class="input-group-btn" id="countdown">
-			<a href="" data-ng-click="toggleLive()" data-ng-class="{'active' : live}" data-ng-show="!ajax">
-				{{count}}
-			</a>
-			<i class="fa fa-cog fa-spin" id="spinner" data-ng-show="ajax"></i>
-		</span
-		-->
 	</div>
 	<ul data-ng-show="(filteredData = (stationList | filter:search)) && search" id="stationList">
         <li data-ng-repeat="station in filteredData">
         	<a href="#/{{station.id}}/">{{station.name}}</a>
         </li>
     </ul>
-    <div id="arrivalsContainer" data-ng-class="{'invisible' : !visible}">
+    <div id="stationData" data-ng-class="{'invisible' : !visible}">
 		<h1>
 			{{station.name}}
 		</h1>

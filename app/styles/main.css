@@ -1,29 +1,5 @@
 /* SASS
 -------------------------*/
-	.bg-bakerloo {background-color:#AE6118 !important;}
-	.bg-central {background-color:#E41F1F !important;}
-	.bg-circle {background-color:#F8D42D !important;}
-	.bg-district {background-color:#007229 !important;}
-	.bg-hammersmith-city {background-color:#E899A8 !important;}
-	.bg-jubilee {background-color:#686E72 !important;}
-	.bg-metropolitan {background-color:#893267 !important;}
-	.bg-northern {background-color:#000 !important;}
-	.bg-piccadilly {background-color:#0450A1 !important;}
-	.bg-victoria {background-color:#009FE0 !important;}
-	.bg-waterloo-city {background-color:#70C3CE !important;}
-
-	.bd-bakerloo {border-color:#AE6118 !important;}
-	.bd-central {border-color:#E41F1F !important;}
-	.bd-circle {border-color:#F8D42D !important;}
-	.bd-district {border-color:#007229 !important;}
-	.bd-hammersmith-city {border-color:#E899A8 !important;}
-	.bd-jubilee {border-color:#686E72 !important;}
-	.bd-metropolitan {border-color:#893267 !important;}
-	.bd-northern {border-color:#000 !important;}
-	.bd-piccadilly {border-color:#0450A1 !important;}
-	.bd-victoria {border-color:#009FE0 !important;}
-	.bd-waterloo-city {border-color:#70C3CE !important;}
-
 	.tc-bakerloo {color:#AE6118 !important;}
 	.tc-central {color:#E41F1F !important;}
 	.tc-circle {color:#F8D42D !important;}
@@ -54,11 +30,6 @@
 		background-position:-1px -1px;
 		overflow: hidden;
 	}
-/* Container 
--------------------------*/
-	#mainContainer {
-		padding:0;
-	}
 
 /* Bootstrap Overides
 -------------------------*/
@@ -79,46 +50,27 @@
 		border:none;
 		margin: 0;
 		background: #252525;
-	}
-	#navTabs li.sq-1 {
-		width: 40px;
-	}
-	#navTabs li.sq-2 {
-		width: 80px;
-	}
-	#navTabs li.sq-3 {
-		width: 120px;
-	}
-	#navTabs li.sq-4 {
-		width: 160px;
-	}
-	#navTabs li.sq-5 {
-		width: 200px;
+		z-index: 1;
 	}
 	#navTabs li {
-		border-right: #2D2D2D solid 1px;
 		line-height: 40px;
 		text-align: center;
 		margin: 0;
+		width: 200px;
 	}
 	#navTabs li a {
 		display: block;
-		text-align: center;
 		padding: 0;
-		letter-spacing: 1px;
+		letter-spacing: 5px;
 		color: #fff;
-		font-weight: 600;
+		font-weight: 500;
 		font-size: 13px;
 		text-decoration: none;
+		font-family: verdana;
 	}
-	#navTabs li a.active {
-		color:#fff;
-	}
-	#navTabs li a .glyphicon,
-	#navTabs li a .fa {
+	#navTabs li a .glyphicon {
 		color: #3dffd6;
 	}
-
 	#counter {
 		border-bottom: #3dffd6 solid 1px;
 	    width: 100%;
@@ -133,13 +85,26 @@
 
 /* Google Map
 -------------------------*/
+	#mapContainer {
+		position: absolute;
+		top:40px;
+		left:0;
+		right:0;
+		bottom: 0;
+		z-index: 0;
+	}
 	#map-canvas {
 		height: 100%;
 	}
-	#mapColumn {
-		height:calc(100vh);
-		padding:0;
-		overflow: hidden;
+
+/* Station Data
+-------------------------*/
+	#stationDataCard {
+		position: absolute;
+		top:80px;
+		left:40px;
+		width: 359px;
+		border-radius: 0px;
 	}
 
 /* Station Search
@@ -236,31 +201,17 @@
 	    font-weight: 600;
 	    font-size: 12px;
 	}
-	.navbar-brand h1 {
-		padding:0;
-		margin:0;
-		margin-left: 5px;
-		font-size: 1.5em;
-		color: #fff;
-		letter-spacing: 1px;
-		text-transform: capitalize;
-		float: left;
-		font-weight: 400;
-	}
 
-/* Arrivals 
+/* Station Data 
 -------------------------*/
-	#arrivalsContainer.invisible {
+	#stationData {
+		max-height: 440px;
+		overflow-y:scroll;
+	}
+	#stationData.invisible {
 		display: none;
 	}
-	#arrivals {
-		position: absolute;
-		top:80px;
-		left:40px;
-		width: 359px;
-		border-radius: 0px;
-	}
-	#arrivals h1 {
+	h1 {
 		margin:0;
 		padding:30px 15px 31px 15px;
 		font-size: 18px;
@@ -271,84 +222,82 @@
 		background-color: #252525;
 		margin-bottom: 1px;
 	}
-	#arrivals h1 small {
+	h1 small {
 		text-transform: capitalize;
 		color: #444
 	}
 
-	/* Arrivals Tabs
-	-------------------------*/
-		#arrivalTabs {
-			background-color: #252525;
-			margin-bottom: 1px;
-		}
-		#arrivalTabs li a {
-			padding:10px 15px;
-			text-align: center;
-			text-transform: uppercase;
-			font-size: 26px;
-			line-height: 19px;
-			border-radius: 0;
-			border-left:#2d2d2d solid 1px;
-			font-weight: 600;
-			letter-spacing: 1px;
-		}
-		#arrivalTabs li:first-child a {
-			border-left:none;
-		}
-		#arrivalTabs li.active a,
-		#arrivalTabs li a:hover {
-			background-color: #222 !important;
-		}
-		#arrivalTabs li.active a {
-			box-shadow: inset 0px 0px 4px 0px rgba(0,0,0,0.4);
-		}
-		#arrivalTabs li a:focus {
-			background: none;
-		}
+/* Arrivals Tabs
+-------------------------*/
+	#arrivalTabs {
+		background-color: #252525;
+		margin-bottom: 1px;
+	}
+	#arrivalTabs li a {
+		padding:10px 15px;
+		text-align: center;
+		text-transform: uppercase;
+		font-size: 26px;
+		line-height: 19px;
+		border-radius: 0;
+		border-left:#2d2d2d solid 1px;
+		font-weight: 600;
+		letter-spacing: 1px;
+	}
+	#arrivalTabs li:first-child a {
+		border-left:none;
+	}
+	#arrivalTabs li.active a,
+	#arrivalTabs li a:hover {
+		background-color: #222 !important;
+	}
+	#arrivalTabs li.active a {
+		box-shadow: inset 0px 0px 4px 0px rgba(0,0,0,0.4);
+	}
+	#arrivalTabs li a:focus {
+		background: none;
+	}
 
-	/* Arrivals List
-	-------------------------*/
-		#arrivalList {
-			max-height: 320px;
-			overflow-y: scroll;
-			margin: 0;
-			background: rgba(37,37,37,0.95);
-		}
-		#arrivalList .list-group-item {
-			border-radius: 0 !important;
-			color: #555;
-			border:none;
-			margin:0;
-			border-bottom: #2d2d2d solid 1px;
-			padding:20px 20px 21px;
-			background: none;
-		}
-		#arrivalList .list-group-item:hover {
-			background-color: #222;
-		}
-		#arrivalList .list-group-item .badge {
-			color:#ccc;
-			background: none;
-			font-size: 0.8em;
-			padding:0;
-		}
-		#arrivalList span.towards {
-			color:#ccc;
-			font-weight: 500;
-			display: block;
-			font-size: 0.92em;
-		}
-		#arrivalList small {
-			font-size: 0.86em;
-			color:#555;
-			white-space: nowrap;
-		}
-		#arrivalList .bullet {
-			vertical-align: middle;
-			font-size: 2em;
-			margin-left: 3px;
-		}
+/* Arrivals List
+-------------------------*/
+	#arrivalList {
+		margin: 0;
+		background: rgba(37,37,37,0.95);
+	}
+	#arrivalList .list-group-item {
+		border-radius: 0 !important;
+		color: #555;
+		border:none;
+		margin:0;
+		border-bottom: #2d2d2d solid 1px;
+		padding:20px 20px 21px;
+		background: none;
+	}
+	#arrivalList .list-group-item:hover {
+		background-color: #222;
+	}
+	#arrivalList .list-group-item .badge {
+		color:#ccc;
+		background: none;
+		font-size: 0.8em;
+		padding:0;
+	}
+	#arrivalList span.towards {
+		color:#ccc;
+		font-weight: 500;
+		display: block;
+		font-size: 0.92em;
+	}
+	#arrivalList small {
+		font-size: 0.86em;
+		color:#555;
+		white-space: nowrap;
+	}
+	#arrivalList .bullet {
+		vertical-align: middle;
+		font-size: 2em;
+		margin-left: 3px;
+	}
 
 /* Marker Info Windows
 -------------------------*/
@@ -396,24 +345,17 @@
 		border:none;
 		float: none;
 	}
-	#mapColumn {
-		top:0;
-		width: 100%;
-		padding:0;
-		overflow: hidden;
-	}
-	#stationList {
-		height: calc(100vh - 40px);
-	}
-	#arrivals {
+	#stationDataCard {
 		top:40px;
 		left: 0;
 		width: 100%;
 	}
-	#arrivalList {
-		height: calc(100vh - 200px);
+	#stationData {
+		height: calc(100vh - 80px);
     	max-height: none;
-    	overflow-y: scroll;
+	}
+	#stationList {
+		height: calc(100vh - 40px);
 	}
 	#arrivalTabs li {
     	display: table-cell;

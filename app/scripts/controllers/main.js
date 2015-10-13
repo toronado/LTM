@@ -476,7 +476,7 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, $timeout, dataFac
         }
     }
     $scope.go = function() {
-        dataFactory.getArrivals('sample', $routeParams.stationId).then(function (data) {
+        dataFactory.getArrivals('line', $routeParams.stationId).then(function (data) {
             $scope.ajax = 0;
             $scope.timestamp = new Date().getTime() / 1000;
             $scope.arrivals = data;
