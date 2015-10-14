@@ -1,14 +1,15 @@
-<div class="container-fluid">
+<div class="container-fluid" data-ng-class="{'index' : bodyIndex}" id="index">
 	<div class="row">
-    	<div class="col-md-6 col-md-offset-3" id="index">
-    		<div class="input-group" id="stationSearch">
+    	<div class="col-md-6 col-md-offset-3">
+			<h2>Live <strong>tube</strong> data plotted on a <strong>Google</strong> map. HTML5, CSS3, <strong>Angular</strong>. Looking for a web developer with an eye for design?<br /><br /><a href="/#/">Get in touch.</a></h2>
+			<div class="input-group" id="stationSearch">
 				<span class="input-group-btn">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 				</span>
 				<input type="text" data-ng-model="search" placeholder="{{station.name}}">
 			</div>
-			<ul data-ng-show="(filteredData = (stationList | filter:search)) && !search" id="stationList">
-			    <li data-ng-repeat="station in filteredData">
+			<ul id="stationList">
+			    <li data-ng-repeat="station in stationList | filter:search">
 			    	<a href="#/{{station.id}}/">{{station.name}}</a>
 			    </li>
 			</ul>
