@@ -196,6 +196,7 @@ angular.module('app.directives.googleMarker', [])
 					markerService.showOnly($scope.filter);
 					markerService.removeOld($scope.timestamp);
 				}
+				console.log(markerService.markers);
 			}
 		};
 	}]);
