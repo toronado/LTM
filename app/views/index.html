@@ -1,37 +1,39 @@
-    	<div class="input-group" id="stationSearch">
-			<span class="input-group-btn">
-				<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-			</span>
-			<input type="text" data-ng-model="search" placeholder="Station Search">
+<div id="index">
+	<nav class="navbar navbar-inverse" id="navMenu">
+		<div class="container-fluid" style="padding:0">
+		    <div class="navbar-header">
+		      	<ul class="nav nav-pills" id="navTabs">
+					<!--li>
+						<a href="#/" id="logo">
+							re:
+						</a>
+					</li-->
+					<li>
+						<a href="" data-ng-click="binaryToggle('sc')">
+							<span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+						</a>
+					</li>
+				</ul>
+		    </div>
 		</div>
-		<ul data-ng-show="(filteredData = (stationList | filter:search)) && search" id="stationList">
-	        <li data-ng-repeat="station in filteredData" class="animated slideInUp">
+	</nav>
+	<div id="about">
+		<h1 id="logo" class="animated fadeIn">re:</h1>
+		<h2 class="animated fadeIn">
+			A '<strong>Live Tube Map</strong>' made with <strong>AngularJS</strong>, Transport for <strong>London</strong> api and <strong>Google</strong> maps. Tube data is retrieved, analysed, converted to geographic <strong>coordinates</strong> and marked on a Google map. When the data updates, the markers <strong>animate</strong>!<br><br>If you're looking for a web developer with an eye for design or have any questions, feel free to <a href="#">Get in touch</a> <strong>:]</strong>
+		</h2>
+	</div>
+	<div id="stationContainer" class="animated slideInLeft" data-ng-show="stationContainer">
+		<div class="input-group" id="stationSearch">
+			<span class="input-group-btn">
+				<span class="glyphicon glyphicon-search" aria-hidden="true" style="color:#fff"></span>
+			</span>
+			<input type="text" data-ng-model="search" placeholder="Filter">
+		</div>
+		<ul id="stationList">
+	        <li data-ng-repeat="station in stationList | filter:search" class="animated slideInUp">
 	        	<a href="#/{{station.id}}/">{{station.name}}</a>
 	        </li>
 	    </ul>
-    	<div id="index">
-    		<h1 id="logo" class="animated fadeInDown">re.</h1>
-			<h2 class="animated fadeInDown">
-				A '<strong>Live Tube Map</strong>' made out of HTML, CSS and <strong>AngularJS</strong>. Transport for London data is converted into coordinates that can be plotted onto a <strong>Google</strong> map. The data auto updates and the map <strong>Animates</strong>! There's scope for development and improvement but for the moment, that's it. Feel free to <a href="#">Get in touch</a> :]
-			</h2>
-			
-				<!--p class="hq">Words &#10142; Numbers</p>
-				<p>Data is retrieved from TFL and then analysed. Train location coordinates are not provided so this is where the real 'work' is done - trying to convert 'Approaching Oxford Circus' to a Latitude and Longitude. Some coordinates will be entirely accurate, others, a best guess.</p>
-				<p class="hq">Numbers &#10142; Markers</p>
-				<p>These coordinates are then plotted on the Google Map as markers. Every 45 seconds new data is retrieved and markers are either added/removed or animated to new positions. The accuracy of what you see is only as accurate as the data coming in, you will probably notice anomalies... especially in the Liverpool Street area!</p-->
-		</div>
-		<!--div class="col-md-6">
-			
-			<ul id="stationList">
-			    <li data-ng-repeat="station in stationList | filter:search">
-			    	<a href="#/{{station.id}}/">{{station.name}}</a>
-			    </li>
-			</ul>
-		</div-->
-		<!--div class="col-md-6">
-			<h2>How it works</h2>
-			<p class="hq">- Words &#10142; Numbers</p>
-			<p>Data is retrieved from TFL and then analysed. Train location coordinates are not provided so this is where the real 'work' is done - trying to convert 'Approaching Oxford Circus' to a Latitude and Longitude. Some coordinates will be entirely accurate, others, a best guess.</p>
-			<p class="hq">- Numbers &#10142; Markers</p>
-			<p>These coordinates are then plotted on the Google Map as markers. Every 45 seconds new data is retrieved and markers are either added/removed or animated to new positions. The accuracy of what you see is only as accurate as the data coming in, you will probably notice anomalies... especially in the Liverpool Street area!</p>		
-    	</div-->
+	</div>
+</div>

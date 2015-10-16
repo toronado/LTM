@@ -18,4 +18,13 @@ tubeApp.controller('IndexCtrl', function ($scope) {
         });
     }
     $scope.stationList = stations;
+
+    $scope.stationContainer = 0;
+    $scope.binaryToggle = function(id) {
+    	switch (id) {
+    		case 'sc':
+    		$scope.stationContainer = 1 - $scope.stationContainer;
+    		break;
+    	}
+    }
 });
