@@ -2,14 +2,9 @@
 	<div class="container-fluid" style="padding:0">
 	    <div class="navbar-header">
 	      	<ul class="nav nav-pills" id="navTabs">
-				<!--li>
-					<a href="#/" id="logo">
-						re:
-					</a>
-				</li-->
-				<li>
+				<li id="logo">
 					<a href="#/">
-						<span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+						// Re.
 					</a>
 				</li>
 			</ul>
@@ -30,23 +25,25 @@
 		</span>
 		<input type="text" data-ng-model="search" placeholder="{{station.name}}">
 		<span class="input-group-btn" id="countdown">
-			<a href="" data-ng-click="toggleLive()" data-ng-class="{'active' : live}" id="countdown">
+			<a href="" data-ng-click="binaryToggle('liveData')" data-ng-class="{'active' : liveData}" id="countdown">
 				<span data-ng-show="!ajax">{{count}}</span>
 				<i class="fa fa-cog fa-spin" id="spinner" data-ng-show="ajax"></i>
 			</a>
 		</span>
 		<span class="input-group-btn" id="minimise">
-			<a href="" data-ng-click="toggleVisible()">
+			<a href="" data-ng-click="binaryToggle('stationData')">
 				<i class="fa fa-bars"></i>
 			</a>
 		</span>
 	</div>
-	<ul data-ng-show="(filteredData = (stationList | filter:search)) && search" id="stationList">
-        <li data-ng-repeat="station in filteredData">
-        	<a href="#/{{station.id}}/">{{station.name}}</a>
-        </li>
-    </ul>
-    <div id="stationData" data-ng-class="{'invisible' : !visible}">
+	<div id="stationListContainer" data-ng-show="(filteredData = (stationList | filter:search)) && search">
+		<ul id="stationList">
+	        <li data-ng-repeat="station in filteredData">
+	        	<a href="#/{{station.id}}/">{{station.name}}</a>
+	        </li>
+	    </ul>
+	</div>
+    <div id="stationData" data-ng-class="{'invisible' : !stationData}">
 		<h1>
 			{{station.name}}
 		</h1>

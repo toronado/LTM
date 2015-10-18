@@ -30,59 +30,6 @@
 		background-position:-1px -1px;
 	}
 
-/* Index Page
--------------------------*/
-
-	h1#logo {
-		width: 40px;
-	    line-height: 40px;
-	    margin: 0;
-	    text-align: center;
-	    background-color: #3dffd6;
-	    font-weight: bold;
-	    font-family: helvetica, arial, sans-serif;
-	    font-size: 16px;
-	    color: #2D5D53;
-	}
-	#about {
-		position: absolute;
-		top:80px;
-		left:80px;
-		width:639px;
-	}
-	@media (max-width: 768px) {
-		#about {
-			width: inherit;
-			left: 40px;
-			right:40px;
-		}
-	}
-	#about h2 {
-		font-size: 22px;
-	    line-height: 40px;
-	    color: #999;
-	    font-weight: 300;
-	    margin: 40px 0 0 0;
-	}
-	#about p {
-		font-size: 20px;
-		color: #999;
-		font-weight: 300;
-		letter-spacing: 1px;
-	}
-	#about h2 strong {
-		color:#fff;
-		font-weight: 400;
-	}
-	#about h2 a {
-		color: #3dffd6;
-		text-decoration: none;
-	}
-	#index #stationList li a:hover {
-		color:#3dffd6;
-		text-decoration: none;
-	}
-
 /* Bootstrap Overides
 -------------------------*/
 	.nav-pills li a {
@@ -93,6 +40,8 @@
 		background: none;
 	}
 
+/* Header 
+-------------------------*/
 	#navMenu {
 		min-height: 0;
 		height: 40px;
@@ -100,47 +49,42 @@
 		border-radius: 0;
 		margin: 0;
 	}
-	#navMenu a.navbar-brand {
-		padding: 0 15px;
-	    font-size: 12px;
-	    height: 40px;
-	    line-height: 40px;
-	}
-	#navMenu p {
-		margin: 0;
-		line-height: 40px;
-		font-weight: bold;
-		font-size: 12px;
-		color: #444;
-	}
-
-/* Header 
--------------------------*/
 	#navTabs li {
 		line-height: 40px;
 		text-align: center;
 		margin: 0;
-		width: 40px;
 	}
 	#navTabs li a {
 		display: block;
-		padding: 0;
+		padding: 0 15px;
 		color: #fff;
 		font-size: 12px;
 	}
-	#navTabs li a#logo {
-		background-color: #3dffd6;
+	#navTabs li#logo a {
+		color: #3dffd6;
+    	font-weight: bold;
 	}
-	#counter {
-		border-bottom: #3dffd6 solid 1px;
-	    width: 100%;
-	    text-align: right;
-	    position: absolute;
-	    width: 100%;
-	    left: 0;
-	    bottom: -1px;
-	    padding: 0;
-	    margin: 0;
+
+	/* Index Page
+-------------------------*/
+	#index h2 {
+		font-size: 22px;
+	    line-height: 40px;
+	    color: #999;
+	    font-weight: 300;
+	    margin: 80px 40px 40px 40px;
+	}
+	#index h2 strong {
+		color:#fff;
+		font-weight: 400;
+	}
+	#index h2 a {
+		color: #3dffd6;
+		text-decoration: none;
+	}
+	#index #stationList li a:hover {
+		color:#3dffd6;
+		text-decoration: none;
 	}
 
 /* Google Map
@@ -173,6 +117,9 @@
 		width: 100%;
 		margin-bottom: 1px;
 		background-color: #252525;
+	}
+	#index #stationSearch {
+		background-color: #292929;
 	}
 	#stationSearch input {
 		border:none;
@@ -237,20 +184,29 @@
 	#stationSearch span#minimise a.active {
 		color: #fff;
 	}
-/* Station List 
+
+/* Station Data 
 -------------------------*/
+	#stationListContainer {
+		position: absolute;
+		top: 40px;
+		right:0;
+		left:0;
+		z-index: 1;
+		width: 100%;
+		height: 100%;
+		overflow-y:scroll;
+	}
 	#stationList {
-		/*position: absolute;*/
-	    top: 40px;
-	    left: 0;
-	    height: calc(100vh - 80px);
+	    height: calc(100vh - 40px);
 	    width: 100%;
 	    overflow-y: scroll; 
-	    right: 0;
 	    margin: 0;
 	    padding: 0;
-	    z-index: 2;
 	    background-color: #252525;
+	}
+	#index #stationList {
+		background-color: #292929;
 	}
 	#stationList li a {
 		display: block;
@@ -259,15 +215,6 @@
 	    color: #ccc;
 	    font-weight: 600;
 	    font-size: 12px;
-	}
-
-/* Station Data 
--------------------------*/
-	#stationContainer {
-		position: absolute;
-		top: 40px;
-		width: 100%;
-		height: 100%;
 	}
 	#stationData {
 		max-height: 440px;
@@ -286,10 +233,6 @@
 		color: #fff;
 		background-color: #252525;
 		margin-bottom: 1px;
-	}
-	#stationData h1 small {
-		text-transform: capitalize;
-		color: #444
 	}
 
 /* Arrivals Tabs
@@ -409,6 +352,9 @@
 		display: inline-block;
 		border:none;
 		float: none;
+	}
+	#index h2 {
+		margin:40px 25px;
 	}
 	#stationDataCard {
 		top:40px;

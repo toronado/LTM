@@ -453,7 +453,6 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, $timeout, dataFac
     markerService.reset();
     lineService.reset();
 
-    $scope.live = 1;
     $scope.stationId = $routeParams.stationId;
     $scope.stations = sObj['sid'];
     $scope.station = $scope.stations[$routeParams.stationId];
@@ -518,22 +517,26 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, $timeout, dataFac
     }
     cd.start();
 
-    $scope.toggleLive = function() {
-        $scope.live = 1 - $scope.live;
-        if ($scope.live) {
-            cd.start();
-        } else {
-            cd.stop();
+    $scope.stationData = 1;
+    $scope.liveData = 1;
+    $scope.binaryToggle = function(id) {
+        switch (id) {
+            case 'stationData': //Station Data
+                $scope.stationData = 1 - $scope.stationData;
+                break;
+            case 'liveData':
+                $scope.liveData = 1 - $scope.liveData;
+                if ($scope.liveData) {
+                    cd.start();
+                } else {
+                    cd.stop();
+                }
+                break;
         }
     }
     $scope.$on("$destroy",function (event) { 
         cd.stop();
     });
-
-    $scope.visible = 1;
-    $scope.toggleVisible = function() {
-        $scope.visible = 1 - $scope.visible;
-    }
 });
 //Change seconds to minutes
 tubeApp.filter('convertTime', function () {
