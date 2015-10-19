@@ -47,6 +47,7 @@
 		height: 40px;
 		border:none;
 		border-radius: 0;
+		border-bottom:#2d2d2d solid 1px;
 		margin: 0;
 	}
 	#navTabs li {
@@ -65,28 +66,6 @@
     	font-weight: bold;
 	}
 
-	/* Index Page
--------------------------*/
-	#index h2 {
-		font-size: 22px;
-	    line-height: 40px;
-	    color: #999;
-	    font-weight: 300;
-	    margin: 80px 40px 40px 40px;
-	}
-	#index h2 strong {
-		color:#fff;
-		font-weight: 400;
-	}
-	#index h2 a {
-		color: #3dffd6;
-		text-decoration: none;
-	}
-	#index #stationList li a:hover {
-		color:#3dffd6;
-		text-decoration: none;
-	}
-
 /* Google Map
 -------------------------*/
 	#mapContainer {
@@ -99,6 +78,78 @@
 	}
 	#map-canvas {
 		height: 100%;
+	}
+
+/* Index About
+-------------------------*/
+	#about {
+		padding:0 80px;
+		position: fixed;
+		width: 65%;
+	}
+	#about h1 {
+		font-size: 12px;
+	    margin: 39px 0 40px -1px;
+	    color: #3dffd6;
+	    font-weight: bold;
+	    width: 41px;
+	    line-height: 39px;
+	    text-align: center;
+	    border: #fff solid 1px;
+	}
+	#about h2 {
+		font-size: 22px;
+	    line-height: 40px;
+	    color: #999;
+	    font-weight: 300;
+	    margin: 40px 0;
+	}
+	#about h2 strong {
+		color:#fff;
+		font-weight: 400;
+	}
+	#about h2 a {
+		color: #3dffd6;
+		text-decoration: none;
+	}
+
+/* Tube Station List
+-------------------------*/
+	#tubeStations ul,
+	#tubeStations li {
+		margin:0;
+		padding:0;
+		list-style: none;
+	}
+	#tubeStations .input-group {
+		width: 100%;
+		background-color: #292929;
+		border-bottom: 1px solid #2D2D2D;
+	}
+	#tubeStations .input-group .input-group-btn {
+		font-size: 12px;
+		padding:0 10px;
+	}
+	#tubeStations .input-group input {
+		background: transparent;
+		width: 100%;
+		border:none;
+		line-height: 39px;
+		padding:0;
+		color: #3dffd6;
+		outline: none;
+		font-size: 14px;
+		font-weight: bold;
+	}
+	#tubeStations a {
+		line-height: 39px;
+		display: block;
+		color:#555;
+		font-weight: bold;
+		font-size: 12px;
+		border-bottom: 1px solid #2D2D2D;
+		background-color: #292929;
+		padding:0 10px;
 	}
 
 /* Station Data
@@ -198,23 +249,27 @@
 		overflow-y:scroll;
 	}
 	#stationList {
-	    height: calc(100vh - 40px);
-	    width: 100%;
-	    overflow-y: scroll; 
+	    height: calc(100vh - 80px);
+	    overflow-y: scroll;
 	    margin: 0;
 	    padding: 0;
-	    background-color: #252525;
 	}
 	#index #stationList {
-		background-color: #292929;
+	}
+	#stationList li {
+		list-style: none;
+		padding:0;
+		margin: 0;
 	}
 	#stationList li a {
 		display: block;
-	    padding: 10px 20px 9px 15px;
-	    border-bottom: #2d2d2d solid 1px;
-	    color: #ccc;
+	    padding: 0 15px;
+	    margin-bottom: 1px;
+	    color: #444;
 	    font-weight: 600;
 	    font-size: 12px;
+	    line-height: 39px;
+	    background-color: #292929;
 	}
 	#stationData {
 		max-height: 440px;
@@ -344,7 +399,7 @@
 
 /* Mobile Tweaks
 -------------------------*/
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
 	#navTabs {
 		text-align: center;
 	}
@@ -353,8 +408,10 @@
 		border:none;
 		float: none;
 	}
-	#index h2 {
-		margin:40px 25px;
+	#about {
+		position: static;
+		width: 100%;
+		padding: 0 40px;
 	}
 	#stationDataCard {
 		top:40px;
@@ -368,12 +425,22 @@
 	#stationList {
 		height: calc(100vh - 80px);
 	}
+	#index #stationList {
+		height: 100%;
+	}
+	#index #stationList li {
+		padding: 0 0 0 40px;
+	}
+
 	#arrivalTabs li {
     	display: table-cell;
     	width: 1%;
     }
   	#arrivalTabs li a {
     	margin-bottom: 0 !important;
+    }
+    #arrivalList {
+    	min-height: calc(100% - 120px);
     }
 }
 

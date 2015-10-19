@@ -4,7 +4,7 @@
 	      	<ul class="nav nav-pills" id="navTabs">
 				<li id="logo">
 					<a href="#/">
-						// Re.
+						<span class="glyphicon glyphicon-flash" aria-hidden="true"></span>
 					</a>
 				</li>
 			</ul>
@@ -31,7 +31,7 @@
 			</a>
 		</span>
 		<span class="input-group-btn" id="minimise">
-			<a href="" data-ng-click="binaryToggle('stationData')">
+			<a href="" data-ng-click="binaryToggle('stationData')" data-ng-class="{'active' : stationData}">
 				<i class="fa fa-bars"></i>
 			</a>
 		</span>
@@ -64,8 +64,3 @@
 	    </div>
 	</div>
 </div>
-<!--footer class="footer">
-  	<div class="container">
-    	&copy; 2015 REDWARD
-  	</div>
-</footer-->
