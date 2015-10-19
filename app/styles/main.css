@@ -40,37 +40,11 @@
 		background: none;
 	}
 
-/* Header 
--------------------------*/
-	#navMenu {
-		min-height: 0;
-		height: 40px;
-		border:none;
-		border-radius: 0;
-		border-bottom:#2d2d2d solid 1px;
-		margin: 0;
-	}
-	#navTabs li {
-		line-height: 40px;
-		text-align: center;
-		margin: 0;
-	}
-	#navTabs li a {
-		display: block;
-		padding: 0 15px;
-		color: #fff;
-		font-size: 12px;
-	}
-	#navTabs li#logo a {
-		color: #3dffd6;
-    	font-weight: bold;
-	}
-
 /* Google Map
 -------------------------*/
 	#mapContainer {
 		position: absolute;
-		top:40px;
+		top:0;
 		left:0;
 		right:0;
 		bottom: 0;
@@ -83,7 +57,7 @@
 /* Index About
 -------------------------*/
 	#about {
-		padding:0 80px;
+		padding:0 40px;
 		position: fixed;
 		width: 65%;
 	}
@@ -115,6 +89,9 @@
 
 /* Tube Station List
 -------------------------*/
+	#tubeStations {
+		background-color: #292929;
+	}
 	#tubeStations ul,
 	#tubeStations li {
 		margin:0;
@@ -148,18 +125,38 @@
 		font-weight: bold;
 		font-size: 12px;
 		border-bottom: 1px solid #2D2D2D;
-		background-color: #292929;
 		padding:0 10px;
+	}
+	#tubeStations.mapCard {
+		position: absolute;
+		right:0;
+		left:0;
+		z-index: 1;
+		width: 100%;
+		height: 440px;
+		overflow-y:scroll;
+		background-color: #252525;
 	}
 
 /* Station Data
 -------------------------*/
 	#stationDataCard {
 		position: absolute;
-		top:80px;
+		top:40px;
 		left:40px;
 		width: 359px;
 		border-radius: 0px;
+	}
+	#stationDataCard h1 {
+		margin:0;
+		padding:30px 15px 31px 15px;
+		font-size: 18px;
+		line-height: 18px;
+		font-weight: 400;
+		text-align: center;
+		color: #fff;
+		background-color: #252525;
+		margin-bottom: 1px;
 	}
 
 /* Station Search
@@ -168,9 +165,6 @@
 		width: 100%;
 		margin-bottom: 1px;
 		background-color: #252525;
-	}
-	#index #stationSearch {
-		background-color: #292929;
 	}
 	#stationSearch input {
 		border:none;
@@ -220,11 +214,18 @@
 	#stationSearch span#countdown {
 		border-left:#2d2d2d solid 1px;
 	}
+	#stationSearch span#logo {
+		border-right:#2d2d2d solid 1px;
+	}
 	#stationSearch span#minimise a,
-	#stationSearch span#countdown a {
+	#stationSearch span#countdown a,
+	#stationSearch span#logo a {
 		color: #555;
 		font-size: 12px;
 		font-weight: bold;
+	}
+	#stationSearch span#logo a {
+		color: #3dffd6;
 	}
 	#stationSearch span#countdown #spinner {
 		font-size: 13px;
@@ -238,56 +239,12 @@
 
 /* Station Data 
 -------------------------*/
-	#stationListContainer {
-		position: absolute;
-		top: 40px;
-		right:0;
-		left:0;
-		z-index: 1;
-		width: 100%;
-		height: 100%;
-		overflow-y:scroll;
-	}
-	#stationList {
-	    height: calc(100vh - 80px);
-	    overflow-y: scroll;
-	    margin: 0;
-	    padding: 0;
-	}
-	#index #stationList {
-	}
-	#stationList li {
-		list-style: none;
-		padding:0;
-		margin: 0;
-	}
-	#stationList li a {
-		display: block;
-	    padding: 0 15px;
-	    margin-bottom: 1px;
-	    color: #444;
-	    font-weight: 600;
-	    font-size: 12px;
-	    line-height: 39px;
-	    background-color: #292929;
-	}
 	#stationData {
 		max-height: 440px;
 		overflow-y:scroll;
 	}
 	#stationData.invisible {
 		display: none;
-	}
-	#stationData h1 {
-		margin:0;
-		padding:30px 15px 31px 15px;
-		font-size: 18px;
-		line-height: 18px;
-		font-weight: 400;
-		text-align: center;
-		color: #fff;
-		background-color: #252525;
-		margin-bottom: 1px;
 	}
 
 /* Arrivals Tabs
@@ -326,6 +283,8 @@
 	#arrivalList {
 		margin: 0;
 		background: rgba(37,37,37,0.95);
+		max-height: 320px;
+		overflow-y:scroll; 
 	}
 	#arrivalList .list-group-item {
 		border-radius: 0 !important;
@@ -386,35 +345,16 @@
 		line-height: 14px;
 	}
 
-/* Footer
--------------------------*/
-	.footer {
-	    position: absolute;
-	    bottom: 0;
-	    width: 100%;
-	    height: 40px;
-	    text-align: center;
-	    color:#333;
-	}
-
 /* Mobile Tweaks
 -------------------------*/
-@media (max-width: 1200px) {
-	#navTabs {
-		text-align: center;
-	}
-	#navTabs li {
-		display: inline-block;
-		border:none;
-		float: none;
-	}
+@media (max-width: 768px) {
 	#about {
 		position: static;
 		width: 100%;
 		padding: 0 40px;
 	}
 	#stationDataCard {
-		top:40px;
+		top:0;
 		left: 0;
 		width: 100%;
 	}
@@ -422,16 +362,6 @@
 		height: calc(100vh - 80px);
     	max-height: none;
 	}
-	#stationList {
-		height: calc(100vh - 80px);
-	}
-	#index #stationList {
-		height: 100%;
-	}
-	#index #stationList li {
-		padding: 0 0 0 40px;
-	}
-
 	#arrivalTabs li {
     	display: table-cell;
     	width: 1%;

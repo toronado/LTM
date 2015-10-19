@@ -1,4 +1,4 @@
-<nav class="navbar navbar-inverse" id="navMenu">
+<!--nav class="navbar navbar-inverse" id="navMenu">
 	<div class="container-fluid" style="padding:0">
 	    <div class="navbar-header">
 	      	<ul class="nav nav-pills" id="navTabs">
@@ -10,7 +10,7 @@
 			</ul>
 	    </div>
 	</div>
-</nav>
+</nav-->
 <div id="mapContainer">
 	<google-map center="station">
 		<google-path data-ng-repeat="path in paths" data="path"></google-path>
@@ -20,6 +20,9 @@
 </div>
 <div id="stationDataCard">
 	<div class="input-group" id="stationSearch">
+		<span class="input-group-btn" id="logo">
+			<a href="#/"><span class="glyphicon glyphicon-flash" aria-hidden="true"></span></a>
+		</span>
 		<span class="input-group-btn">
 			<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 		</span>
@@ -36,17 +39,15 @@
 			</a>
 		</span>
 	</div>
-	<div id="stationListContainer" data-ng-show="(filteredData = (stationList | filter:search)) && search">
-		<ul id="stationList">
-	        <li data-ng-repeat="station in filteredData">
-	        	<a href="#/{{station.id}}/">{{station.name}}</a>
-	        </li>
-	    </ul>
-	</div>
-    <div id="stationData" data-ng-class="{'invisible' : !stationData}">
-		<h1>
-			{{station.name}}
-		</h1>
+	<div  data-ng-class="{'invisible' : !stationData}">
+		<div id="tubeStations" class="mapCard" data-ng-show="(filteredData = (stationList | filter:search)) && search">
+			<ul>
+		        <li data-ng-repeat="station in filteredData">
+		        	<a href="#/{{station.id}}/">{{station.name}}</a>
+		        </li>
+		    </ul>
+		</div>
+		<h1>{{station.name}}</h1>
 		<ul class="nav nav-pills nav-justified" id="arrivalTabs">
 			<li data-ng-repeat="(key, value) in station.line" data-ng-class="{active: $index === activeTab}">
 				<a href="" data-ng-click="lineFilter.set(key, $index)" class="tc-{{key}}">&bull;</a>
