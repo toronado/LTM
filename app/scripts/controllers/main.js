@@ -388,9 +388,9 @@ tubeApp.factory('markerService', function() {
             google.maps.event.addListener(marker, 'mouseout', function () {
                 infowindow.close(map,marker);
             });
-            /*google.maps.event.addListener(marker, 'click', function () {
+            google.maps.event.addListener(marker, 'click', function () {
                 infowindow.open(map,marker);
-            });*/
+            });
             if (iObj['clickback']) {
                 google.maps.event.addListener(marker, 'click', function () {
                     iObj.clickback();
