@@ -16,12 +16,14 @@
 	</div>
 	<div class="col-md-4" style="padding:0">
 		<div id="tubeStations" class="index">
-			<!--div class="input-group">
-				<span class="input-group-btn">
-					<span class="glyphicon glyphicon-search" aria-hidden="true" style="color:#3CFED5"></span>
-				</span>
-				<input type="text" data-ng-model="search" placeholder="">
-			</div-->
+			<div id="stationSearch">
+				<div class="input-group">
+					<span class="input-group-btn">
+						<span class="glyphicon glyphicon-search" aria-hidden="true" style="color:#3CFED5"></span>
+					</span>
+					<input type="text" data-ng-model="search" placeholder="">
+				</div>
+			</div>
 			<ul>
 		        <li data-ng-repeat="station in stationList | filter:search" class="animated slideInUp">
 		        	<a href="#/{{station.id}}/">{{station.name}}</a>
