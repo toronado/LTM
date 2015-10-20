@@ -358,7 +358,7 @@
 
 /* Mobile Tweaks
 -------------------------*/
-@media (max-width: 480px) {
+@media (max-width: 768px) {
 	#about {
 		position: static;
 		width: 100%;
