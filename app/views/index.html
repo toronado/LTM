@@ -1,35 +1,27 @@
-<!--nav class="navbar navbar-inverse" id="navMenu">
-	<div class="container-fluid">
-		<div class="row">
-		    <div class="navbar-header">
-		      	<ul class="nav nav-pills" id="navTabs">
-					<li id="logo">
-						<a href="#/">
-							<span class="glyphicon glyphicon-flash" aria-hidden="true"></span>
-						</a>
-					</li>
-				</ul>
-		    </div>
-		</div>
+<nav class="navbar navbar-inverse navbar-fixed-top" id="stationSearch">
+	<div class="input-group">
+		<span class="input-group-btn" id="logo">
+			<a href="#/"><span class="glyphicon glyphicon-flash" aria-hidden="true"></span></a>
+		</span>
 	</div>
-</nav-->
+</nav>
 <div class="container-fluid" style="padding:0">
 	<div class="col-md-8" style="padding:0">
 		<div class="animated fadeIn" id="about">
-			<h1><span class="glyphicon glyphicon-flash" aria-hidden="true"></span></h1>
+			<h1>RE</h1>
 			<h2>
 				A '<strong>Live Tube Map</strong>' made with <strong>AngularJS</strong>, Transport for <strong>London</strong> data and Google maps. Data is retrieved, analysed, converted to geographic coordinates and marked on a <strong>Google map</strong>. When the data updates, the markers <strong>animate</strong>! <br><br>If you're looking for a <strong>developer</strong> with an eye for <strong>design</strong> or have any questions, <a href="#">email me</a> <strong>:]</strong>
 			</h2>
 		</div>
 	</div>
 	<div class="col-md-4" style="padding:0">
-		<div id="tubeStations">
-			<div class="input-group">
+		<div id="tubeStations" class="index">
+			<!--div class="input-group">
 				<span class="input-group-btn">
 					<span class="glyphicon glyphicon-search" aria-hidden="true" style="color:#3CFED5"></span>
 				</span>
 				<input type="text" data-ng-model="search" placeholder="">
-			</div>
+			</div-->
 			<ul>
 		        <li data-ng-repeat="station in stationList | filter:search" class="animated slideInUp">
 		        	<a href="#/{{station.id}}/">{{station.name}}</a>

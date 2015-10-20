@@ -1,16 +1,3 @@
-<!--nav class="navbar navbar-inverse" id="navMenu">
-	<div class="container-fluid" style="padding:0">
-	    <div class="navbar-header">
-	      	<ul class="nav nav-pills" id="navTabs">
-				<li id="logo">
-					<a href="#/">
-						<span class="glyphicon glyphicon-flash" aria-hidden="true"></span>
-					</a>
-				</li>
-			</ul>
-	    </div>
-	</div>
-</nav-->
 <div id="mapContainer">
 	<google-map center="station">
 		<google-path data-ng-repeat="path in paths" data="path"></google-path>
@@ -18,35 +5,40 @@
 		<google-marker data-ng-repeat="train in trains" icon="'train'" data="train" timestamp="timestamp" last="$last" station="stationId" filter="lineFilter.lineId"></google-marker>
 	</google-map>
 </div>
-<div id="stationDataCard">
-	<div class="input-group" id="stationSearch">
+<nav class="navbar navbar-inverse navbar-fixed-top" id="stationSearch">
+	<div class="input-group">
 		<span class="input-group-btn" id="logo">
 			<a href="#/"><span class="glyphicon glyphicon-flash" aria-hidden="true"></span></a>
 		</span>
-		<span class="input-group-btn">
-			<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-		</span>
-		<input type="text" data-ng-model="search" placeholder="{{station.name}}">
 		<span class="input-group-btn" id="countdown">
 			<a href="" data-ng-click="binaryToggle('liveData')" data-ng-class="{'active' : liveData}" id="countdown">
 				<span data-ng-show="!ajax">{{count}}</span>
 				<i class="fa fa-cog fa-spin" id="spinner" data-ng-show="ajax"></i>
 			</a>
 		</span>
-		<span class="input-group-btn" id="minimise">
-			<a href="" data-ng-click="binaryToggle('stationData')" data-ng-class="{'active' : stationData}">
-				<i class="fa fa-bars"></i>
-			</a>
+		<span class="input-group-btn">
+			<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 		</span>
+		<input type="text" data-ng-model="search" placeholder="{{station.name}}">
 	</div>
-	<div  data-ng-class="{'invisible' : !stationData}">
-		<div id="tubeStations" class="mapCard" data-ng-show="(filteredData = (stationList | filter:search)) && search">
-			<ul>
-		        <li data-ng-repeat="station in filteredData">
-		        	<a href="#/{{station.id}}/">{{station.name}}</a>
-		        </li>
-		    </ul>
-		</div>
+</nav>
+<div id="tubeStations" data-ng-show="(filteredData = (stationList | filter:search)) && search">
+	<ul>
+        <li data-ng-repeat="station in filteredData" class="animated slideInDown">
+        	<a href="#/{{station.id}}/">{{station.name}}</a>
+        </li>
+    </ul>
+</div>
+<div id="arrivalsBoard">
+	<nav class="navbar navbar-inverse">
+		<span class="text">16 Arrivals</span>
+		<div class="btn-group pull-right" role="group" aria-label="">
+	  		<button type="button" class="btn btn-default" data-ng-click="binaryToggle('stationData')" data-ng-class="{'active' : stationData}">
+	  			<span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+	  		</button>
+	  	</div>
+	</nav>
+	<div id="arrivals" data-ng-class="{'hidden' : !stationData}">
 		<h1>{{station.name}}</h1>
 		<ul class="nav nav-pills nav-justified" id="arrivalTabs">
 			<li data-ng-repeat="(key, value) in station.line" data-ng-class="{active: $index === activeTab}">
