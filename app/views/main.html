@@ -8,7 +8,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top" id="stationSearch">
 	<div class="input-group">
 		<span class="input-group-btn" id="logo">
-			<a href="#/"><span class="glyphicon glyphicon-flash" aria-hidden="true"></span></a>
+			<a href="#/"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a>
 		</span>
 		<span class="input-group-btn" id="countdown">
 			<a href="" data-ng-click="binaryToggle('liveData')" data-ng-class="{'active' : liveData}" id="countdown">
@@ -16,9 +16,9 @@
 				<i class="fa fa-cog fa-spin" id="spinner" data-ng-show="ajax"></i>
 			</a>
 		</span>
-		<span class="input-group-btn">
+		<!--span class="input-group-btn">
 			<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-		</span>
+		</span-->
 		<input type="text" data-ng-model="search" placeholder="{{station.name}}">
 	</div>
 </nav>
@@ -31,10 +31,11 @@
 </div>
 <div id="arrivalsBoard">
 	<nav class="navbar navbar-inverse">
-		<span class="text">Arrivals Board</span>
+		<span class="text">{{(arrivals | filter:lineFilter).length}} Arrivals {{lineFilter.lineId}}</span>
 		<div class="btn-group pull-right" role="group" aria-label="">
 	  		<button type="button" class="btn btn-default" data-ng-click="binaryToggle('stationData')" data-ng-class="{'active' : stationData}">
-	  			<span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+	  			<span class="glyphicon glyphicon-minus" aria-hidden="true" data-ng-show="stationData"></span>
+	  			<span class="glyphicon glyphicon-plus" aria-hidden="true" data-ng-show="!stationData"></span>
 	  		</button>
 	  	</div>
 	</nav>
@@ -46,13 +47,13 @@
 			</li>
 		</ul>
 		<div class="list-group animated fadeIn" id="arrivalList">
-	    	<a href="" class="list-group-item" data-ng-click="popInfo(arrival)" data-ng-repeat="arrival in arrivals | orderBy:'-timeToStation':true | filter:lineFilter" ng-if="arrival.naptanId === '940GZZLU'+stationId">
+	    	<a href="" class="list-group-item" data-ng-click="popInfo(arrival)" data-ng-repeat="arrival in arrivals | orderBy:'-timeToStation':true | filter:lineFilter">
 	    		<span class="badge">
 	    			{{arrival.timeToStation | convertTime}}
 	    			<span class="bullet tc-{{arrival.lineId}}">&bull;</span>
 	    		</span>
 	    		<span class="towards">{{arrival.towards}}</span>
-	    		<small>{{arrival.currentLocation}}</small>
+	    		<small>{{arrival.platformName | directionBound}} - {{arrival.currentLocation}}</small>
 	    	</a>
 	    </div>
 	</div>

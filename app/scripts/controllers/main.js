@@ -453,12 +453,13 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, $timeout, dataFac
     markerService.reset();
     lineService.reset();
 
-    $scope.stationId = $routeParams.stationId;
+    $scope.stationId = $routeParams.stationId.toUpperCase();
     $scope.stations = sObj['sid'];
-    $scope.station = $scope.stations[$routeParams.stationId];
+    $scope.station = $scope.stations[$scope.stationId];
     $scope.paths = Object.keys($scope.station['line']);
     $scope.activeTab = null;
     $scope.lineFilter = {
+        naptanId: '940GZZLU'+$scope.stationId,
         lineId: '',
         set: function (line, index) {
             if (line === this.lineId) {
@@ -475,7 +476,7 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, $timeout, dataFac
         }
     }
     $scope.go = function() {
-        dataFactory.getArrivals('line', $routeParams.stationId).then(function (data) {
+        dataFactory.getArrivals('sample', $scope.stationId).then(function (data) {
             $scope.ajax = 0;
             $scope.timestamp = new Date().getTime() / 1000;
             $scope.arrivals = data;
@@ -548,5 +549,19 @@ tubeApp.filter('convertTime', function () {
             return input + 's';
         }
         return Math.floor(input / 60) + ' min';
+    };
+});
+//Extract North/East/South/West bound
+tubeApp.filter('directionBound', function () {
+    return function (input) {
+        input = input.split(' -')[0];
+        switch (input) {
+            case 'Inner Rail':
+                return 'Eastbound';
+            case 'Outer Rail':
+                return 'Westbound';
+            default:
+                return input;
+        }
     };
 });

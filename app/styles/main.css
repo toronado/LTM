@@ -29,6 +29,10 @@
 		background-size:40px 40px;
 		background-position:-1px -1px;
 	}
+	::-webkit-scrollbar {
+		background: none;
+		width: 0;
+	}
 
 /* Bootstrap Overides
 -------------------------*/
@@ -69,6 +73,7 @@
 		right:0;
 		bottom: 0;
 		z-index: 0;
+		padding-top:40px;
 	}
 	#map-canvas {
 		height: 100%;
@@ -155,35 +160,35 @@
 		}
 		#stationSearch input {
 			border:none;
-			padding:0;
+			padding:0 15px;
 			height: 39px;
 			width: 100%;
 			outline: none;
 			background: transparent;
-			font-weight: bold;
+			font-weight: 500;
 			font-size: 14px;
 			color: #3dffd6;
 		}
 		::-webkit-input-placeholder { /* WebKit browsers */
 			font-size: 14px;
-	    	color: #444;
+	    	color: #555;
 		}
 		:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
 			font-size: 14px;
-		    color: #444;
+		    color: #555;
 		}
 		::-moz-placeholder { /* Mozilla Firefox 19+ */
 			font-size: 14px;
-		    color: #444;
+		    color: #555;
 		}
 		:-ms-input-placeholder { /* Internet Explorer 10+ */
 			font-size: 14px;
-		    color: #444;
+		    color: #555;
 		}
 		#stationSearch span.input-group-btn {
 			width: 40px;
 			text-align: center;
-			color: #444;
+			color: #fff;
 		}
 		#stationSearch span.input-group-btn a {
 			border: none;
@@ -204,8 +209,8 @@
 		#stationSearch span#countdown a,
 		#stationSearch span#logo a {
 			color: #555;
-			font-size: 12px;
-			font-weight: bold;
+			font-size: 14px;
+			font-weight: 500;
 		}
 		#stationSearch span#logo a {
 			color: #3dffd6;
@@ -214,7 +219,7 @@
 			font-size: 13px;
 		}
 		#stationSearch span#countdown a.active {
-			color: #fff;
+			color: #3dffd6;
 		}
 
 /* Arrivals Board
@@ -243,6 +248,7 @@
 	#arrivalsBoard span.text {
 		padding: 0 15px;
 		font-weight: bold;
+		text-transform: capitalize;
 	}
 	#arrivalsBoard button.active .glyphicon,
 	#arrivalsBoard button.active .fa {
@@ -250,9 +256,9 @@
 	}
 	#arrivalsBoard h1 {
 		margin:0;
-		padding:30px 15px 31px 15px;
+		padding:0;
 		font-size: 18px;
-		line-height: 18px;
+		line-height: 79px;
 		font-weight: 400;
 		text-align: center;
 		color: #fff;
@@ -296,7 +302,7 @@
 		#arrivalList {
 			margin: 0;
 			background: rgba(37,37,37,0.95);
-			max-height: 320px;
+			max-height: 319px;
 			overflow-y:scroll; 
 		}
 		#arrivalList .list-group-item {
@@ -307,6 +313,10 @@
 			border-bottom: #2d2d2d solid 1px;
 			padding:20px 20px 21px;
 			background: none;
+			white-space: nowrap;
+		}
+		#arrivalList .list-group-item:last-child {
+			border:none;
 		}
 		#arrivalList .list-group-item:hover {
 			background-color: #222;
@@ -326,7 +336,6 @@
 		#arrivalList small {
 			font-size: 0.86em;
 			color:#555;
-			white-space: nowrap;
 		}
 		#arrivalList .bullet {
 			vertical-align: middle;
