@@ -8,7 +8,9 @@
 <nav class="navbar navbar-inverse navbar-fixed-top" id="stationSearch">
 	<div class="input-group">
 		<span class="input-group-btn" id="logo">
-			<a href="#/"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a>
+			<a href="#/">
+				//
+			</a>
 		</span>
 		<span class="input-group-btn" id="countdown">
 			<a href="" data-ng-click="binaryToggle('liveData')" data-ng-class="{'active' : liveData}" id="countdown">
@@ -17,7 +19,12 @@
 			</a>
 		</span>
 		<span class="input-group-btn">
-			<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+			<a href="" data-ng-click="search=' '" data-ng-show="!search">
+				<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+			</a>
+			<a href="" data-ng-click="search=null" data-ng-show="search">
+				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+			</a>
 		</span>
 		<input type="text" data-ng-model="search" placeholder="{{station.name}}">
 	</div>
@@ -31,11 +38,10 @@
 </div>
 <div id="arrivalsBoard">
 	<nav class="navbar navbar-inverse">
-		<span class="text">{{(arrivals | filter:lineFilter).length}} Arrivals {{lineFilter.lineId}}</span>
+		<span class="text">{{(arrivals | filter:lineFilter).length}} arrivals</span>
 		<div class="btn-group pull-right" role="group" aria-label="">
 	  		<button type="button" class="btn btn-default" data-ng-click="binaryToggle('stationData')" data-ng-class="{'active' : stationData}">
-	  			<span class="glyphicon glyphicon-minus" aria-hidden="true" data-ng-show="stationData"></span>
-	  			<span class="glyphicon glyphicon-plus" aria-hidden="true" data-ng-show="!stationData"></span>
+	  			<span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
 	  		</button>
 	  	</div>
 	</nav>
