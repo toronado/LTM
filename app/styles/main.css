@@ -114,9 +114,20 @@
 		color: #3dffd6;
 		text-decoration: none;
 	}
+	#about h3 {
+		margin: 0;
+	    margin-top: 55px;
+	    margin-bottom: 13px;
+	    padding: 0;
+	    font-size: 11px;
+	    text-transform: uppercase;
+	    color: white;
+	    letter-spacing: 2px;
+	    font-weight: 600;
+	}
 	#about p {
-		color: #444;
-		margin-top: 43px;
+		color: #555;
+		margin: 0;
     	line-height: 40px;
 	}
 	#about p a {
@@ -126,13 +137,12 @@
 /* Tube Station List
 -------------------------*/
 	#tubeStations {
-		position: absolute;
+		position: fixed;
 		padding-top:40px;
 		top:0;
 		left:0;
 		right: 0;
 		bottom: 0;
-		height: 100%;
 		overflow-y:scroll;
 		background-color: #222;
 		z-index: 1;
@@ -391,11 +401,6 @@
 /* Mobile Tweaks
 -------------------------*/
 @media (max-width: 768px) {
-	#about {
-		position: static;
-		width: 100%;
-		padding: 40px 40px 0 40px;
-	}
 	#arrivalsBoard {
 		top:40px;
 		left: 0;
