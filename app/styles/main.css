@@ -388,7 +388,7 @@
 	    text-transform: capitalize;
 	}
 	.info-window.station {
-		background: url(../images/icon_tube.png) no-repeat left center;
+		background: url(../../images/icon_tube.png) no-repeat left center;
 		padding-left: 20px;
 	}
 	.info-window p {
