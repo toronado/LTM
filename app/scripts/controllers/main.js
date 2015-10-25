@@ -493,6 +493,16 @@ tubeApp.controller('MainCtrl', function ($scope, $routeParams, $timeout, dataFac
         });
     }
     $scope.stationList = stations;
+    $scope.listVisible = false;
+    $scope.showList = function(n) {
+        if (n === '1') {
+            $scope.listVisible = true;
+        } else {
+            $scope.listVisible = false;
+            $scope.searchTerm = '';
+        }
+    }
+
     $scope.popInfo = function(arrival) {
         var mid = arrival.lineId.substring(0,2)+arrival.vehicleId;
         markerService.showHideInfo(mid);

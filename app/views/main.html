@@ -19,19 +19,19 @@
 			</a>
 		</span>
 		<span class="input-group-btn">
-			<a href="" data-ng-click="search=' '" data-ng-show="!search">
+			<a href="" data-ng-click="showList('1')" data-ng-hide="listVisible || searchTerm">
 				<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 			</a>
-			<a href="" data-ng-click="search=null" data-ng-show="search">
+			<a href="" data-ng-click="showList('0')" data-ng-show="listVisible || searchTerm">
 				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 			</a>
 		</span>
-		<input type="text" data-ng-model="search" placeholder="{{station.name}}">
+		<input type="text" data-ng-model="searchTerm" placeholder="Station search">
 	</div>
 </nav>
-<div id="tubeStations" data-ng-show="(filteredData = (stationList | filter:search)) && search">
+<div id="tubeStations" data-ng-show="listVisible || searchTerm">
 	<ul>
-        <li data-ng-repeat="station in filteredData" class="animated slideInDown">
+        <li data-ng-repeat="station in stationList | filter:searchTerm" class="animated slideInDown">
         	<a href="#/{{station.id}}/">{{station.name}}</a>
         </li>
     </ul>

@@ -1,27 +1,27 @@
 <nav class="navbar navbar-inverse navbar-fixed-top" id="stationSearch">
 	<div class="input-group">
 		<span class="input-group-btn">
-			<a href="" data-ng-click="search=' '" data-ng-show="!search">
+			<a href="" data-ng-click="showList('1')" data-ng-hide="listVisible || searchTerm">
 				<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 			</a>
-			<a href="" data-ng-click="search=null" data-ng-show="search">
+			<a href="" data-ng-click="showList('0')" data-ng-show="listVisible || searchTerm">
 				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 			</a>
 		</span>
-		<input type="text" data-ng-model="search" placeholder="Station search">
+		<input type="text" data-ng-model="searchTerm" placeholder="Station search">
 	</div>
 </nav>
-<div id="tubeStations" data-ng-show="(filteredData = (stationList | filter:search)) && search">
+<div id="tubeStations" data-ng-show="listVisible || searchTerm">
 	<ul>
-        <li data-ng-repeat="station in filteredData" class="animated slideInDown">
+        <li data-ng-repeat="station in stationList | filter:searchTerm" class="animated slideInDown">
         	<a href="#/{{station.id}}/">{{station.name}}</a>
         </li>
     </ul>
 </div>
 <div class="container-fluid">
 	<div class="row">
-		<div class="col-md-7" style="padding:0">
-			<div class="animated fadeIn" id="about">
+		<div class="col-md-7" id="about">
+			<div class="animated fadeIn">
 				<h1>//</h1>
 				<h2>
 					A '<strong>Live</strong> Tube Map' made with <strong>AngularJS</strong>, Google maps and Powered by TfL <strong>Open Data</strong>. To put simply, <strong>Tube</strong> data is requested, analysed, coordinates calculated, then marked on a <strong>Google map</strong>. Every 50s the data updates and the markers <strong>animate!</strong><br><br>Looking for a <strong>developer</strong> with an eye for <strong>design</strong>? Have any questions? say <a href="mailto:hello@tubemapp.co.uk">hello@tubemapp.co.uk</a> <strong></strong>

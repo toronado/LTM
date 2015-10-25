@@ -18,13 +18,13 @@ tubeApp.controller('IndexCtrl', function ($scope) {
         });
     }
     $scope.stationList = stations;
-
-    $scope.stationContainer = 0;
-    $scope.binaryToggle = function(id) {
-    	switch (id) {
-    		case 'sc':
-    		$scope.stationContainer = 1 - $scope.stationContainer;
-    		break;
-    	}
+    $scope.listVisible = false;
+    $scope.showList = function(n) {
+        if (n === '1') {
+            $scope.listVisible = true;
+        } else {
+            $scope.listVisible = false;
+            $scope.searchTerm = '';
+        }
     }
 });
