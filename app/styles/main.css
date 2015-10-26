@@ -82,7 +82,7 @@
 /* Index About
 -------------------------*/
 	#about {
-		padding:40px;
+		padding:40px 40px 40px 80px;
 		max-width: 790px;
 		/*position: fixed;
 		width: 60%;
@@ -405,6 +405,9 @@
 /* Mobile Tweaks
 -------------------------*/
 @media (max-width: 768px) {
+	#about {
+		padding:40px;
+	}
 	#arrivalsBoard {
 		top:40px;
 		left: 0;
