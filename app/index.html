@@ -6,51 +6,25 @@
         <meta name="description" content="A live tube map built with AngularJS, Google Maps and TfL Open Data.">
         <meta name="keywords" content="London, google maps, api data, transport for london, tfl, product design, user experience, visual design, web development, javascript, css3, html5, map, tube, train, underground">
         <meta name="viewport" content="width=device-width">
-        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-        <!-- build:css(.) styles/vendor.css -->
-        <!-- bower:css -->
-        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
-        <!-- endbower -->
-        <!-- endbuild -->
-        <!-- build:css(.tmp) styles/main.css -->
-        <link rel="stylesheet" href="styles/main.css">
-        <link rel="stylesheet" href="styles/animate.css">
-        <!-- endbuild -->
+        <link rel="stylesheet" href="styles/bootstrap.min.css">
+        <link rel="stylesheet" href="styles/font-awesome.min.css">
+        <link rel="stylesheet" href="styles/animate.min.css">
+        <link rel="stylesheet" href="styles/main.min.css">
     </head>
     <body ng-app="tubeApp">
         <!--[if lt IE 7]>
-        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to have an experience.</p>
         <![endif]-->
-
-        <!-- Add your site or application content here -->
         <div ng-view=""></div>
-        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID
-         <script>
-           !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
-           (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
-           r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
-           }(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-           ga('create', 'UA-XXXXX-X');
-           ga('send', 'pageview');
-        </script> -->
         <script src="https://maps.googleapis.com/maps/api/js?v=3"></script>
-        <!-- build:js(.) scripts/vendor.js -->
-        <!-- bower:js -->
-        <script src="bower_components/jquery/dist/jquery.min.js"></script>
-        <script src="bower_components/angular/angular.min.js"></script>
-        <script src="bower_components/angular-route/angular-route.min.js"></script>
-        <!-- endbower -->
-        <!-- endbuild -->
-
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="data/stationData.min.js"></script>
+        <script src="scripts/lib/jquery.min.js"></script>
+        <script src="scripts/lib/angular.min.js"></script>
+        <script src="scripts/lib/angular-route.min.js"></script>
+        <script src="scripts/lib/stationData.min.js"></script>
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/index.js"></script>
         <script src="scripts/directives/googleMap.js"></script>
         <script src="scripts/directives/markerAnimate.js"></script>
-        <!-- endbuild -->
     </body>
 </html>

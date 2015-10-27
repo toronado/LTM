@@ -5,15 +5,14 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         concat: {   
-            js: {
+            css: {
                 src: [
-                    'app/build/js/ngApp.js',
-                    'app/build/js/ngCtrlMain.js',
-                    'app/build/js/ngCtrlIndex.js',
-                    'app/build/js/ngDirMarkerAnimate.js',
-                    'app/build/js/ngDirMarkerLabel.js'
+                    'app/styles/bootstrap.min.css',
+                    'app/styles/font-awesome.min.css',
+                    'app/styles/animate.min.css',
+                    'app/styles/main.min.css'
                 ],
-                dest: 'app/build/js/ng.js',
+                dest: 'app/styles/styles.min.css'
             }
         },
         uglify: {
@@ -25,7 +24,7 @@ module.exports = function(grunt) {
         cssmin: {
             dist: {
                 files: {
-                    'app/build/css/style.min.css': ['app/styles/*.css'],
+                    'app/styles/main.min.css': ['app/styles/main.css']
                 }
             }
         },
@@ -43,6 +42,15 @@ module.exports = function(grunt) {
                     'app/build/js/ngDirMarkerLabel.js': ['app/scripts/directives/markerLabel.js']
                 }
             }
+        },
+        watch: {
+            styles: {
+                files: ['app/styles/main.css'],
+                tasks: ['cssmin'],
+                options: {
+                    spawn: false,
+                }
+            } 
         }
     });
 
@@ -51,8 +59,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-ng-annotate'); 
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
     // 4. Where we tell Grunt what to do when we type "grunt" into the terminal.
-    grunt.registerTask('default', ['cssmin']);
+    grunt.registerTask('default', ['watch']);
 
 };
