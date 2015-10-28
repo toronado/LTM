@@ -1,19 +1,4 @@
 'use strict';
-
-var tubeLines = [
-    /*0*/'bakerloo',
-    /*1*/'central',
-    /*2*/'circle',
-    /*3*/'district',
-    /*4*/'hammersmith-city',
-    /*5*/'jubilee',
-    /*6*/'metropolitan',
-    /*7*/'northern',
-    /*8*/'piccadilly',
-    /*9*/'victoria',
-    /*10*/'waterloo-city'
-];
-
 /**
  * @ngdoc function
  * @name tubeApp.controller:MainCtrl

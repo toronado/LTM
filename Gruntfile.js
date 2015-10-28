@@ -5,20 +5,37 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         concat: {   
-            css: {
+            cssLib: {
                 src: [
                     'app/styles/bootstrap.min.css',
                     'app/styles/font-awesome.min.css',
-                    'app/styles/animate.min.css',
-                    'app/styles/main.min.css'
+                    'app/styles/animate.min.css'
                 ],
-                dest: 'app/styles/styles.min.css'
+                dest: 'app/styles/libs.min.css'
+            },
+            jsLib: {
+                src: [
+                    'app/scripts/lib/jquery.min.js',
+                    'app/scripts/lib/angular.min.js',
+                    'app/scripts/lib/angular-route.min.js',
+                    'app/scripts/lib/markerAnimate.min.js'
+                ],
+                dest: 'app/scripts/lib/libs.min.js'
+            },
+            jsAng: {
+                src: [
+                    'app/scripts/app.js',
+                    'app/scripts/controllers/main.js',
+                    'app/scripts/controllers/index.js',
+                    'app/scripts/directives/googleMap.js'
+                ],
+                dest: 'app/scripts/ng.js'
             }
         },
         uglify: {
             build: {
-                src: 'app/build/js/ng.js',
-                dest: 'app/build/js/ng.min.js'
+                src: 'app/scripts/lib/markerAnimate.js',
+                dest: 'app/scripts/lib/markerAnimate.min.js'
             }
         },
         cssmin: {
@@ -48,7 +65,7 @@ module.exports = function(grunt) {
                 files: ['app/styles/main.css'],
                 tasks: ['cssmin'],
                 options: {
-                    spawn: false,
+                    spawn: false
                 }
             } 
         }
@@ -62,6 +79,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     // 4. Where we tell Grunt what to do when we type "grunt" into the terminal.
-    grunt.registerTask('default', ['watch']);
+    grunt.registerTask('default', ['concat:jsAng']);
 
 };
