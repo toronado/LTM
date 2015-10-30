@@ -91,13 +91,13 @@
 	#about h1 {
 		font-size: 12px;
 	    margin: 39px 0 40px -1px;
-	    background-color: #3dffd6;
+	    background-color: #222;
 	    font-weight: bold;
 	    width: 41px;
 	    line-height: 39px;
 	    text-align: center;
-	    border: #3dffd6 solid 1px;
-	    color: #222;
+	    border: #2D2D2D solid 1px;
+	    color: #3dffd6;
 	}
 	#about h2 {
 		font-size: 22px;
@@ -246,8 +246,7 @@
 			color: #555;
 		}
 		#stationSearch span#logo a {
-			background-color: #3dffd6;
-			color: #222;
+			color: #3dffd6;
 		}
 		#stationSearch span#countdown #spinner {
 			font-size: 13px;

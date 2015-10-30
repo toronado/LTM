@@ -22,7 +22,11 @@ tubeApp.factory('dataFactory', function ($http) {
                     break;
                 case 'line':
                     var url = 'https://api.tfl.gov.uk/Line/%7Bids%7D/Arrivals';
-                    var params = { 'ids': Object.keys(sObj['sid'][params]['line']).join() };
+                    var params = { 
+                        'ids': Object.keys(sObj['sid'][params]['line']).join(),
+                        'app_id': 'ce72dd70',
+                        'app_key': 'f590cc0852641cbba6489cc9935fddc6'
+                    };
                     break;
             }
             return $http({

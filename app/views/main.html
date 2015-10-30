@@ -12,21 +12,21 @@
 				//
 			</a>
 		</span>
-		<span class="input-group-btn" id="countdown">
-			<a href="" data-ng-click="binaryToggle('liveData')" data-ng-class="{'active' : liveData}" id="countdown">
-				<span data-ng-show="!ajax">{{count}}</span>
-				<i class="fa fa-cog fa-spin" id="spinner" data-ng-show="ajax"></i>
-			</a>
-		</span>
 		<span class="input-group-btn">
 			<a href="" data-ng-click="showList('1')" data-ng-hide="listVisible || searchTerm">
-				<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
 			</a>
 			<a href="" data-ng-click="showList('0')" data-ng-show="listVisible || searchTerm">
 				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 			</a>
 		</span>
 		<input type="text" data-ng-model="searchTerm" placeholder="{{station.name}}">
+		<span class="input-group-btn" id="countdown">
+			<a href="" data-ng-click="binaryToggle('liveData')" data-ng-class="{'active' : liveData}" id="countdown">
+				<span data-ng-show="!ajax">{{count}}</span>
+				<i class="fa fa-cog fa-spin" id="spinner" data-ng-show="ajax"></i>
+			</a>
+		</span>
 	</div>
 </nav>
 <div id="tubeStations" data-ng-show="listVisible || searchTerm">
@@ -41,7 +41,10 @@
 		<span class="text">{{(arrivals | filter:lineFilter).length}} Arrivals</span>
 		<div class="btn-group pull-right" role="group" aria-label="">
 	  		<button type="button" class="btn btn-default" data-ng-click="binaryToggle('stationData')" data-ng-class="{'active' : stationData}">
-	  			<span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+	  			<!--span class="glyphicon glyphicon-minus" aria-hidden="true" data-ng-show="stationData"></span>
+	  			<span class="glyphicon glyphicon-plus" aria-hidden="true" data-ng-show="!stationData"></span-->
+	  			<i class="fa fa-minus" data-ng-show="stationData"></i>
+	  			<i class="fa fa-plus" data-ng-show="!stationData"></i>
 	  		</button>
 	  	</div>
 	</nav>
