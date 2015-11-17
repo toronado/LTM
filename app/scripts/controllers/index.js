@@ -27,4 +27,5 @@ tubeApp.controller('IndexCtrl', function ($scope) {
             $scope.searchTerm = '';
         }
     }
+    $scope.luck = stations[Math.floor(Math.random() * 270)];
 });

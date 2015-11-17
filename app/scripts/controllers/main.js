@@ -371,6 +371,9 @@ tubeApp.factory('markerService', function() {
                 maxWidth: 300,
                 content: iObj['content']
             });
+            if (iObj['visible'] === 1) {
+                infowindow.open(map,marker);
+            }
             google.maps.event.addListener(marker, 'mouseover', function () {
                 infowindow.open(map,marker);
             });

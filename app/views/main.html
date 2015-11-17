@@ -1,6 +1,6 @@
 <div id="mapContainer">
 	<google-map center="station">
-		<google-path data-ng-repeat="path in paths" data="path"></google-path>
+		<google-path data-ng-repeat="path in paths" data="path" station="stationId"></google-path>
 		<google-marker icon="'center'" data="station"></google-marker>
 		<google-marker data-ng-repeat="train in trains" icon="'train'" data="train" timestamp="timestamp" last="$last" station="stationId" filter="lineFilter.lineId"></google-marker>
 	</google-map>
@@ -8,14 +8,14 @@
 <nav class="navbar navbar-inverse navbar-fixed-top" id="stationSearch">
 	<div class="input-group">
 		<span class="input-group-btn" id="countdown">
-			<a href="" data-ng-click="binaryToggle('liveData')" data-ng-class="{'active' : liveData}" id="countdown">
+			<a href="" data-ng-click="binaryToggle('liveData')" data-ng-class="{'active' : liveData}">
 				<span data-ng-show="!ajax">{{count}}</span>
 				<i class="fa fa-cog fa-spin" id="spinner" data-ng-show="ajax"></i>
 			</a>
 		</span>
 		<span class="input-group-btn">
 			<a href="" data-ng-click="showList('1')" data-ng-hide="listVisible || searchTerm">
-				<span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 			</a>
 			<a href="" data-ng-click="showList('0')" data-ng-show="listVisible || searchTerm">
 				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -24,10 +24,11 @@
 		<input type="text" data-ng-model="searchTerm" placeholder="{{station.name}}">
 		<span class="input-group-btn" id="logo">
 			<a href="#/">
-				//
+				<img src="images/icon_logo.png">
 			</a>
 		</span>
 	</div>
+	<div id="countdownBar" style="width:{{count/50*100}}%"></div>
 </nav>
 <div id="tubeStations" data-ng-show="listVisible || searchTerm">
 	<ul>
@@ -41,8 +42,7 @@
 		<span class="text">{{(arrivals | filter:lineFilter).length}} Arrivals</span>
 		<div class="btn-group pull-right" role="group" aria-label="">
 	  		<button type="button" class="btn btn-default" data-ng-click="binaryToggle('stationData')" data-ng-class="{'active' : stationData}">
-	  			<i class="fa fa-minus" data-ng-show="stationData"></i>
-	  			<i class="fa fa-plus" data-ng-show="!stationData"></i>
+	  			<span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
 	  		</button>
 	  	</div>
 	</nav>

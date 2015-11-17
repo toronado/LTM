@@ -31,19 +31,24 @@ angular.module('app.directives.googlePath', [])
 		return {
 			restrict: 'E',
 			scope: {
-				data: '='
+				data: '=',
+				station: '='
 			},
 			controller: function($scope) {
 				var line = lineService.buildLine('paths', $scope.data);
 				var lineLen = line.length;
-				var pathLen, path, point, i, j, sid, pathCoords;
+				var pathLen, path, point, i, j, sid, pathCoords, visible;
 				for (i=0; i<lineLen; i++) {
 					path = line[i];
 					pathLen = line[i].length;
 					pathCoords = [];
 					for (j=0; j<pathLen; j++) {
+						visible = 0;
 						point = path[j];
 						sid = sObj['sid'][point];
+						if (point === $scope.station) {
+							visible = 1;
+						}
 						markerService.addMove({
 							id: $scope.data.substring(0,2)+point,
 							lat: sid['lat'],
@@ -65,7 +70,8 @@ angular.module('app.directives.googlePath', [])
 								naptan: point,
 								clickback: function() {
 									location.replace('#/'+this.naptan+'/');
-								}
+								},
+								visible: visible
 							}
 						});
 						pathCoords.push(new google.maps.LatLng(sid['lat'], sid['lon']));
