@@ -107,7 +107,7 @@
 	    line-height: 40px;
 	    color: #999;
 	    font-weight: 300;
-	    margin: 32px 0 40px 0;
+	    margin: 60px 0 40px 0;
 	}
 	#about h2 strong {
 		color:#fff;
@@ -181,7 +181,7 @@
 		#countdownBar {
 			width: 100%;
 			position: absolute;
-			bottom: 0;
+			top: 0;
 			height: 1px;
 			background-color: #3dffd6;
 			z-index: 1;
@@ -221,7 +221,7 @@
 			width: 40px;
 			text-align: center;
 			color: #fff;
-			border-right:#2d2d2d solid 1px;
+			border-right:#222 solid 1px;
 		}
 		#stationSearch span.input-group-btn a {
 			border: none;
@@ -240,6 +240,10 @@
 		#stationSearch .fa {
 			font-size: 12px;
 		}
+		#stationSearch span#countdown {
+			padding: 0 15px;
+			border:none;
+		}
 		#stationSearch span#countdown a,
 		#stationSearch span#logo a {
 			color: #fff;
@@ -249,8 +253,10 @@
 		#stationSearch span#countdown a {
 			color: #555;
 		}
+		#stationSearch span#countdown.active {
+			background-color: #3dffd6;
+		}
 		#stationSearch span#logo {
-			border:none;
 		}
 		#stationSearch span#logo a {
 			color: #3dffd6;
