@@ -8,7 +8,7 @@
 				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 			</a>
 		</span>
-		<input type="text" data-ng-model="searchTerm" placeholder="Station search">
+		<input type="text" data-ng-model="searchTerm" placeholder="Station Name">
 	</div>
 </nav>
 <div id="tubeStations" data-ng-show="listVisible || searchTerm">
@@ -22,10 +22,10 @@
 	<div class="row">
 		<div class="col-md-12" style="padding:0">
 			<div class="animated fadeIn" id="about">
-				<!--h1>//</h1-->
-				<img src="images/logo.png" id="logo-big">
+				<!--h1><span class="glyphicon glyphicon-flash" aria-hidden="true"></span></h1-->
+				<!--img src="images/logo.png" id="logo-big"-->
 				<h2>
-					An <strong>interactive</strong> 'Live Tube Map' made with <strong>AngularJS</strong>, Google maps and Powered by TfL <strong>Open Data</strong>. To put simply, <strong>tube</strong> data is requested, analysed, coordinates calculated, then marked on a <strong>Google map</strong>. Every 50s the data updates and the markers <strong>animate!</strong><br><br>This is a work in <strong>progress</strong> but if you've any questions or are looking for a <strong>developer</strong> with an eye for <strong>design</strong>, say <a href="mailto:hello@tubemapp.co.uk">hello@tubemapp.co.uk</a> <strong></strong><br><br>To get started, <strong>search</strong> for your station <strong>above</strong> or try your luck with this random choice... <a href="#/{{luck.id}}/">{{luck.name}}</a>
+					An <strong>interactive</strong> 'Live Tube Map' made with <strong>AngularJS</strong>, Google maps and Powered by TfL <strong>Open Data</strong>. To put simply, <strong>tube</strong> data is requested, analysed, coordinates calculated, then marked on a <strong>Google map</strong>. Every <strong>50</strong>s the data updates and the markers <strong>animate!</strong><br><br>To get started, search for a station above or try your luck with... <a href="#/{{luck.id}}/">{{luck.name}}</a>! This is a work in progress but if you're looking for a <strong>developer</strong> with an eye for <strong>design</strong> or have any questions, say <a href="mailto:hello@tubemapp.co.uk">hello@tubemapp.co.uk</a>
 				</h2>
 				<!--h3>// Why?</h3>
 				<p>I made this primarily to learn AngularJS and work with live data. Being a Londoner, and a tube user, this seemed an ideal project. It's something I work on in my spare time so don't expect perfection!</p>
