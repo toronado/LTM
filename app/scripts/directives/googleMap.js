@@ -18,7 +18,7 @@ angular.module('app.directives.googleMap', [])
 	                	{"featureType":"all","stylers":[{"visibility":"off"}]},
 	                	{"featureType": "administrative","elementType": "labels.text", "stylers": [{ "visibility": "on" }]},
 	                	{"featureType": "administrative","elementType": "labels.text.stroke", "stylers": [{ "visibility": "off" }]},
-	                	{"featureType": "administrative","elementType": "labels.text.fill", "stylers": [{ "color": "#333333" }]}
+	                	{"featureType": "administrative","elementType": "labels.text.fill", "stylers": [{ "color": "#444444" }]}
 	                ]
 	            };
 	            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
@@ -37,18 +37,14 @@ angular.module('app.directives.googlePath', [])
 			controller: function($scope) {
 				var line = lineService.buildLine('paths', $scope.data);
 				var lineLen = line.length;
-				var pathLen, path, point, i, j, sid, pathCoords, visible;
+				var pathLen, path, point, i, j, sid, pathCoords;
 				for (i=0; i<lineLen; i++) {
 					path = line[i];
 					pathLen = line[i].length;
 					pathCoords = [];
 					for (j=0; j<pathLen; j++) {
-						visible = 0;
 						point = path[j];
 						sid = sObj['sid'][point];
-						if (point === $scope.station) {
-							visible = 1;
-						}
 						markerService.addMove({
 							id: $scope.data.substring(0,2)+point,
 							lat: sid['lat'],
@@ -65,13 +61,12 @@ angular.module('app.directives.googlePath', [])
 							},
 							info: {
 								content: '<div class="info-window station">'
-												+ '<h3>' + sid['name'] + '</h3>'
+												+ '<h3><a href="#/'+point+'/">' + sid['name'] + '</a></h3>'
 											+ '</div>',
 								naptan: point,
 								clickback: function() {
 									location.replace('#/'+this.naptan+'/');
-								},
-								visible: visible
+								}
 							}
 						});
 						pathCoords.push(new google.maps.LatLng(sid['lat'], sid['lon']));
@@ -110,12 +105,13 @@ angular.module('app.directives.googleMarker', [])
 	                    			strokeColor: '#252525',
 	                    			scale: 6,
 	                    			fillColor: sObj['lines'][$scope.data['lineId']]['colour'],
-	                    			zIndex: 3
+	                    			zIndex: 4
 								},
 								info: {
 									content: '<div class="info-window train">'
-												+ '<h3><i class="fa fa-subway"></i> ' + $scope.data['towards'] + '</span></h3>'
-												+ '<p>' + $scope.data['currentLocation'] + '</p>'
+												+ '<span class="bc-' + $scope.data['lineId'] + '"><i class="fa fa-subway"></i></span>'
+												+ '<h3>' + $scope.data['towards'] + '</span></h3>'
+												+ '<p>' + markerService.infoFormat('train', $scope.data) + '</p>'
 											+ '</div>'
 								},
 								timestamp: $scope.timestamp
@@ -169,8 +165,16 @@ angular.module('app.directives.googleMarker', [])
                     			strokeWeight: 1.5,
                     			strokeColor: '#fff',
                     			scale: 8,
-                    			fillColor: '#fff',
-                    			zIndex: 2
+                    			fillColor: '#222',
+                    			zIndex: 3
+							},
+							info: {
+								content: '<div class="info-window station">'
+												+ '<h3>' + $scope.data['name'] + '</h3>'
+											+ '</div>',
+								visible: true,
+								lat: $scope.data['lat'],
+								lon: $scope.data['lon']
 							}
 						};
 						break;

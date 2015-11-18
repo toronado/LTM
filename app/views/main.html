@@ -30,7 +30,7 @@
 			</a>
 		</span>
 	</div>
-	<!--div id="countdownBar" style="width:{{count/50*100}}%"></div-->
+	<div id="countdownBar" style="width:{{100-(count/50*100)}}%"></div>
 </nav>
 <div id="tubeStations" data-ng-show="listVisible || searchTerm">
 	<ul>
@@ -52,7 +52,7 @@
 		<h1>{{station.name}}</h1>
 		<ul class="nav nav-pills nav-justified" id="arrivalTabs">
 			<li data-ng-repeat="(key, value) in station.line" data-ng-class="{active: $index === activeTab}">
-				<a href="" data-ng-click="lineFilter.set(key, $index)" class="tc-{{key}}">&bull;</a>
+				<a href="" data-ng-click="lineFilter.set(key, $index)" class="tc-{{key}}">{{key.substring(0,3)}}</a>
 			</li>
 		</ul>
 		<div class="list-group animated fadeIn" id="arrivalList">
@@ -62,7 +62,7 @@
 	    			<span class="bullet tc-{{arrival.lineId}}">&bull;</span>
 	    		</span>
 	    		<span class="towards">{{arrival.towards}}</span>
-	    		<small>{{arrival.currentLocation}}</small>
+	    		<small>{{arrival.platformName.split(' - ')[0]}}</small>
 	    	</a>
 	    </div>
 	</div>

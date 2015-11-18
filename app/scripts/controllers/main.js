@@ -368,18 +368,15 @@ tubeApp.factory('markerService', function() {
         },
         infoWindow: function (iObj, marker) {
             var infowindow = new google.maps.InfoWindow({
-                maxWidth: 300,
+                maxWidth: 500,
                 content: iObj['content']
             });
-            if (iObj['visible'] === 1) {
-                infowindow.open(map,marker);
-            }
             google.maps.event.addListener(marker, 'mouseover', function () {
                 infowindow.open(map,marker);
             });
-            google.maps.event.addListener(marker, 'mouseout', function () {
+            /*google.maps.event.addListener(marker, 'mouseout', function () {
                 infowindow.close(map,marker);
-            });
+            });*/
             google.maps.event.addListener(marker, 'click', function () {
                 infowindow.open(map,marker);
             });
@@ -388,8 +385,26 @@ tubeApp.factory('markerService', function() {
                     iObj.clickback();
                 });
             }
+            if (iObj['visible']) {
+                infowindow.setPosition({lat: iObj['lat'], lng: iObj['lon']});
+                infowindow.open(map,marker);
+            }
             //return infowindow object so it can be updated
             return infowindow;
+        },
+        infoFormat: function (type, value) {
+            switch (type) {
+                case 'train':
+                    var tts = value['timeToStation'];
+                    var stn = value['stationName'].split(' Underground')[0];
+                    if (!tts) {
+                        return 'At ' + stn;
+                    }
+                    if (tts < 60) {
+                        return tts + 's from ' + stn;
+                    }
+                    return Math.floor(tts/60) + 'm from ' + stn;
+            }
         },
         removeOld: function (timestamp) {
             var m, marker;

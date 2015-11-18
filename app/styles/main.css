@@ -12,6 +12,18 @@
 	.tc-victoria {color:#009FE0 !important;}
 	.tc-waterloo-city {color:#70C3CE !important;}
 
+	.bc-bakerloo {background-color:#AE6118 !important;}
+	.bc-central {background-color:#E41F1F !important;}
+	.bc-circle {background-color:#F8D42D !important;}
+	.bc-district {background-color:#007229 !important;}
+	.bc-hammersmith-city {background-color:#E899A8 !important;}
+	.bc-jubilee {background-color:#686E72 !important;}
+	.bc-metropolitan {background-color:#893267 !important;}
+	.bc-northern {background-color:#000 !important;}
+	.bc-piccadilly {background-color:#0450A1 !important;}
+	.bc-victoria {background-color:#009FE0 !important;}
+	.bc-waterloo-city {background-color:#70C3CE !important;}
+
 /* Foundation 
 -------------------------*/
 	html,
@@ -49,7 +61,7 @@
 		border-bottom: #2D2D2D solid 1px;
 		min-height: 0;
 		height: 40px;
-		background-color: #151515;
+		background-color: #000;
 		margin: 0;
 	}
 	.navbar li a {
@@ -266,10 +278,13 @@
 		#stationSearch span#countdown.active {
 			background-color: #3dffd6;
 		}
+		#stationSearch span#countdown .controls {
+			color: #fff;
+		}
 		#stationSearch span#logo {
 		}
 		#stationSearch span#logo a {
-			color: #3dffd6;
+			/*color: #3dffd6;*/
 		}
 		#stationSearch span#countdown #spinner {
 			font-size: 13px;
@@ -331,7 +346,7 @@
 			padding:10px 15px;
 			text-align: center;
 			text-transform: uppercase;
-			font-size: 26px;
+			font-size: 10px;
 			line-height: 19px;
 			border-radius: 0;
 			border-left:#2d2d2d solid 1px;
@@ -403,13 +418,29 @@
 	.info-window {
 		-webkit-font-smoothing: antialiased;
 		margin:10px;
+		padding-left: 20px;
+		text-align: center;
+	}
+	.info-window .fa {
+		font-size: 16px;
+	}
+	.info-window span.label {
+		line-height: 16px;
 	}
 	.info-window h3 {
 		margin: 0;
 		font-size: 13px;
-	    margin-bottom: 2px;
 	    font-weight: bold;
 	    text-transform: capitalize;
+	}
+	.info-window.train h3 {
+		margin: 5px 0;
+	}
+	.info-window.train span {
+		padding:3px 6px;
+		color: #fff;
+		border-radius: 50%;
+		display: inline-block;
 	}
 	.info-window.station {
 		background: url(../images/icon_tube.png) no-repeat left center;
@@ -417,7 +448,7 @@
 	}
 	.info-window p {
 		margin: 5px 0 0 0;
-		color:#888;
+		color:#666;
 		font-weight: 500;
 		line-height: 14px;
 	}
