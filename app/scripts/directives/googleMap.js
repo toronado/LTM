@@ -16,9 +16,10 @@ angular.module('app.directives.googleMap', [])
 	                backgroundColor: 'none',
 	                styles: [
 	                	{"featureType":"all","stylers":[{"visibility":"off"}]},
-	                	{"featureType": "administrative","elementType": "labels.text", "stylers": [{ "visibility": "on" }]},
+	                	{"featureType": "water", "elementType": "geometry", "stylers": [{ "visibility": "simplified" },{"color": '#1C2123'}]}
+	                	/*{"featureType": "administrative","elementType": "labels.text", "stylers": [{ "visibility": "on" }]},
 	                	{"featureType": "administrative","elementType": "labels.text.stroke", "stylers": [{ "visibility": "off" }]},
-	                	{"featureType": "administrative","elementType": "labels.text.fill", "stylers": [{ "color": "#444444" }]}
+	                	{"featureType": "administrative","elementType": "labels.text.fill", "stylers": [{ "color": "#444444" }]}*/
 	                ]
 	            };
 	            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
@@ -46,7 +47,7 @@ angular.module('app.directives.googlePath', [])
 						point = path[j];
 						sid = sObj['sid'][point];
 						markerService.addMove({
-							id: $scope.data.substring(0,2)+point,
+							id: point,
 							lat: sid['lat'],
 							lon: sid['lon'],
 							icon: {
@@ -59,14 +60,9 @@ angular.module('app.directives.googlePath', [])
                     			fillColor: '#ccc',
                     			zIndex: 2
 							},
-							info: {
-								content: '<div class="info-window station">'
-												+ '<h3><a href="#/'+point+'/">' + sid['name'] + '</a></h3>'
-											+ '</div>',
-								naptan: point,
-								clickback: function() {
-									location.replace('#/'+this.naptan+'/');
-								}
+							infoBox: {
+								id: point,
+								name: sid['name']
 							}
 						});
 						pathCoords.push(new google.maps.LatLng(sid['lat'], sid['lon']));
@@ -167,14 +163,6 @@ angular.module('app.directives.googleMarker', [])
                     			scale: 8,
                     			fillColor: '#222',
                     			zIndex: 3
-							},
-							info: {
-								content: '<div class="info-window station">'
-												+ '<h3>' + $scope.data['name'] + '</h3>'
-											+ '</div>',
-								visible: true,
-								lat: $scope.data['lat'],
-								lon: $scope.data['lon']
 							}
 						};
 						break;

@@ -362,19 +362,45 @@ tubeApp.factory('markerService', function() {
                 if (mObj['info']) {
                     mObj['infoObj'] = this.infoWindow(mObj['info'], mObj['markerObj']);
                 }
+                if (mObj['infoBox']) {
+                    mObj['infoBoxObj'] = this.infoBox(mObj['infoBox'], mObj['markerObj']);
+                }
                 //Add marker to markers object for tracking puroposes
                 this.markers[mObj['id']] = mObj;
             }
+        },
+        infoBox: function (iObj, marker) {
+            var boxText = document.createElement("a");
+            boxText.className = "info-box-station";
+            boxText.href = '#/' + iObj['id'] + '/';
+            boxText.innerHTML = iObj['name'];
+
+            var infoBox = new InfoBox({
+                content: boxText,
+                maxWidth: 0,
+                pixelOffset: new google.maps.Size(10, -7),
+                zIndex: 1,
+                boxStyle: { 
+                    opacity: 0.75,
+                    'white-space': 'nowrap'
+                },
+                closeBoxMargin: "0",
+                closeBoxURL: "",
+                infoBoxClearance: new google.maps.Size(1, 1),
+                isHidden: false
+            });
+            infoBox.open(map, marker);
+            return infoBox;
         },
         infoWindow: function (iObj, marker) {
             var infowindow = new google.maps.InfoWindow({
                 maxWidth: 500,
                 content: iObj['content']
             });
-            google.maps.event.addListener(marker, 'mouseover', function () {
+            /*google.maps.event.addListener(marker, 'mouseover', function () {
                 infowindow.open(map,marker);
             });
-            /*google.maps.event.addListener(marker, 'mouseout', function () {
+            google.maps.event.addListener(marker, 'mouseout', function () {
                 infowindow.close(map,marker);
             });*/
             google.maps.event.addListener(marker, 'click', function () {
@@ -384,10 +410,6 @@ tubeApp.factory('markerService', function() {
                 google.maps.event.addListener(marker, 'click', function () {
                     iObj.clickback();
                 });
-            }
-            if (iObj['visible']) {
-                infowindow.setPosition({lat: iObj['lat'], lng: iObj['lon']});
-                infowindow.open(map,marker);
             }
             //return infowindow object so it can be updated
             return infowindow;

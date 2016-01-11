@@ -18,7 +18,8 @@ module.exports = function(grunt) {
                     'app/scripts/lib/jquery.min.js',
                     'app/scripts/lib/angular.min.js',
                     'app/scripts/lib/angular-route.min.js',
-                    'app/scripts/lib/markerAnimate.min.js'
+                    'app/scripts/lib/markerAnimate.min.js',
+                    'app/scripts/lib/infoBox.js'
                 ],
                 dest: 'app/scripts/lib/libs.min.js'
             },
