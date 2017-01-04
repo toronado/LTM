@@ -15,9 +15,9 @@ angular.module('app.directives.googleMap', [])
 	                disableDefaultUI: true,
 	                backgroundColor: 'none',
 	                styles: [
-	                	{"featureType":"all","stylers":[{"visibility":"off"}]},
-	                	{"featureType": "water", "elementType": "geometry", "stylers": [{ "visibility": "simplified" },{"color": '#1C2123'}]}
-	                	/*{"featureType": "administrative","elementType": "labels.text", "stylers": [{ "visibility": "on" }]},
+	                	{"featureType":"all","stylers":[{"visibility":"off"}]}
+	                	/*{"featureType": "water", "elementType": "geometry", "stylers": [{ "visibility": "simplified" },{"color": '#1C2123'}]}
+	                	{"featureType": "administrative","elementType": "labels.text", "stylers": [{ "visibility": "on" }]},
 	                	{"featureType": "administrative","elementType": "labels.text.stroke", "stylers": [{ "visibility": "off" }]},
 	                	{"featureType": "administrative","elementType": "labels.text.fill", "stylers": [{ "color": "#444444" }]}*/
 	                ]
@@ -121,7 +121,7 @@ angular.module('app.directives.googleMarker', [])
 	                			// Caller
 	                			var c = $scope.station;
 	                			// If caller is destination or caller is current location, train on route
-	                			if (c !== b && c !== a) {	                			
+	                			if (c !== b && c !== a) {
 		                			// Route to contain a, b, c to be worth displaying train
 		                			var stations = [a,b,c];
 		                			// Check for a via station
