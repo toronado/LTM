@@ -15,9 +15,9 @@ angular.module('app.directives.googleMap', [])
 	                disableDefaultUI: true,
 	                backgroundColor: 'none',
 	                styles: [
-	                	{"featureType":"all","stylers":[{"visibility":"off"}]}
-	                	/*{"featureType": "water", "elementType": "geometry", "stylers": [{ "visibility": "simplified" },{"color": '#1C2123'}]}
-	                	{"featureType": "administrative","elementType": "labels.text", "stylers": [{ "visibility": "on" }]},
+	                	{"featureType":"all","stylers":[{"visibility":"off"}]},
+	                	{"featureType": "water", "elementType": "geometry", "stylers": [{ "visibility": "simplified" },{"color": '#1C2123'}]}
+	                	/*{"featureType": "administrative","elementType": "labels.text", "stylers": [{ "visibility": "on" }]},
 	                	{"featureType": "administrative","elementType": "labels.text.stroke", "stylers": [{ "visibility": "off" }]},
 	                	{"featureType": "administrative","elementType": "labels.text.fill", "stylers": [{ "color": "#444444" }]}*/
 	                ]
